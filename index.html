@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Demo</title>
+    <style>
+      .start-screen {
+        top: 240px;
+        left: 100px;
+        position: relative;
+      }
+      .node {
+        stroke: #255472;
+        stroke-width: 3px;
+        fill: white;
+        cursor: pointer;
+      }
+
+      /* Dropdown Button */
+      .dropbtn {
+        background-color: #787878;
+        color: white;
+        padding: 10px;
+        font-family: Arial;
+        font-weight: bold;
+        font-size: 10px;
+        border: none;
+        cursor: pointer;
+        min-width: 150px;
+        text-anchor: middle;
+      }
+
+      /* The container <div> - needed to position the dropdown content */
+      .dropdown-stack-name,
+      .dropdown-education-standard,
+      .dropdown-topic,
+      .dropdown-audience {
+        display: inline-block;
+        margin: auto;
+        position: relative;
+        text-anchor: middle;
+        padding-right: 50px;
+      }
+
+      /* Dropdown Content (Hidden by Default) */
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 150px;
+        z-index: 1;
+        max-height: 400px;
+        overflow: auto;
+        text-anchor: middle;
+      }
+
+      /* Links inside the dropdown */
+      .dropdown-content a {
+        color: #404e4d;
+        font-size: 10px;
+        font-family: Arial;
+        font-weight: bold;
+        padding: 8px 0px;
+        text-decoration: none;
+        display: block;
+        text-anchor: middle;
+        text-align: center;
+      }
+
+      /* Change color of dropdown links on hover */
+      .dropdown-content a:hover {
+        background-color: #ddd;
+      }
+
+      /* Show the dropdown menu on hover */
+      .dropdown-stack-name:hover .dropdown-content,
+      .dropdown-education-standard:hover .dropdown-content,
+      .dropdown-topic:hover .dropdown-content,
+      .dropdown-audience:hover .dropdown-content {
+        display: block;
+      }
+
+      /* Change the background color of the dropdown button when the dropdown content is shown */
+      .dropdown-education-standard:hover .dropbtn,
+      .dropdown-stack-name:hover .dropbtn,
+      .dropdown-topic:hover .dropbtn,
+      .dropdown-audience:hover .dropbtn {
+        background-color: #132a54;
+      }
+
+      .back-btn {
+        padding: 10px;
+        background-color: gray;
+        color: white;
+        cursor: pointer;
+        position: relative;
+        left: 100px;
+        font-family: Arial;
+        font-weight: bold;
+        text-anchor: middle;
+        text-align: center;
+        display: none;
+      }
+    </style>
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+  </head>
+
+  <body>
+    <div class="start-screen">
+      <div class="dropdown-audience">
+        <button class="dropbtn">
+          <i class="arrow down"></i> Select Audience
+        </button>
+        <div class="dropdown-content" id="audience-selector"></div>
+      </div>
+
+      <div class="dropdown-topic">
+        <button class="dropbtn"><i class="arrow down"></i> Select Topic</button>
+        <div class="dropdown-content" id="topic-selector"></div>
+      </div>
+
+      <div class="dropdown-stack-name">
+        <button class="dropbtn">
+          <i class="arrow down"></i> Select Stack Name
+        </button>
+        <div class="dropdown-content" id="stack-name-selector"></div>
+      </div>
+
+      <div class="dropdown-education-standard">
+        <button class="dropbtn">
+          <i class="arrow down"></i> Select Education Standard
+        </button>
+        <div class="dropdown-content" id="education-standard-selector"></div>
+      </div>
+    </div>
+    <div class="viz-container">
+      <div id="viz"></div>
+    </div>
+
+    <script>
+      var width = 600,
+        height = 600,
+        directory = [],
+        mode = "",
+        audienceData,
+        topicData,
+        level = 0;
+      d3.csv("data.csv").then(function(data) {
+        console.log(data);
+
+        new_data = [];
+        data.forEach(function(v) {
+          var audiences = v["Audience"].split(",");
+          audiences.forEach(function(w) {
+            v_copy = JSON.parse(JSON.stringify(v));
+            v_copy["Audience_alt"] = w.replace(/"/g, "").trim();
+            new_data.push(v_copy);
+          });
+        });
+
+        data = new_data;
+        new_data = [];
+        data.forEach(function(v) {
+          var topics = v["Topic"].split(",");
+          topics.forEach(function(w) {
+            v_copy = JSON.parse(JSON.stringify(v));
+            v_copy["Topic_alt"] = w.replace(/"/g, "").trim();
+            new_data.push(v_copy);
+          });
+        });
+
+        data = new_data;
+        new_data = [];
+        data.forEach(function(v) {
+          var stackNames = v["Micro-credential Stack Name"].split(",");
+          stackNames.forEach(function(w) {
+            v_copy = JSON.parse(JSON.stringify(v));
+            v_copy["Micro-credential Stack Name_alt"] = w
+              .replace(/"/g, "")
+              .trim();
+            new_data.push(v_copy);
+          });
+        });
+
+        data = new_data;
+        new_data = [];
+        data.forEach(function(v) {
+          var educationStandards = v["Education Standard"].split(",");
+          educationStandards.forEach(function(w) {
+            v_copy = JSON.parse(JSON.stringify(v));
+            v_copy["Education Standard_alt"] = w.replace(/"/g, "").trim();
+            new_data.push(v_copy);
+          });
+        });
+
+        data = new_data;
+
+        audienceData = d3
+          .nest()
+          .key(function(d) {
+            return d["Audience_alt"];
+          })
+          .key(function(d) {
+            return d["Topic_alt"];
+          })
+          .entries(data);
+
+        topicData = d3
+          .nest()
+          .key(function(d) {
+            return d["Topic_alt"];
+          })
+          .key(function(d) {
+            return d["Audience_alt"];
+          })
+          .entries(data);
+
+        stackNameData = d3
+          .nest()
+          .key(function(d) {
+            return d["Micro-credential Stack Name_alt"];
+          })
+          .key(function(d) {
+            return d["Audience_alt"];
+          })
+          .key(function(d) {
+            return d["Topic_alt"];
+          })
+          .entries(data);
+
+        educationStandardData = d3
+          .nest()
+          .key(function(d) {
+            return d["Education Standard_alt"];
+          })
+          .key(function(d) {
+            return d["Audience_alt"];
+          })
+          .key(function(d) {
+            return d["Topic_alt"];
+          })
+          .entries(data);
+
+        var audienceList = [];
+        audienceData.forEach(function(w) {
+          audienceList.push(w.key);
+          w.values.forEach(function(v) {
+            var tmp_list = [];
+            v.values.forEach(function(u, i) {
+              if (tmp_list.indexOf(u["MC ID #"]) < 0) {
+                tmp_list.push(u["MC ID #"]);
+              } else {
+                delete v.values[i];
+              }
+            });
+          });
+        });
+
+        var topicList = [];
+        topicData.forEach(function(w) {
+          topicList.push(w.key);
+          w.values.forEach(function(v) {
+            var tmp_list = [];
+            v.values.forEach(function(u, i) {
+              if (tmp_list.indexOf(u["MC ID #"]) < 0) {
+                tmp_list.push(u["MC ID #"]);
+              } else {
+                delete v.values[i];
+              }
+            });
+          });
+        });
+
+        var stackNameList = [];
+        stackNameData.forEach(function(w) {
+          stackNameList.push(w.key);
+          w.values.forEach(function(v) {
+            v.values.forEach(function(u) {
+              var tmp_list = [];
+              u.values.forEach(function(o, i) {
+                if (tmp_list.indexOf(o["MC ID #"]) < 0) {
+                  tmp_list.push(o["MC ID #"]);
+                } else {
+                  delete u.values[i];
+                }
+              });
+            });
+          });
+        });
+
+        var educationStandardList = [];
+        educationStandardData.forEach(function(w) {
+          educationStandardList.push(w.key);
+          w.values.forEach(function(v) {
+            v.values.forEach(function(u) {
+              var tmp_list = [];
+              u.values.forEach(function(o, i) {
+                if (tmp_list.indexOf(o["MC ID #"]) < 0) {
+                  tmp_list.push(o["MC ID #"]);
+                } else {
+                  delete u.values[i];
+                }
+              });
+            });
+          });
+        });
+
+        d3.select(".back-btn").on("click", function() {});
+
+        var audienceSelector = d3
+          .select("#audience-selector")
+          .selectAll("a")
+          .data(audienceList)
+          .enter()
+          .append("text")
+          .html(function(d) {
+            return "<a href='#'>" + d + "</a>";
+          })
+          .on("click", function(d) {
+            audienceData.forEach(function(v) {
+              if (v.key === d) {
+                mode = "Audience";
+                var data_copy = JSON.parse(JSON.stringify(v.values));
+                data_copy.push(v);
+                directory = [];
+                directory.push(v.key);
+                generateGraph(data_copy, v.key);
+              }
+            });
+          });
+
+        var topicSelector = d3
+          .select("#topic-selector")
+          .selectAll("a")
+          .data(topicList)
+          .enter()
+          .append("text")
+          .html(function(d) {
+            return "<a href='#'>" + d + "</a>";
+          })
+          .on("click", function(d) {
+            topicData.forEach(function(v) {
+              if (v.key === d) {
+                mode = "Topic";
+                var data_copy = JSON.parse(JSON.stringify(v.values));
+                data_copy.push(v);
+                directory = [];
+                directory.push(v.key);
+                generateGraph(data_copy, v.key);
+              }
+            });
+          });
+
+        var stackNameSelector = d3
+          .select("#stack-name-selector")
+          .selectAll("a")
+          .data(stackNameList)
+          .enter()
+          .append("text")
+          .html(function(d) {
+            return "<a href='#'>" + d + "</a>";
+          })
+          .on("click", function(d) {
+            stackNameData.forEach(function(v) {
+              if (v.key === d) {
+                mode = "Stack Name";
+                var data_copy = JSON.parse(JSON.stringify(v.values));
+                data_copy.push(v);
+                directory = [];
+                directory.push(v.key);
+                generateGraph(data_copy, v.key);
+              }
+            });
+          });
+
+        var educationStandardSelector = d3
+          .select("#education-standard-selector")
+          .selectAll("a")
+          .data(educationStandardList)
+          .enter()
+          .append("text")
+          .html(function(d) {
+            return "<a href='#'>" + d + "</a>";
+          })
+          .on("click", function(d) {
+            console.log(d);
+            educationStandardData.forEach(function(v) {
+              if (v.key === d) {
+                mode = "Education Standard";
+                var data_copy = JSON.parse(JSON.stringify(v.values));
+                data_copy.push(v);
+                directory = [];
+                directory.push(v.key);
+                generateGraph(data_copy, v.key);
+              }
+            });
+          });
+      });
+
+      function generateGraph(data, root_key) {
+        d3.select(".start-screen").style("display", "none");
+        d3.select("#viz")
+          .selectAll("*")
+          .remove();
+        d3.select(".back-btn").style("display", "inline-block");
+
+        var root_init = d3
+          .stratify()
+          .id(function(d) {
+            return d.key;
+          })
+          .parentId(function(d) {
+            if (d.key != root_key) {
+              return root_key;
+            } else {
+              return "";
+            }
+          })(data);
+
+        var root = d3.hierarchy(root_init);
+
+        var transform = d3.zoomIdentity;
+        let node, link;
+
+        const svg = d3
+          .select("#viz")
+          .append("svg")
+          .attr("width", 1000)
+          .attr("height", 1000)
+          .append("g")
+          .attr("transform", "translate(200,200)");
+
+        var simulation = d3
+          .forceSimulation()
+          .force("collision", d3.forceCollide(50))
+          .force(
+            "link",
+            d3
+              .forceLink()
+              .id(function(d) {
+                return d.data.id;
+              })
+              .distance(function(d) {
+                return 80;
+              })
+          )
+          .force("charge", d3.forceManyBody())
+          .force("center", d3.forceCenter(width / 2, height / 4))
+          .force("x", d3.forceX())
+          .force("y", d3.forceY())
+          .on("tick", ticked);
+
+        function update() {
+          const nodes = flatten(root);
+          const links = root.links();
+
+          link = svg.selectAll(".link").data(links, function(d) {
+            return d.target.id;
+          });
+
+          link.exit().remove();
+
+          const linkEnter = link
+            .enter()
+            .append("line")
+            .attr("class", "link")
+            .style("stroke", function(d) {
+              if (d.value > 0) {
+                return "white";
+              } else {
+                return "#000";
+              }
+            })
+            .style("opacity", function(d) {
+              return 0.2;
+            })
+            .style("stroke-width", function(d) {
+              if (d.value > 0) {
+                return d.value / 2;
+              } else {
+                return 2;
+              }
+            });
+
+          link = linkEnter.merge(link);
+
+          node = svg.selectAll(".node").data(nodes, function(d) {
+            return d.id;
+          });
+
+          node.exit().remove();
+
+          nodeLabels = node
+            .enter()
+            .append("text")
+            .attr("class", function(d) {
+              if (d.data.id === root_key) {
+                return "node-label-key";
+              } else {
+                return "node-label";
+              }
+            })
+            .text(function(d) {
+              if (d.data.id) {
+                return d.data.id;
+              }
+              if (d.data.data["Micro-credential Name"]) {
+                return d.data.data["Micro-credential Name"];
+              }
+            });
+
+          const nodeEnter = node
+            .enter()
+            .append("g")
+            .attr("class", "node")
+            .style("fill", function(d) {
+              if (d.data.id === root_key) {
+                return "#ECE4B7";
+              } else {
+                return "#FADF7F";
+              }
+            })
+            .on("click", function(d) {
+              if (d.data.parent !== null) {
+                if (mode === "Audience") {
+                  directory.push(d.data.id);
+                  audienceData.forEach(function(v) {
+                    if (v.key === directory[0]) {
+                      v.values.forEach(function(w) {
+                        if (w) {
+                          if (w.key === directory[1]) {
+                            var data_copy = JSON.parse(
+                              JSON.stringify(w.values)
+                            );
+                            data_copy.push(w);
+                            level = -1;
+                            generateGraph(
+                              data_copy.filter(function(d) {
+                                return d != null;
+                              }),
+                              w.key
+                            );
+                          }
+                        }
+                      });
+                    }
+                  });
+                }
+                if (mode === "Topic") {
+                  directory.push(d.data.id);
+                  topicData.forEach(function(v) {
+                    if (v.key === directory[0]) {
+                      v.values.forEach(function(w) {
+                        if (w) {
+                          if (w.key === directory[1]) {
+                            var data_copy = JSON.parse(
+                              JSON.stringify(w.values)
+                            );
+                            data_copy.push(w);
+                            level = -1;
+                            generateGraph(
+                              data_copy.filter(function(d) {
+                                return d != null;
+                              }),
+                              w.key
+                            );
+                          }
+                        }
+                      });
+                    }
+                  });
+                }
+                if (mode === "Stack Name") {
+                  console.log(stackNameData);
+                  directory.push(d.data.id);
+                  stackNameData.forEach(function(v) {
+                    if (v.key === directory[0] && v.key === root_key) {
+                      v.values.forEach(function(w) {
+                        console.log(w);
+                        if (w) {
+                          if (w.key === directory[1]) {
+                            var data_copy = JSON.parse(
+                              JSON.stringify(w.values)
+                            );
+                            data_copy.push(w);
+                            level = -1;
+                            generateGraph(
+                              data_copy.filter(function(d) {
+                                return d != null;
+                              }),
+                              w.key
+                            );
+                          }
+                        }
+                      });
+                    }
+                    if (v.key === directory[0]) {
+                      v.values.forEach(function(w) {
+                        if (w.key === directory[1] && w.key === root_key) {
+                          w.values.forEach(function(u) {
+                            if (u.key === d.data.id) {
+                              var data_copy = JSON.parse(
+                                JSON.stringify(u.values)
+                              );
+                              data_copy.push(u);
+                              generateGraph(
+                                data_copy.filter(function(d) {
+                                  return d != null;
+                                }),
+                                u.key
+                              );
+                            }
+                          });
+                        }
+                      });
+                    }
+                  });
+                }
+                if (mode === "Education Standard") {
+                  directory.push(d.data.id);
+                  educationStandardData.forEach(function(v) {
+                    if (v.key === directory[0] && v.key === root_key) {
+                      v.values.forEach(function(w) {
+                        console.log(w);
+                        if (w) {
+                          if (w.key === directory[1]) {
+                            var data_copy = JSON.parse(
+                              JSON.stringify(w.values)
+                            );
+                            data_copy.push(w);
+                            level = -1;
+                            generateGraph(
+                              data_copy.filter(function(d) {
+                                return d != null;
+                              }),
+                              w.key
+                            );
+                          }
+                        }
+                      });
+                    }
+                    if (v.key === directory[0]) {
+                      v.values.forEach(function(w) {
+                        if (w.key === directory[1] && w.key === root_key) {
+                          w.values.forEach(function(u) {
+                            if (u.key === d.data.id) {
+                              var data_copy = JSON.parse(
+                                JSON.stringify(u.values)
+                              );
+                              data_copy.push(u);
+                              generateGraph(
+                                data_copy.filter(function(d) {
+                                  return d != null;
+                                }),
+                                u.key
+                              );
+                            }
+                          });
+                        }
+                      });
+                    }
+                  });
+                }
+              }
+            })
+            .call(
+              d3
+                .drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended)
+            );
+          //.on("mouseover", nodeMouseOver);
+
+          nodeEnter
+            .append("circle")
+            .style("r", function(d) {
+              if (d.data.id === root_key) {
+                return 14;
+              } else {
+                return 10;
+              }
+            })
+            .style("text-anchor", function(d) {
+              return d.children ? "end" : "start";
+            })
+            .text(function(d) {
+              return d.data.id;
+            });
+
+          node = nodeEnter.merge(node);
+          simulation.nodes(nodes);
+          simulation.force("link").links(links);
+        }
+
+        function ticked() {
+          link
+            .attr("x1", function(d) {
+              return d.source.x;
+            })
+            .attr("y1", function(d) {
+              return d.source.y;
+            })
+            .attr("x2", function(d) {
+              return d.target.x;
+            })
+            .attr("y2", function(d) {
+              return d.target.y;
+            });
+
+          node.attr("transform", function(d) {
+            return `translate(${d.x}, ${d.y})`;
+          });
+
+          nodeLabels
+            .attr("x", function(d) {
+              return d.x + 30;
+            })
+            .attr("y", function(d) {
+              return d.y + 3;
+            });
+        }
+
+        function dragstarted(d) {
+          if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+          d.fx = d.x;
+          d.fy = d.y;
+        }
+
+        function dragged(d) {
+          d.fx = d3.event.x;
+          d.fy = d3.event.y;
+        }
+
+        function dragended(d) {
+          if (!d3.event.active) simulation.alphaTarget(0);
+          d.fx = null;
+          d.fy = null;
+        }
+
+        function flatten(root) {
+          const nodes = [];
+          function recurse(node) {
+            if (node.children) node.children.forEach(recurse);
+            nodes.push(node);
+          }
+          recurse(root);
+          return nodes;
+        }
+        update();
+      }
+    </script>
+  </body>
+</html>
