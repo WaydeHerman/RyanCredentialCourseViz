@@ -19,7 +19,7 @@
       .node-label {
         text-align: center;
         text-anchor: middle;
-        font-family: Arial;
+        font-family: Futura;
         font-weight: bold;
         font-size: 0.7em;
       }
@@ -27,7 +27,7 @@
       .node-label-key {
         text-align: center;
         text-anchor: middle;
-        font-family: Arial;
+        font-family: Futura;
         font-weight: bold;
         font-size: 0.9em;
       }
@@ -164,6 +164,14 @@
         font-size: 1.2em;
         padding-bottom: 10px;
       }
+
+      .tooltip-close-btn {
+        cursor: pointer;
+      }
+
+      .tooltip-badge-img {
+        width: 100px;
+      }
     </style>
 
     <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -175,35 +183,39 @@
 
   <body>
     <div class="start-screen">
-      <div class="dropdown-audience">
-        <button class="dropbtn">
-          <i class="arrow down"></i> Select Audience
-        </button>
-        <div class="dropdown-content" id="audience-selector"></div>
-      </div>
+      <label for="Audience">Select Audience</label>
+      <select
+        id="audience-selector"
+        name="audience-selector"
+        form="option-form"
+      >
+      </select>
 
-      <div class="dropdown-topic">
-        <button class="dropbtn"><i class="arrow down"></i> Select Topic</button>
-        <div class="dropdown-content" id="topic-selector"></div>
-      </div>
+      <label for="Topic">Select Topic</label>
+      <select id="topic-selector" name="topic-selector" form="option-form">
+      </select>
 
-      <div class="dropdown-stack-name">
-        <button class="dropbtn">
-          <i class="arrow down"></i> Select Stack Name
-        </button>
-        <div class="dropdown-content" id="stack-name-selector"></div>
-      </div>
+      <label for="Stack Name">Select Stack Name</label>
+      <select
+        id="stack-name-selector"
+        name="stack-name-selector"
+        form="option-form"
+      >
+      </select>
 
-      <div class="dropdown-education-standard">
-        <button class="dropbtn">
-          <i class="arrow down"></i> Select Education Standard
-        </button>
-        <div class="dropdown-content" id="education-standard-selector"></div>
-      </div>
+      <label for="Education Standard">Select Education Standard</label>
+      <select
+        id="education-standard-selector"
+        name="education-standard-selector"
+        form="option-form"
+      >
+      </select>
     </div>
     <div class="viz-container">
       <div class="tooltip">
+        <div class="tooltip-close-btn">C</div>
         <div class="tooltip-name"></div>
+        <img class="tooltip-badge-img" />
         <div class="tooltip-issuing-organization"></div>
         <div class="tooltip-topic"></div>
         <div class="tooltip-audience"></div>
@@ -227,7 +239,7 @@
     </div>
 
     <script>
-      var width = 600,
+      var width = 1000,
         height = 600,
         directory = [],
         mode = "",
@@ -292,6 +304,9 @@
             return d["Audience_alt"];
           })
           .key(function(d) {
+            return d["Education Standard_alt"];
+          })
+          .key(function(d) {
             return d["Topic_alt"];
           })
           .entries(data);
@@ -334,17 +349,20 @@
 
         var audienceList = [];
         audienceData.forEach(function(w) {
+          w.connections = [];
           if (w.key !== "") {
             audienceList.push(w.key);
           }
           w.values.forEach(function(v) {
-            var tmp_list = [];
             v.values.forEach(function(u, i) {
-              if (tmp_list.indexOf(u["MC ID #"]) < 0) {
-                tmp_list.push(u["MC ID #"]);
-              } else {
-                delete v.values[i];
-              }
+              var tmp_list = [];
+              u.values.forEach(function(o, i) {
+                if (tmp_list.indexOf(o["MC ID #"]) < 0) {
+                  tmp_list.push(o["MC ID #"]);
+                } else {
+                  delete u.values[i];
+                }
+              });
             });
           });
         });
@@ -404,9 +422,7 @@
           });
         });
 
-        d3.select(".back-btn").on("click", function() {});
-
-        var audienceSelector = d3
+        /* var audienceSelector = d3
           .select("#audience-selector")
           .selectAll("a")
           .data(audienceList)
@@ -424,97 +440,218 @@
                 directory = [];
                 directory.push(v.key);
                 level += 1;
-                breadCrumbs = [{ name: v.key, type: "audience", data: v }];
+                breadCrumbs = [{ name: v.key, type: "Audience", data: v }];
                 generateGraph(data_copy, v.key);
               }
             });
+          }); */
+
+        var audienceSelector = d3
+          .select("#audience-selector")
+          .selectAll("option")
+          .data(audienceList)
+          .enter()
+          .append("option")
+          .html(function(d) {
+            return "<option value='" + d + "'>" + d + "<\/option>";
           });
+
+        d3.select("#audience-selector").on("change", function() {
+          d = this.value;
+          audienceData.forEach(function(v) {
+            if (v.key === d) {
+              mode = "Audience";
+              var data_copy = JSON.parse(JSON.stringify(v.values));
+              data_copy.push(v);
+              directory = [];
+              directory.push(v.key);
+              level += 1;
+              breadCrumbs = [{ name: v.key, type: "Audience", data: v }];
+              generateGraph(data_copy, v.key);
+            }
+          });
+        });
 
         var topicSelector = d3
           .select("#topic-selector")
-          .selectAll("a")
+          .selectAll("option")
           .data(topicList)
           .enter()
-          .append("text")
+          .append("option")
           .html(function(d) {
-            return "<a href='#'>" + d + "</a>";
-          })
-          .on("click", function(d) {
-            topicData.forEach(function(v) {
-              if (v.key === d) {
-                mode = "Topic";
-                var data_copy = JSON.parse(JSON.stringify(v.values));
-                data_copy.push(v);
-                directory = [];
-                directory.push(v.key);
-                level += 1;
-                breadCrumbs = [{ name: v.key, type: "topic", data: v }];
-                generateGraph(data_copy, v.key);
-              }
-            });
+            return "<option value='" + d + "'>" + d + "<\/option>";
           });
+
+        d3.select("#topic-selector").on("change", function() {
+          d = this.value;
+          topicData.forEach(function(v) {
+            if (v.key === d) {
+              mode = "Topic";
+              var data_copy = JSON.parse(JSON.stringify(v.values));
+              data_copy.push(v);
+              directory = [];
+              directory.push(v.key);
+              level += 1;
+              breadCrumbs = [{ name: v.key, type: "Topic", data: v }];
+              generateGraph(data_copy, v.key);
+            }
+          });
+        });
 
         var stackNameSelector = d3
           .select("#stack-name-selector")
-          .selectAll("a")
+          .selectAll("option")
           .data(stackNameList)
           .enter()
-          .append("text")
+          .append("option")
           .html(function(d) {
-            return "<a href='#'>" + d + "</a>";
-          })
-          .on("click", function(d) {
-            stackNameData.forEach(function(v) {
-              if (v.key === d) {
-                mode = "Stack Name";
-                var data_copy = JSON.parse(JSON.stringify(v.values));
-                data_copy.push(v);
-                directory = [];
-                directory.push(v.key);
-                level += 1;
-                breadCrumbs = [{ name: v.key, type: "stack", data: v }];
-                generateGraph(data_copy, v.key);
-              }
-            });
+            return "<option value='" + d + "'>" + d + "<\/option>";
           });
+
+        d3.select("#stack-name-selector").on("change", function() {
+          d = this.value;
+          stackNameData.forEach(function(v) {
+            if (v.key === d) {
+              mode = "Stack Name";
+              var data_copy = JSON.parse(JSON.stringify(v.values));
+              data_copy.push(v);
+              directory = [];
+              directory.push(v.key);
+              level += 1;
+              breadCrumbs = [
+                { name: v.key, type: "Micro-credential Stack Name", data: v }
+              ];
+              generateGraph(data_copy, v.key);
+            }
+          });
+        });
 
         var educationStandardSelector = d3
           .select("#education-standard-selector")
-          .selectAll("a")
+          .selectAll("option")
           .data(educationStandardList)
           .enter()
-          .append("text")
+          .append("option")
           .html(function(d) {
-            return "<a href='#'>" + d + "</a>";
-          })
-          .on("click", function(d) {
-            console.log(d);
-            educationStandardData.forEach(function(v) {
-              if (v.key === d) {
-                mode = "Education Standard";
-                var data_copy = JSON.parse(JSON.stringify(v.values));
-                data_copy.push(v);
-                directory = [];
-                directory.push(v.key);
-                level += 1;
-                breadCrumbs = [
-                  { name: v.key, type: "education-standard", data: v }
-                ];
-                generateGraph(data_copy, v.key);
-              }
-            });
+            return "<option value='" + d + "'>" + d + "<\/option>";
           });
+
+        d3.select("#education-standard-selector").on("change", function() {
+          d = this.value;
+          educationStandardData.forEach(function(v) {
+            if (v.key === d) {
+              mode = "Education Standard";
+              var data_copy = JSON.parse(JSON.stringify(v.values));
+              data_copy.push(v);
+              directory = [];
+              directory.push(v.key);
+              level += 1;
+              breadCrumbs = [
+                { name: v.key, type: "Education Standard", data: v }
+              ];
+              generateGraph(data_copy, v.key);
+            }
+          });
+        });
       });
+
+      d3.select(".tooltip-close-btn").on("click", function() {
+        d3.select(".tooltip").style("display", "none");
+      });
+
+      function setZoom() {
+        /* Function to zoom out to see entire graph.
+            Used when graph is initialized and when zoom is reset.
+            */
+
+        zoomState = 0; // Set zoom state to 0 to enable mouseover and mouseout functions
+        // determine Min/Max of x, y node values:
+        var maxX = d3.max(nodes, function(d) {
+          return d.x;
+        });
+
+        var maxY = d3.max(nodes, function(d) {
+          return d.y;
+        });
+
+        var minX = d3.min(nodes, function(d) {
+          return d.x;
+        });
+
+        var minY = d3.min(nodes, function(d) {
+          return d.y;
+        });
+
+        // determine the translation and zoom based on the min/max x and y values:
+        var vx = 0;
+        var vy = 0;
+        var bx = minX;
+        var by = minY;
+        var bw = Math.abs(minX - maxX);
+        var bh = Math.abs(minY - maxY);
+        var kX = width / (bw + 600);
+        var kY = height / (bh + 600);
+        k = d3.min([kX, kY]);
+        tx = -bx * k + vx + width / 2 - (bw * k) / 2;
+        ty = -by * k + vy + height / 2 - (bh * k) / 2;
+
+        console.log("k", k);
+        console.log("tx", tx);
+        console.log("ty", ty);
+
+        // applying the zoom transformation to the container.
+        svg.attr(
+          "transform",
+          "translate(" + 0 + ", " + 0 + ") scale(" + k + ")"
+        );
+      }
 
       function generateGraph(data, root_key) {
         updateBreadcrumbs();
         d3.select(".tooltip").style("display", "none");
-        console.log(breadCrumbs);
         d3.select(".start-screen").style("display", "none");
         d3.select("#viz")
           .selectAll("*")
           .remove();
         //d3.select(".back-btn").style("display", "inline-block");
+
+        console.log(data);
+
+        var type = breadCrumbs.slice(-1)[0].type;
+
+        /*
+        relationships = [];
+        data.forEach(function(v) {
+          if (v.key !== root_key) {
+            v.values.forEach(function(w) {
+              if (w !== null) {
+                console.log(w);
+                data.forEach(function(u) {
+                  if (u.key !== v.key) {
+                    u.values.forEach(function(o) {
+                      if (o !== null) {
+                        if (
+                          o["MC ID #"] === w["MC ID #"] &&
+                          o["MC ID #"] != ""
+                        ) {
+                          relationships.push({
+                            source: v,
+                            target: u
+                          });
+                          if (!v.total) {
+                            v.total = 1;
+                          } else {
+                            v.total += 1;
+                          }
+                        }
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }
+        }); */
 
         var root_init = d3
           .stratify()
@@ -529,18 +666,21 @@
             }
           })(data);
 
-        var root = d3.hierarchy(root_init);
+        var root = d3.hierarchy(root_init).sort(function(a, b) {
+          //console.log("a", a);
+          //console.log("b", b);
+        });
 
         var transform = d3.zoomIdentity;
         let node, link;
 
-        const svg = d3
+        svg = d3
           .select("#viz")
           .append("svg")
-          .attr("width", 1000)
-          .attr("height", 1000)
+          .attr("width", width)
+          .attr("height", height)
           .append("g")
-          .attr("transform", "translate(200,200)");
+          .attr("transform", "translate(0,0)");
 
         var simulation = d3
           .forceSimulation()
@@ -557,7 +697,7 @@
               })
           )
           .force("charge", d3.forceManyBody())
-          .force("center", d3.forceCenter(width / 2, height / 4))
+          .force("center", d3.forceCenter(width / 2, height / 2))
           .force("x", d3.forceX())
           .force("y", d3.forceY())
           .on("tick", ticked);
@@ -607,7 +747,6 @@
           level = 1;
           breadCrumbs = breadCrumbs.slice(0, 1);
           directory = directory.slice(0, 1);
-          console.log(breadCrumbs);
           if (mode === "Audience") {
             audienceData.forEach(function(v) {
               if (v.key === breadCrumbs[0].name) {
@@ -650,9 +789,18 @@
           level = 2;
           breadCrumbs = breadCrumbs.slice(0, 2);
           directory = directory.slice(0, 2);
-          console.log(breadCrumbs);
           if (mode === "Audience") {
-            //
+            audienceData.forEach(function(v) {
+              if (v.key === breadCrumbs[0].name) {
+                v.values.forEach(function(u) {
+                  if (u.key === breadCrumbs[1].name) {
+                    var data_copy = JSON.parse(JSON.stringify(u.values));
+                    data_copy.push(u);
+                    generateGraph(data_copy, u.key);
+                  }
+                });
+              }
+            });
           }
           if (mode === "Topic") {
             //
@@ -686,8 +834,81 @@
         });
 
         function update() {
-          const nodes = flatten(root);
-          const links = root.links();
+          nodes = flatten(root);
+          //const links = root.links();
+
+          //const links = relationships;
+
+          links = [];
+
+          if (
+            (mode !== "Topic" && breadCrumbs.length < 3) ||
+            (mode === "Topic" && breadCrumbs.length < 2)
+          ) {
+            listOfConnections = [];
+            nodes.forEach(function(v) {
+              if (v.parent === null) {
+                rootNode = v;
+              } else {
+                console.log("node v", v);
+                v.data.data.values.forEach(function(w, i) {
+                  if (w !== null) {
+                    nodes.forEach(function(u) {
+                      if (
+                        u.data.data.key !== v.data.data.key &&
+                        u.parent !== null
+                      ) {
+                        u.data.data.values.forEach(function(o, j) {
+                          if (o !== null) {
+                            if (o.key === w.key) {
+                              if (
+                                listOfConnections.indexOf(
+                                  u.data.data.key + "" + v.data.data.key
+                                ) < 0
+                              ) {
+                                listOfConnections.push(
+                                  u.data.data.key + "" + v.data.data.key
+                                );
+                                links.push({
+                                  source: u,
+                                  target: v,
+                                  id: links.length,
+                                  ref: u.data.data.key + "" + v.data.data.key,
+                                  value: 1
+                                });
+                              } else {
+                                links.forEach(function(k) {
+                                  if (
+                                    k.ref ===
+                                    u.data.data.key + "" + v.data.data.key
+                                  ) {
+                                    k.value += 1;
+                                  }
+                                });
+                              }
+                            }
+                          }
+                        });
+                      }
+                    });
+                  }
+                });
+              }
+            });
+            console.log("listOfConnections", listOfConnections);
+          } else {
+            nodes.forEach(function(v) {
+              if (v.parent === null) {
+                rootNode = v;
+              }
+            });
+          }
+
+          console.log(links);
+
+          rootLink = svg.selectAll(".root-link").data(nodes);
+
+          rootLink.exit().remove();
 
           link = svg.selectAll(".link").data(links, function(d) {
             return d.target.id;
@@ -695,10 +916,10 @@
 
           link.exit().remove();
 
-          const linkEnter = link
+          const rootLinkEnter = rootLink
             .enter()
             .append("line")
-            .attr("class", "link")
+            .attr("class", "root-link")
             .style("stroke", function(d) {
               if (d.value > 0) {
                 return "white";
@@ -712,6 +933,34 @@
             .style("stroke-width", function(d) {
               if (d.value > 0) {
                 return d.value / 2;
+              } else {
+                return 2;
+              }
+            });
+
+          rootLink = rootLinkEnter.merge(rootLink);
+
+          const linkEnter = link
+            .enter()
+            .append("line")
+            .attr("class", "link")
+            .style("stroke", function(d) {
+              if (d.value > 0) {
+                return "#000";
+              } else {
+                return "#000";
+              }
+            })
+            .style("opacity", function(d) {
+              return 0.2;
+            })
+            .style("stroke-width", function(d) {
+              if (d.value > 0) {
+                if (d.value / 2 > 8) {
+                  return 8;
+                } else {
+                  return d.value / 2;
+                }
               } else {
                 return 2;
               }
@@ -733,7 +982,7 @@
               if (d.data.id === root_key) {
                 return "#8B8B8B";
               } else {
-                if (mode === "Audience" || mode === "Topic") {
+                if (mode === "Topic") {
                   if (breadCrumbs.length == 2) {
                     return "#3891A6";
                   } else {
@@ -749,94 +998,29 @@
               }
             })
             .on("mouseover", function(d) {
+              //
+            })
+            .on("click", function(d) {
               if (d.data.id !== root_key) {
-                if (
-                  breadCrumbs.length === 2 &&
-                  (mode === "Audience" || mode === "Topic")
-                ) {
+                if (breadCrumbs.length === 2 && mode === "Topic") {
                   showTooltip(d.data.data);
                 }
                 if (
                   breadCrumbs.length === 3 &&
-                  (mode === "Stack Name" || mode === "Education Standard")
+                  (mode === "Audience" ||
+                    mode === "Stack Name" ||
+                    mode === "Education Standard")
                 ) {
                   showTooltip(d.data.data);
                 }
               }
-            })
-            .on("click", function(d) {
-              console.log(d);
               if (d.data.parent !== null) {
                 if (mode === "Audience") {
-                  if (breadCrumbs.length < 2) {
+                  if (breadCrumbs.length < 3) {
                     directory.push(d.data.id);
                     audienceData.forEach(function(v) {
-                      if (v.key === directory[0]) {
-                        v.values.forEach(function(w) {
-                          if (w) {
-                            if (w.key === directory[1]) {
-                              var data_copy = JSON.parse(
-                                JSON.stringify(w.values)
-                              );
-                              data_copy.push(w);
-                              level += 1;
-                              breadCrumbs.push({
-                                name: w.key,
-                                type: "topic",
-                                data: w
-                              });
-                              generateGraph(
-                                data_copy.filter(function(d) {
-                                  return d != null;
-                                }),
-                                w.key
-                              );
-                            }
-                          }
-                        });
-                      }
-                    });
-                  }
-                }
-                if (mode === "Topic") {
-                  if (breadCrumbs.length < 2) {
-                    directory.push(d.data.id);
-                    topicData.forEach(function(v) {
-                      if (v.key === directory[0]) {
-                        v.values.forEach(function(w) {
-                          if (w) {
-                            if (w.key === directory[1]) {
-                              var data_copy = JSON.parse(
-                                JSON.stringify(w.values)
-                              );
-                              data_copy.push(w);
-                              level += 1;
-                              breadCrumbs.push({
-                                name: w.key,
-                                type: "audience",
-                                data: w
-                              });
-                              generateGraph(
-                                data_copy.filter(function(d) {
-                                  return d != null;
-                                }),
-                                w.key
-                              );
-                            }
-                          }
-                        });
-                      }
-                    });
-                  }
-                }
-                if (mode === "Stack Name") {
-                  if (breadCrumbs.length < 3) {
-                    console.log(stackNameData);
-                    directory.push(d.data.id);
-                    stackNameData.forEach(function(v) {
                       if (v.key === directory[0] && v.key === root_key) {
                         v.values.forEach(function(w) {
-                          console.log(w);
                           if (w) {
                             if (w.key === directory[1]) {
                               var data_copy = JSON.parse(
@@ -846,7 +1030,7 @@
                               level += 1;
                               breadCrumbs.push({
                                 name: w.key,
-                                type: "audience",
+                                type: "Education Standard",
                                 data: w
                               });
                               generateGraph(
@@ -871,7 +1055,95 @@
                                 level += 1;
                                 breadCrumbs.push({
                                   name: u.key,
-                                  type: "topic",
+                                  type: "Topic",
+                                  data: u
+                                });
+                                generateGraph(
+                                  data_copy.filter(function(d) {
+                                    return d != null;
+                                  }),
+                                  u.key
+                                );
+                              }
+                            });
+                          }
+                        });
+                      }
+                    });
+                  }
+                }
+                if (mode === "Topic") {
+                  if (breadCrumbs.length < 2) {
+                    directory.push(d.data.id);
+                    topicData.forEach(function(v) {
+                      if (v.key === directory[0]) {
+                        v.values.forEach(function(w) {
+                          if (w) {
+                            if (w.key === directory[1]) {
+                              var data_copy = JSON.parse(
+                                JSON.stringify(w.values)
+                              );
+                              data_copy.push(w);
+                              level += 1;
+                              breadCrumbs.push({
+                                name: w.key,
+                                type: "Audience",
+                                data: w
+                              });
+                              generateGraph(
+                                data_copy.filter(function(d) {
+                                  return d != null;
+                                }),
+                                w.key
+                              );
+                            }
+                          }
+                        });
+                      }
+                    });
+                  }
+                }
+                if (mode === "Stack Name") {
+                  if (breadCrumbs.length < 3) {
+                    directory.push(d.data.id);
+                    stackNameData.forEach(function(v) {
+                      if (v.key === directory[0] && v.key === root_key) {
+                        v.values.forEach(function(w) {
+                          if (w) {
+                            if (w.key === directory[1]) {
+                              var data_copy = JSON.parse(
+                                JSON.stringify(w.values)
+                              );
+                              data_copy.push(w);
+                              level += 1;
+                              breadCrumbs.push({
+                                name: w.key,
+                                type: "Audience",
+                                data: w
+                              });
+                              generateGraph(
+                                data_copy.filter(function(d) {
+                                  return d != null;
+                                }),
+                                w.key
+                              );
+                            }
+                          }
+                        });
+                      }
+                      if (v.key === directory[0]) {
+                        v.values.forEach(function(w) {
+                          if (w.key === directory[1] && w.key === root_key) {
+                            w.values.forEach(function(u) {
+                              if (u.key === d.data.id) {
+                                var data_copy = JSON.parse(
+                                  JSON.stringify(u.values)
+                                );
+                                data_copy.push(u);
+                                level += 1;
+                                breadCrumbs.push({
+                                  name: u.key,
+                                  type: "Topic",
                                   data: u
                                 });
                                 generateGraph(
@@ -894,7 +1166,6 @@
                     educationStandardData.forEach(function(v) {
                       if (v.key === directory[0] && v.key === root_key) {
                         v.values.forEach(function(w) {
-                          console.log(w);
                           if (w) {
                             if (w.key === directory[1]) {
                               var data_copy = JSON.parse(
@@ -904,7 +1175,7 @@
                               level += 1;
                               breadCrumbs.push({
                                 name: w.key,
-                                type: "audience",
+                                type: "Audience",
                                 data: w
                               });
                               generateGraph(
@@ -929,7 +1200,7 @@
                                 level += 1;
                                 breadCrumbs.push({
                                   name: u.key,
-                                  type: "topic",
+                                  type: "Topic",
                                   data: u
                                 });
                                 generateGraph(
@@ -995,6 +1266,7 @@
           node = nodeEnter.merge(node);
           simulation.nodes(nodes);
           simulation.force("link").links(links);
+          setZoom();
         }
 
         function ticked() {
@@ -1012,6 +1284,20 @@
               return d.target.y;
             });
 
+          rootLink
+            .attr("x1", function(d) {
+              return d.x;
+            })
+            .attr("y1", function(d) {
+              return d.y;
+            })
+            .attr("x2", function(d) {
+              return rootNode.x;
+            })
+            .attr("y2", function(d) {
+              return rootNode.y;
+            });
+
           node.attr("transform", function(d) {
             return `translate(${d.x}, ${d.y})`;
           });
@@ -1026,9 +1312,14 @@
         }
 
         function showTooltip(d) {
-          console.log(d);
           d3.select(".tooltip").style("display", "block");
           d3.select(".tooltip-name").text(d["Micro-credential Name"]);
+          if (d["Badge Image"]) {
+            const badgeUrlRegex = /\((.*?)\)/;
+            imgURL = badgeUrlRegex.exec(d["Badge Image"])[1];
+            d3.select(".tooltip-badge-img").attr("src", imgURL);
+          }
+
           d3.select(".tooltip-issuing-organization").text(
             "Issuing Organization: " + d["Issuing Organization"]
           );
@@ -1040,15 +1331,17 @@
           d3.select(".tooltip-stack-name").text(
             "Stack Name: " + d["Micro-credential Stack Name"]
           );
+          d3.select(".tooltip-description").text(
+            d["Competency Statement (Description)"]
+          );
         }
 
         function updateBreadcrumbs() {
-          console.log("level", level);
           if (level === 0) {
             d3.select(".breadcrumbs-container").style("display", "none");
           } else {
             d3.select(".breadcrumbs-container").style("display", "block");
-            if (mode === "Audience" || mode === "Topic") {
+            if (mode === "Topic") {
               d3.select(".bitem-4").style("display", "none");
               d3.select(".bitem-icon-4").style("display", "none");
             } else {
@@ -1058,8 +1351,9 @@
             if (level === 1) {
               if (mode === "Audience") {
                 var bitem1 = breadCrumbs[0].name;
-                var bitem2 = "Select Topic";
-                var bitem3 = "Select Micro-credential";
+                var bitem2 = "Select Education Standard";
+                var bitem3 = "Select Topic";
+                var bitem4 = "Select Micro-credential";
               }
               if (mode === "Topic") {
                 var bitem1 = breadCrumbs[0].name;
@@ -1096,7 +1390,8 @@
               if (mode === "Audience") {
                 var bitem1 = breadCrumbs[0].name;
                 var bitem2 = breadCrumbs[1].name;
-                var bitem3 = "Select Micro-credential";
+                var bitem3 = "Select Education Standard";
+                var bitem4 = "Select Micro-credential";
               }
               if (mode === "Topic") {
                 var bitem1 = breadCrumbs[0].name;
@@ -1130,6 +1425,12 @@
               );
             }
             if (level === 3) {
+              if (mode === "Audience") {
+                var bitem1 = breadCrumbs[0].name;
+                var bitem2 = breadCrumbs[1].name;
+                var bitem3 = breadCrumbs[2].name;
+                var bitem4 = "Select Micro-credential";
+              }
               if (mode === "Stack Name") {
                 var bitem1 = breadCrumbs[0].name;
                 var bitem2 = breadCrumbs[1].name;
