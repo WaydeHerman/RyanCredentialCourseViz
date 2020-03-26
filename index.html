@@ -1535,25 +1535,25 @@
             }
             if (level === 1) {
               if (mode === "Audience") {
-                var bitem1 = breadCrumbs[0].name;
+                var bitem1 = "Audience: " + breadCrumbs[0].name;
                 var bitem2 = "Select Education Standard";
                 var bitem3 = "Select Topic";
                 var bitem4 = "Select Micro-credential";
               }
               if (mode === "Stack Name") {
-                var bitem1 = breadCrumbs[0].name;
+                var bitem1 = "Stack Name: " + breadCrumbs[0].name;
                 var bitem2 = "Select Audience";
                 var bitem3 = "Select Topic";
                 var bitem4 = "Select Micro-credential";
               }
               if (mode === "Education Standard") {
-                var bitem1 = breadCrumbs[0].name;
+                var bitem1 = "Education Standard: " + breadCrumbs[0].name;
                 var bitem2 = "Select Audience";
                 var bitem3 = "Select Topic";
                 var bitem4 = "Select Micro-credential";
               }
               if (mode === "Topic") {
-                var bitem1 = breadCrumbs[0].name;
+                var bitem1 = "Topic: " + breadCrumbs[0].name;
                 var bitem2 = "Select Audience";
                 var bitem4 = "Select Micro-credential";
               }
@@ -1582,14 +1582,14 @@
               );
               d3.select(".bbox-4").attr("class", "bbox bbox-4 bbox-inactive");
               if (mode === "Audience") {
-                var bitem1 = breadCrumbs[0].name;
-                var bitem2 = breadCrumbs[1].name;
-                var bitem3 = "Select Education Standard";
+                var bitem1 = "Audience: " + breadCrumbs[0].name;
+                var bitem2 = "Education Standard: " + breadCrumbs[1].name;
+                var bitem3 = "Select Topic";
                 var bitem4 = "Select Micro-credential";
               }
               if (mode === "Topic") {
-                var bitem1 = breadCrumbs[0].name;
-                var bitem2 = breadCrumbs[1].name;
+                var bitem1 = "Topic: " + breadCrumbs[0].name;
+                var bitem2 = "Audience: " + breadCrumbs[1].name;
                 var bitem4 = "Select Micro-credential";
                 d3.select(".bitem-4")
                   .attr("class", "bitem bitem-4")
@@ -1597,14 +1597,14 @@
                 d3.select(".bbox-4").attr("class", "bbox bbox-4");
               }
               if (mode === "Stack Name") {
-                var bitem1 = breadCrumbs[0].name;
-                var bitem2 = breadCrumbs[1].name;
+                var bitem1 = "Stack Name: " + breadCrumbs[0].name;
+                var bitem2 = "Audience: " + breadCrumbs[1].name;
                 var bitem3 = "Select Topic";
                 var bitem4 = "Select Micro-credential";
               }
               if (mode === "Education Standard") {
-                var bitem1 = breadCrumbs[0].name;
-                var bitem2 = breadCrumbs[1].name;
+                var bitem1 = "Education Standard: " + breadCrumbs[0].name;
+                var bitem2 = "Audience: " + breadCrumbs[1].name;
                 var bitem3 = "Select Topic";
                 var bitem4 = "Select Micro-credential";
               }
@@ -1618,21 +1618,21 @@
             }
             if (level === 3) {
               if (mode === "Audience") {
-                var bitem1 = breadCrumbs[0].name;
-                var bitem2 = breadCrumbs[1].name;
-                var bitem3 = breadCrumbs[2].name;
+                var bitem1 = "Audience: " + breadCrumbs[0].name;
+                var bitem2 = "Education Standard: " + breadCrumbs[1].name;
+                var bitem3 = "Topic: " + breadCrumbs[2].name;
                 var bitem4 = "Select Micro-credential";
               }
               if (mode === "Stack Name") {
-                var bitem1 = breadCrumbs[0].name;
-                var bitem2 = breadCrumbs[1].name;
-                var bitem3 = breadCrumbs[2].name;
+                var bitem1 = "Stack Name: " + breadCrumbs[0].name;
+                var bitem2 = "Audience: " + breadCrumbs[1].name;
+                var bitem3 = "Topic: " + breadCrumbs[2].name;
                 var bitem4 = "Select Micro-credential";
               }
               if (mode === "Education Standard") {
-                var bitem1 = breadCrumbs[0].name;
-                var bitem2 = breadCrumbs[1].name;
-                var bitem3 = breadCrumbs[2].name;
+                var bitem1 = "Education Standard: " + breadCrumbs[0].name;
+                var bitem2 = "Audience: " + breadCrumbs[1].name;
+                var bitem3 = "Topic: " + breadCrumbs[2].name;
                 var bitem4 = "Select Micro-credential";
               }
               d3.select(".bitem-1")
