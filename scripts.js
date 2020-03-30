@@ -979,7 +979,7 @@ function generateGraph(data, root_key) {
           }
         }
 
-        if (text.length > 20) {
+        if (text.length > 30) {
           a = text.substr(0, 30).lastIndexOf(" ");
           y = text.substr(a + 1);
           if (y.length > 1) {
@@ -1017,7 +1017,7 @@ function generateGraph(data, root_key) {
           console.log("text", text);
           a = text.substr(0, 30).lastIndexOf(" ");
           y = text.substr(a + 1);
-          if (y.length > 20) {
+          if (y.length > 30) {
             b = y.substr(0, 30).lastIndexOf(" ");
             z = y.substr(b + 1);
             console.log("a", a);
@@ -1071,7 +1071,7 @@ function generateGraph(data, root_key) {
           console.log("text", text);
           a = text.substr(0, 30).lastIndexOf(" ");
           y = text.substr(a + 1);
-          if (y.length > 20) {
+          if (y.length > 30) {
             b = y.substr(0, 30).lastIndexOf(" ");
             z = y.substr(b + 1);
             console.log("a", a);
@@ -1108,8 +1108,8 @@ function generateGraph(data, root_key) {
     // distance based on number of nodes?
     distanceScale = d3
       .scaleSqrt()
-      .domain([0, 100])
-      .range([120, 80]);
+      .domain([0, 80])
+      .range([200, 60]);
 
     node = nodeEnter.merge(node);
     simulation.nodes(nodes);
