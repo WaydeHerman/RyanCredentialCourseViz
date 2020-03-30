@@ -63,9 +63,6 @@ d3.csv("data.csv").then(function(data) {
     })
     .sortKeys(d3.ascending)
     .key(function(d) {
-      return d["Education Standard_alt"];
-    })
-    .key(function(d) {
       return d["Topics_alt"];
     })
     .entries(data);
@@ -111,20 +108,17 @@ d3.csv("data.csv").then(function(data) {
 
   var audienceList = [];
   audienceData.forEach(function(w) {
-    w.connections = [];
     if (w.key !== "") {
       audienceList.push(w.key);
     }
     w.values.forEach(function(v) {
+      var tmp_list = [];
       v.values.forEach(function(u, i) {
-        var tmp_list = [];
-        u.values.forEach(function(o, i) {
-          if (tmp_list.indexOf(o["MC ID #"]) < 0) {
-            tmp_list.push(o["MC ID #"]);
-          } else {
-            delete u.values[i];
-          }
-        });
+        if (tmp_list.indexOf(u["MC ID #"]) < 0) {
+          tmp_list.push(u["MC ID #"]);
+        } else {
+          delete v.values[i];
+        }
       });
     });
   });
@@ -184,32 +178,7 @@ d3.csv("data.csv").then(function(data) {
     });
   });
 
-  /* var audienceSelector = d3
-      .select("#audience-selector")
-      .selectAll("a")
-      .data(audienceList)
-      .enter()
-      .append("text")
-      .html(function(d) {
-        return "<a href='#'>" + d + "</a>";
-      })
-      .on("click", function(d) {
-        audienceData.forEach(function(v) {
-          if (v.key === d) {
-            mode = "Audience";
-            var data_copy = JSON.parse(JSON.stringify(v.values));
-            data_copy.push(v);
-            directory = [];
-            directory.push(v.key);
-            level += 1;
-            breadCrumbs = [{ name: v.key, type: "Audience", data: v }];
-            generateGraph(data_copy, v.key);
-          }
-        });
-      }); */
-
-  var audienceSelector = d3
-    .select("#audience-selector")
+  d3.select("#audience-selector")
     .selectAll("option")
     .data(audienceList)
     .enter()
@@ -234,8 +203,7 @@ d3.csv("data.csv").then(function(data) {
     });
   });
 
-  var topicSelector = d3
-    .select("#topic-selector")
+  d3.select("#topic-selector")
     .selectAll("option")
     .data(topicList)
     .enter()
@@ -260,8 +228,7 @@ d3.csv("data.csv").then(function(data) {
     });
   });
 
-  var stackNameSelector = d3
-    .select("#stack-name-selector")
+  d3.select("#stack-name-selector")
     .selectAll("option")
     .data(stackNameList)
     .enter()
@@ -288,8 +255,7 @@ d3.csv("data.csv").then(function(data) {
     });
   });
 
-  var educationStandardSelector = d3
-    .select("#education-standard-selector")
+  d3.select("#education-standard-selector")
     .selectAll("option")
     .data(educationStandardList)
     .enter()
@@ -366,24 +332,17 @@ function generateGraph(data, root_key) {
   d3.select("#viz")
     .selectAll("*")
     .remove();
-  //d3.select(".back-btn").style("display", "inline-block");
 
   data = data.filter(function(d) {
     return d.key != "";
   });
 
-  var type = breadCrumbs.slice(-1)[0].type;
-
-  var p0 = performance.now();
-
-  console.log("data", data);
-
   relationships = [];
   listOfRelationships = [];
   if (
     data.length > 2 &&
-    ((mode !== "Topics" && breadCrumbs.length < 3) ||
-      (mode === "Topics" && breadCrumbs.length < 2))
+    ((mode !== "Topics" && mode !== "Audience" && breadCrumbs.length < 3) ||
+      ((mode === "Topics" || mode === "Audience") && breadCrumbs.length < 2))
   ) {
     data.forEach(function(v, i) {
       if (v.key !== root_key) {
@@ -394,8 +353,11 @@ function generateGraph(data, root_key) {
                 u.values.forEach(function(o) {
                   if (o !== null) {
                     if (
-                      (mode !== "Topics" && breadCrumbs.length === 2) ||
-                      (mode === "Topics" && breadCrumbs.length === 1)
+                      (mode !== "Topics" &&
+                        mode !== "Audience" &&
+                        breadCrumbs.length === 2) ||
+                      ((mode === "Topics" || mode === "Audience") &&
+                        breadCrumbs.length === 1)
                     ) {
                       if (o["MC ID #"] === w["MC ID #"]) {
                         var ref = "" + v.key + u.key;
@@ -447,14 +409,9 @@ function generateGraph(data, root_key) {
     });
   }
 
-  console.log(relationships);
-
   if (relationships.length > 1) {
     relationships = getTopXpercent(relationships, "value", 0.05);
   }
-
-  var p1 = performance.now();
-  console.log("Call to p(function) took " + (p1 - p0) + " milliseconds.");
 
   var root_init = d3
     .stratify()
@@ -469,10 +426,7 @@ function generateGraph(data, root_key) {
       }
     })(data);
 
-  var root = d3.hierarchy(root_init).sort(function(a, b) {
-    //console.log("a", a);
-    //console.log("b", b);
-  });
+  var root = d3.hierarchy(root_init);
 
   var transform = d3.zoomIdentity;
   let node, link;
@@ -591,17 +545,7 @@ function generateGraph(data, root_key) {
     breadCrumbs = breadCrumbs.slice(0, 2);
     directory = directory.slice(0, 2);
     if (mode === "Audience") {
-      audienceData.forEach(function(v) {
-        if (v.key === breadCrumbs[0].name) {
-          v.values.forEach(function(u) {
-            if (u.key === breadCrumbs[1].name) {
-              var data_copy = JSON.parse(JSON.stringify(u.values));
-              data_copy.push(u);
-              generateGraph(data_copy, u.key);
-            }
-          });
-        }
-      });
+      //
     }
     if (mode === "Topics") {
       //
@@ -635,14 +579,9 @@ function generateGraph(data, root_key) {
   });
 
   function update() {
-    console.log("mode", mode);
-    console.log("breadCrumbs.length", breadCrumbs.length);
     nodes = flatten(root);
-    //const links = root.links();
 
     links = relationships;
-
-    //links = [];
 
     nodes.forEach(function(v) {
       if (v.parent === null) {
@@ -735,7 +674,7 @@ function generateGraph(data, root_key) {
       .attr("class", "node")
       .style("fill", function(d) {
         if (d.data.id === root_key) {
-          if (mode === "Topics") {
+          if (mode === "Topics" || mode === "Audience") {
             if (breadCrumbs.length == 1) {
               return "#235789";
             } else {
@@ -755,7 +694,7 @@ function generateGraph(data, root_key) {
             }
           }
         } else {
-          if (mode === "Topics") {
+          if (mode === "Topics" || mode === "Audience") {
             if (breadCrumbs.length == 1) {
               return "#F1D302";
             } else {
@@ -781,24 +720,25 @@ function generateGraph(data, root_key) {
       })
       .on("click", function(d) {
         if (d.data.id !== root_key) {
-          if (breadCrumbs.length === 2 && mode === "Topics") {
+          if (
+            breadCrumbs.length === 2 &&
+            (mode === "Topics" || mode === "Audience")
+          ) {
             showTooltip(d.data.data);
           }
           if (
             breadCrumbs.length === 3 &&
-            (mode === "Audience" ||
-              mode === "Stack Name" ||
-              mode === "Education Standard")
+            (mode === "Stack Name" || mode === "Education Standard")
           ) {
             showTooltip(d.data.data);
           }
         }
         if (d.data.parent !== null) {
           if (mode === "Audience") {
-            if (breadCrumbs.length < 3) {
+            if (breadCrumbs.length < 2) {
               directory.push(d.data.id);
               audienceData.forEach(function(v) {
-                if (v.key === directory[0] && v.key === root_key) {
+                if (v.key === directory[0]) {
                   v.values.forEach(function(w) {
                     if (w) {
                       if (w.key === directory[1]) {
@@ -807,7 +747,7 @@ function generateGraph(data, root_key) {
                         level += 1;
                         breadCrumbs.push({
                           name: w.key,
-                          type: "Education Standard",
+                          type: "Topics",
                           data: w
                         });
                         generateGraph(
@@ -817,30 +757,6 @@ function generateGraph(data, root_key) {
                           w.key
                         );
                       }
-                    }
-                  });
-                }
-                if (v.key === directory[0]) {
-                  v.values.forEach(function(w) {
-                    if (w.key === directory[1] && w.key === root_key) {
-                      w.values.forEach(function(u) {
-                        if (u.key === d.data.id) {
-                          var data_copy = JSON.parse(JSON.stringify(u.values));
-                          data_copy.push(u);
-                          level += 1;
-                          breadCrumbs.push({
-                            name: u.key,
-                            type: "Topic",
-                            data: u
-                          });
-                          generateGraph(
-                            data_copy.filter(function(d) {
-                              return d != null;
-                            }),
-                            u.key
-                          );
-                        }
-                      });
                     }
                   });
                 }
@@ -1127,8 +1043,9 @@ function generateGraph(data, root_key) {
       .on("mouseover", function(d) {
         if (
           d.data.id !== root_key &&
-          ((mode === "Topics" && breadCrumbs.length !== 2) ||
-            mode !== "Topics" ||
+          (((mode === "Topics" || mode === "Audience") &&
+            breadCrumbs.length !== 2) ||
+            (mode !== "Topics" && mode !== "Audience") ||
             breadCrumbs.length !== 3)
         ) {
           toShow = [];
@@ -1220,8 +1137,6 @@ function generateGraph(data, root_key) {
       d3.select(".tooltip-badge-img").attr("src", imgURL);
     }
 
-    console.log("tooltip d", d);
-
     var audiences = d["Audience"].split(",");
     var educationStandards = d["Education Standard"].split(",");
     var topics = d["Topics"].split(",");
@@ -1278,13 +1193,9 @@ function generateGraph(data, root_key) {
     d3.select(".tooltip-issuing-organization").html(
       "Issuing Organization: " + d["Issuing Organization"]
     );
-    // <<<<
     d3.select(".tooltip-topic").html(topicsHTML);
-    // <<<<
     d3.select(".tooltip-audience").html(audienceHTML);
-    // <<<<
     d3.select(".tooltip-education-standard").html(educationStandardsHTML);
-    // <<<<
     d3.select(".tooltip-stack-name").html(stackNameHTML);
     d3.select(".tooltip-description").text(
       d["Competency Statement (Description)"]
@@ -1362,7 +1273,7 @@ function generateGraph(data, root_key) {
       d3.select(".breadcrumbs-container").style("display", "none");
     } else {
       d3.select(".breadcrumbs-container").style("display", "block");
-      if (mode === "Topics") {
+      if (mode === "Topics" || mode === "Audience") {
         d3.select(".bitem-3").style("display", "none");
         d3.select(".bitem-icon-3").style("display", "none");
         d3.select(".bbox-3").style("display", "none");
@@ -1374,8 +1285,7 @@ function generateGraph(data, root_key) {
       if (level === 1) {
         if (mode === "Audience") {
           var bitem1 = "Audience: " + breadCrumbs[0].name;
-          var bitem2 = "Select Education Standard";
-          var bitem3 = "Select Topic";
+          var bitem2 = "Select Topic";
           var bitem4 = "Select Micro-credential";
         }
         if (mode === "Stack Name") {
@@ -1410,14 +1320,16 @@ function generateGraph(data, root_key) {
       }
       if (level === 2) {
         d3.select(".bitem-3").attr("class", "bitem bitem-3 bitem-active");
-
         d3.select(".bitem-4").attr("class", "bitem bitem-4 bitem-inactive");
         d3.select(".bbox-4").attr("class", "bbox bbox-4 bbox-inactive");
         if (mode === "Audience") {
           var bitem1 = "Audience: " + breadCrumbs[0].name;
-          var bitem2 = "Education Standard: " + breadCrumbs[1].name;
-          var bitem3 = "Select Topic";
+          var bitem2 = "Topic: " + breadCrumbs[1].name;
           var bitem4 = "Select Micro-credential";
+          d3.select(".bitem-4")
+            .attr("class", "bitem bitem-4")
+            .text(bitem4);
+          d3.select(".bbox-4").attr("class", "bbox bbox-4");
         }
         if (mode === "Topics") {
           var bitem1 = "Topic: " + breadCrumbs[0].name;
@@ -1449,12 +1361,6 @@ function generateGraph(data, root_key) {
         d3.select(".bbox-3").attr("class", "bbox bbox-3");
       }
       if (level === 3) {
-        if (mode === "Audience") {
-          var bitem1 = "Audience: " + breadCrumbs[0].name;
-          var bitem2 = "Education Standard: " + breadCrumbs[1].name;
-          var bitem3 = "Topic: " + breadCrumbs[2].name;
-          var bitem4 = "Select Micro-credential";
-        }
         if (mode === "Stack Name") {
           var bitem1 = "Stack Name: " + breadCrumbs[0].name;
           var bitem2 = "Audience: " + breadCrumbs[1].name;
