@@ -1293,7 +1293,7 @@ function generateGraph(data, root_key) {
         audienceHTML +=
           "<span class='tooltip-link audience-link-" +
           i +
-          "'>, " +
+          "'>" +
           v +
           "</span>";
       } else {
@@ -1307,7 +1307,7 @@ function generateGraph(data, root_key) {
         educationStandardsHTML +=
           "<span class='tooltip-link education-standards-link-" +
           i +
-          "'>, " +
+          "'>" +
           v +
           "</span>";
       } else {
@@ -1322,7 +1322,7 @@ function generateGraph(data, root_key) {
     topics.forEach(function(v, i) {
       if (i > 0) {
         topicsHTML +=
-          "<span class='tooltip-link topics-link-" + i + "'>, " + v + "</span>";
+          "<span class='tooltip-link topics-link-" + i + "'>" + v + "</span>";
       } else {
         topicsHTML +=
           "<span class='tooltip-link topics-link-" + i + "'>" + v + "</span>";
