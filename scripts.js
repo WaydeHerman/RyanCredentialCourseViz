@@ -960,16 +960,11 @@ function generateGraph(data, root_key) {
         }
 
         if (text.length > 40) {
-          console.log("text", text);
           a = text.substr(0, 30).lastIndexOf(" ");
           y = text.substr(a + 1);
           if (y.length > 20) {
             b = y.substr(0, 30).lastIndexOf(" ");
             z = y.substr(b + 1);
-            console.log("a", a);
-            console.log("y", y);
-            console.log("b", b);
-            console.log("z", z);
             e = text.substr(0, a);
             y = text.substr(a + 1);
             z = y.substr(b + 1);
@@ -1014,16 +1009,11 @@ function generateGraph(data, root_key) {
         }
 
         if (text.length > 40) {
-          console.log("text", text);
           a = text.substr(0, 30).lastIndexOf(" ");
           y = text.substr(a + 1);
           if (y.length > 30) {
             b = y.substr(0, 30).lastIndexOf(" ");
             z = y.substr(b + 1);
-            console.log("a", a);
-            console.log("y", y);
-            console.log("b", b);
-            console.log("z", z);
             e = text.substr(0, a);
             y = text.substr(a + 1);
             z = y.substr(0, b);
@@ -1068,16 +1058,11 @@ function generateGraph(data, root_key) {
         }
 
         if (text.length > 40) {
-          console.log("text", text);
           a = text.substr(0, 30).lastIndexOf(" ");
           y = text.substr(a + 1);
           if (y.length > 30) {
             b = y.substr(0, 30).lastIndexOf(" ");
             z = y.substr(b + 1);
-            console.log("a", a);
-            console.log("y", y);
-            console.log("b", b);
-            console.log("z", z);
             e = text.substr(0, a);
             //y = text.substr(a + 1);
             return e;
@@ -1207,6 +1192,9 @@ function generateGraph(data, root_key) {
             }
           });
           nodeLabels1.attr("opacity", function(v) {
+            if (d.data.id === v.data.id) {
+              d3.select(this).moveToFront();
+            }
             if (toShow.indexOf(v.data.id) >= 0) {
               return 1;
             } else {
@@ -1214,6 +1202,9 @@ function generateGraph(data, root_key) {
             }
           });
           nodeLabels0.attr("opacity", function(v) {
+            if (d.data.id === v.data.id) {
+              d3.select(this).moveToFront();
+            }
             if (toShow.indexOf(v.data.id) >= 0) {
               return 1;
             } else {
@@ -1221,6 +1212,9 @@ function generateGraph(data, root_key) {
             }
           });
           nodeLabels.attr("opacity", function(v) {
+            if (d.data.id === v.data.id) {
+              d3.select(this).moveToFront();
+            }
             if (toShow.indexOf(v.data.id) >= 0) {
               return 1;
             } else {
@@ -1570,6 +1564,12 @@ function generateGraph(data, root_key) {
 
     return arrayCopy;
   }
+
+  d3.selection.prototype.moveToFront = function() {
+    return this.each(function() {
+      this.parentNode.appendChild(this);
+    });
+  };
 
   function flatten(root) {
     const nodes = [];
