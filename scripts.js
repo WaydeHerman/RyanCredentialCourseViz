@@ -1269,6 +1269,10 @@ function generateGraph(data, root_key) {
       .on("click", function() {
         window.open(d["Direct Link to MC on the platform"], "_blank");
       });
+    d3.select(".visit-btn")
+      .on("click", function() {
+        window.open(d["Direct Link to MC on the platform"], "_blank");
+      });
     if (d["Badge Image Link (Badgr)"]) {
       //const badgeUrlRegex = /\((.*?)\)/;
       //imgURL = badgeUrlRegex.exec(d["Badge Image"])[1];
