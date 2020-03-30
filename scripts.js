@@ -1026,8 +1026,8 @@ function generateGraph(data, root_key) {
             console.log("z", z);
             e = text.substr(0, a);
             y = text.substr(a + 1);
-            z = y.substr(b + 1);
-            return y;
+            z = y.substr(0, b);
+            return z;
           } else {
             return text.substr(0, a);
           }
@@ -1079,8 +1079,7 @@ function generateGraph(data, root_key) {
             console.log("b", b);
             console.log("z", z);
             e = text.substr(0, a);
-            y = text.substr(a + 1);
-            z = y.substr(b + 1);
+            //y = text.substr(a + 1);
             return e;
           } else {
             return "";
