@@ -20,8 +20,6 @@ $(".start-over-btn").click(function() {
 d3.csv("data.csv").then(function(data) {
   breadCrumbs = [];
 
-  console.log(data);
-
   new_data = [];
   data.forEach(function(v) {
     var audiences = v["Audience"].split(",");
@@ -301,7 +299,6 @@ d3.select(".tooltip-close-btn").on("click", function() {
 });
 
 function setZoom(bmargin) {
-  console.log(bmargin);
   /* Function to zoom out to see entire graph.
           Used when graph is initialized and when zoom is reset.
           */
@@ -966,16 +963,20 @@ function generateGraph(data, root_key) {
           console.log("text", text);
           a = text.substr(0, 30).lastIndexOf(" ");
           y = text.substr(a + 1);
-          b = y.substr(0, 30).lastIndexOf(" ");
-          z = y.substr(b + 1);
-          console.log("a", a);
-          console.log("y", y);
-          console.log("b", b);
-          console.log("z", z);
-          e = text.substr(0, a);
-          y = text.substr(a + 1);
-          z = y.substr(b + 1);
-          return z;
+          if (y.length > 20) {
+            b = y.substr(0, 30).lastIndexOf(" ");
+            z = y.substr(b + 1);
+            console.log("a", a);
+            console.log("y", y);
+            console.log("b", b);
+            console.log("z", z);
+            e = text.substr(0, a);
+            y = text.substr(a + 1);
+            z = y.substr(b + 1);
+            return z;
+          } else {
+            return y;
+          }
         }
 
         if (text.length > 20) {
@@ -1013,14 +1014,23 @@ function generateGraph(data, root_key) {
         }
 
         if (text.length > 40) {
+          console.log("text", text);
           a = text.substr(0, 30).lastIndexOf(" ");
           y = text.substr(a + 1);
-          b = y.substr(0, 30).lastIndexOf(" ");
-          z = y.substr(b + 1);
-          e = text.substr(0, a);
-          f = y.substr(0, b);
-          z = y.substr(b + 1);
-          return f;
+          if (y.length > 20) {
+            b = y.substr(0, 30).lastIndexOf(" ");
+            z = y.substr(b + 1);
+            console.log("a", a);
+            console.log("y", y);
+            console.log("b", b);
+            console.log("z", z);
+            e = text.substr(0, a);
+            y = text.substr(a + 1);
+            z = y.substr(b + 1);
+            return y;
+          } else {
+            return text.substr(0, a);
+          }
         }
 
         if (text.length > 20) {
@@ -1058,14 +1068,23 @@ function generateGraph(data, root_key) {
         }
 
         if (text.length > 40) {
+          console.log("text", text);
           a = text.substr(0, 30).lastIndexOf(" ");
           y = text.substr(a + 1);
-          b = y.substr(0, 30).lastIndexOf(" ");
-          z = y.substr(b + 1);
-          e = text.substr(0, a);
-          y = text.substr(a + 1);
-          z = y.substr(b + 1);
-          return e;
+          if (y.length > 20) {
+            b = y.substr(0, 30).lastIndexOf(" ");
+            z = y.substr(b + 1);
+            console.log("a", a);
+            console.log("y", y);
+            console.log("b", b);
+            console.log("z", z);
+            e = text.substr(0, a);
+            y = text.substr(a + 1);
+            z = y.substr(b + 1);
+            return e;
+          } else {
+            return "";
+          }
         } else {
           return "";
         }
@@ -1107,7 +1126,6 @@ function generateGraph(data, root_key) {
         })
     );
     simulation.force("link").links(links);
-    console.log(relationships.length);
     if (relationships.length < 10) {
       setZoom(400);
     } else {
