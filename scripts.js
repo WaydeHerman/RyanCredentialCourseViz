@@ -300,7 +300,8 @@ d3.select(".tooltip-close-btn").on("click", function() {
   d3.select(".tooltip").style("display", "none");
 });
 
-function setZoom() {
+function setZoom(bmargin) {
+  console.log(bmargin);
   /* Function to zoom out to see entire graph.
           Used when graph is initialized and when zoom is reset.
           */
@@ -330,8 +331,8 @@ function setZoom() {
   var by = minY;
   var bw = Math.abs(minX - maxX);
   var bh = Math.abs(minY - maxY);
-  var kX = width / (bw + 200);
-  var kY = height / (bh + 200);
+  var kX = width / (bw + bmargin);
+  var kY = height / (bh + bmargin);
   k = d3.min([kX, kY]);
   tx = -bx * k + vx + width / 2 - (bw * k) / 2;
   ty = -by * k + vy + height / 2 - (bh * k) / 2;
@@ -1106,7 +1107,12 @@ function generateGraph(data, root_key) {
         })
     );
     simulation.force("link").links(links);
-    setZoom();
+    console.log(relationships.length);
+    if (relationships.length < 10) {
+      setZoom(400);
+    } else {
+      setZoom(150);
+    }
   }
 
   function ticked() {
@@ -1238,7 +1244,11 @@ function generateGraph(data, root_key) {
       .attr("y", function(d) {
         return d.y - 20;
       });
-    setZoom();
+    if (relationships.length < 10) {
+      setZoom(400);
+    } else {
+      setZoom(150);
+    }
   }
 
   function showTooltip(d) {
