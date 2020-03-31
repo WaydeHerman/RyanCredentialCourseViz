@@ -330,12 +330,27 @@ function setZoom(bmargin) {
   var bh = Math.abs(minY - maxY);
   var kX = width / (bw + bmargin);
   var kY = height / (bh + bmargin);
-  k = d3.min([kX, kY]);
+  k = kX;
   tx = -bx * k + vx + width / 2 - (bw * k) / 2;
   ty = -by * k + vy + height / 2 - (bh * k) / 2;
-
+  test = -by * k + vy + (k * bh + 100) / 2 - (bh * k) / 2;
   // applying the zoom transformation to the container.
-  svg.attr("transform", "translate(" + tx + ", " + ty + ") scale(" + k + ")");
+  if (nodes.length > 20) {
+    svg.attr(
+      "transform",
+      "translate(" + tx + ", " + test + ") scale(" + k + ")"
+    );
+
+    d3.select("#viz")
+      .select("svg")
+      .attr("height", k * (bh + 100) + "px");
+  } else {
+    svg.attr("transform", "translate(" + tx + ", " + ty + ") scale(" + k + ")");
+
+    d3.select("#viz")
+      .select("svg")
+      .attr("height", "650px");
+  }
 }
 
 function generateGraph(data, root_key) {
@@ -488,6 +503,8 @@ function generateGraph(data, root_key) {
     .force("charge", d3.forceManyBody())
     .force("center", d3.forceCenter(width / 2, height / 2))
     .on("tick", ticked);
+
+  //simulation.iterations(100);
 
   d3.select(".bitem-0").on("click", function() {
     level = 0;
@@ -959,34 +976,35 @@ function generateGraph(data, root_key) {
           var text = d.data.data["Micro-credential Name"];
         }
 
-        if (text.length > 40) {
-          a = text.substr(0, 30).lastIndexOf(" ");
-          y = text.substr(a + 1);
-          if (y.length > 20) {
-            b = y.substr(0, 30).lastIndexOf(" ");
-            z = y.substr(b + 1);
-            e = text.substr(0, a);
-            y = text.substr(a + 1);
-            z = y.substr(b + 1);
-            return z;
-          } else {
-            return y;
-          }
-        }
+        // console.log("text", text);
 
-        if (text.length > 30) {
-          a = text.substr(0, 30).lastIndexOf(" ");
-          y = text.substr(a + 1);
-          if (y.length > 1) {
-            e = text.substr(0, a);
-            f = text.substr(a + 1);
-          } else {
-            e = text.substr(0, a);
-            f = "";
-          }
-          return f;
-        } else {
+        a = text.substr(0, 30).lastIndexOf(" ");
+        y = text.substr(a + 1);
+        b = text.substr(0, a);
+        c = y.substr(0, 30).lastIndexOf(" ");
+        z = y.substr(c + 1);
+        y_alt = y.substr(0, c);
+        // console.log("text.length", text.length);
+        // console.log("a", a);
+        // console.log("y", y);
+        // console.log("y.length", y.length);
+        // console.log("b", b);
+        // console.log("b.length", b.length);
+        // console.log("c", c);
+        // console.log("z", z);
+        // console.log("y_alt", y_alt);
+
+        // 0:text 1:"", 2:"" if under 30
+        // 0:
+
+        if (text.length <= 30) {
           return text;
+        } else {
+          if (y.length <= 30) {
+            return y;
+          } else {
+            return z;
+          }
         }
       });
 
@@ -1008,34 +1026,21 @@ function generateGraph(data, root_key) {
           var text = d.data.data["Micro-credential Name"];
         }
 
-        if (text.length > 40) {
-          a = text.substr(0, 30).lastIndexOf(" ");
-          y = text.substr(a + 1);
-          if (y.length > 30) {
-            b = y.substr(0, 30).lastIndexOf(" ");
-            z = y.substr(b + 1);
-            e = text.substr(0, a);
-            y = text.substr(a + 1);
-            z = y.substr(0, b);
-            return z;
-          } else {
-            return text.substr(0, a);
-          }
-        }
+        a = text.substr(0, 30).lastIndexOf(" ");
+        y = text.substr(a + 1);
+        b = text.substr(0, a);
+        c = y.substr(0, 30).lastIndexOf(" ");
+        z = y.substr(c + 1);
+        y_alt = y.substr(0, c);
 
-        if (text.length > 20) {
-          a = text.substr(0, 30).lastIndexOf(" ");
-          y = text.substr(a + 1);
-          if (y.length > 1) {
-            e = text.substr(0, a);
-            f = text.substr(a + 1);
-          } else {
-            e = text.substr(0, a);
-            f = "";
-          }
-          return e;
-        } else {
+        if (text.length <= 30) {
           return "";
+        } else {
+          if (y.length <= 30) {
+            return b;
+          } else {
+            return y_alt;
+          }
         }
       });
 
@@ -1057,38 +1062,31 @@ function generateGraph(data, root_key) {
           var text = d.data.data["Micro-credential Name"];
         }
 
-        if (text.length > 40) {
-          a = text.substr(0, 30).lastIndexOf(" ");
-          y = text.substr(a + 1);
-          if (y.length > 30) {
-            b = y.substr(0, 30).lastIndexOf(" ");
-            z = y.substr(b + 1);
-            e = text.substr(0, a);
-            //y = text.substr(a + 1);
-            return e;
-          } else {
-            return "";
-          }
-        } else {
+        a = text.substr(0, 30).lastIndexOf(" ");
+        y = text.substr(a + 1);
+        b = text.substr(0, a);
+        c = y.substr(0, 30).lastIndexOf(" ");
+        z = y.substr(c + 1);
+        y_alt = y.substr(0, c);
+
+        if (text.length <= 30) {
           return "";
+        } else {
+          if (y.length <= 30) {
+            return "";
+          } else {
+            return b;
+          }
         }
       });
 
-    nodeEnter
-      .append("circle")
-      .style("r", function(d) {
-        if (d.data.id === root_key) {
-          return 14;
-        } else {
-          return 10;
-        }
-      })
-      .style("text-anchor", function(d) {
-        return d.children ? "end" : "start";
-      })
-      .text(function(d) {
-        return d.data.id;
-      });
+    nodeEnter.append("circle").style("r", function(d) {
+      if (d.data.id === root_key) {
+        return 14;
+      } else {
+        return 10;
+      }
+    });
 
     // distance based on number of nodes?
     distanceScale = d3
@@ -1110,11 +1108,18 @@ function generateGraph(data, root_key) {
         })
     );
     simulation.force("link").links(links);
-    if (relationships.length < 10) {
-      setZoom(400);
+    console.log("data.length", data.length);
+    if (data.length < 10) {
+      setZoom(600);
     } else {
+      console.log("here");
       setZoom(150);
+      //simulation.force("x", d3.forceX().strength(0.01));
     }
+    simulation.alphaDecay(0.2);
+    // setTimeout(function() {
+    //   simulation.stop();
+    // }, 2500);
   }
 
   function ticked() {
@@ -1155,8 +1160,9 @@ function generateGraph(data, root_key) {
           d.data.id !== root_key &&
           (((mode === "Topics" || mode === "Audience") &&
             breadCrumbs.length !== 2) ||
-            (mode !== "Topics" && mode !== "Audience") ||
-            breadCrumbs.length !== 3)
+            (mode !== "Topics" &&
+              mode !== "Audience" &&
+              breadCrumbs.length !== 3))
         ) {
           toShow = [];
           link.style("opacity", function(v) {
@@ -1221,6 +1227,55 @@ function generateGraph(data, root_key) {
               return 0.3;
             }
           });
+        } else {
+          node.attr("opacity", function(v) {
+            if (
+              d.data.data["Micro-credential Name"] ===
+                v.data.data["Micro-credential Name"] ||
+              (d.data.key && d.data.key === v.data.key)
+            ) {
+              d3.select(this).moveToFront();
+              return 1;
+            } else {
+              return 0.3;
+            }
+          });
+          nodeLabels1.attr("opacity", function(v) {
+            if (
+              d.data.data["Micro-credential Name"] ===
+                v.data.data["Micro-credential Name"] ||
+              (d.data.key && d.data.key === v.data.key)
+            ) {
+              d3.select(this).moveToFront();
+              return 1;
+            } else {
+              return 0.3;
+            }
+          });
+          nodeLabels0.attr("opacity", function(v) {
+            if (
+              d.data.data["Micro-credential Name"] ===
+                v.data.data["Micro-credential Name"] ||
+              (d.data.key && d.data.key === v.data.key)
+            ) {
+              d3.select(this).moveToFront();
+              return 1;
+            } else {
+              return 0.3;
+            }
+          });
+          nodeLabels.attr("opacity", function(v) {
+            if (
+              d.data.data["Micro-credential Name"] ===
+                v.data.data["Micro-credential Name"] ||
+              (d.data.key && d.data.key === v.data.key)
+            ) {
+              d3.select(this).moveToFront();
+              return 1;
+            } else {
+              return 0.3;
+            }
+          });
         }
       })
       .on("mouseout", function() {
@@ -1255,8 +1310,8 @@ function generateGraph(data, root_key) {
       .attr("y", function(d) {
         return d.y - 20;
       });
-    if (relationships.length < 10) {
-      setZoom(400);
+    if (data.length < 10) {
+      setZoom(600);
     } else {
       setZoom(150);
     }
@@ -1269,10 +1324,9 @@ function generateGraph(data, root_key) {
       .on("click", function() {
         window.open(d["Direct Link to MC on the platform"], "_blank");
       });
-    d3.select(".visit-btn")
-      .on("click", function() {
-        window.open(d["Direct Link to MC on the platform"], "_blank");
-      });
+    d3.select(".visit-btn").on("click", function() {
+      window.open(d["Direct Link to MC on the platform"], "_blank");
+    });
     if (d["Badge Image Link (Badgr)"]) {
       //const badgeUrlRegex = /\((.*?)\)/;
       //imgURL = badgeUrlRegex.exec(d["Badge Image"])[1];
@@ -1295,11 +1349,7 @@ function generateGraph(data, root_key) {
     audiences.forEach(function(v, i) {
       if (i > 0) {
         audienceHTML +=
-          "<span class='tooltip-link audience-link-" +
-          i +
-          "'>" +
-          v +
-          "</span>";
+          "<span class='tooltip-link audience-link-" + i + "'>" + v + "</span>";
       } else {
         audienceHTML +=
           "<span class='tooltip-link audience-link-" + i + "'>" + v + "</span>";
