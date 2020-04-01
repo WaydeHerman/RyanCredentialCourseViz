@@ -7,10 +7,10 @@ var width = 800,
   audienceData,
   topicData,
   level = 0,
-  yellow = "#ebda22",
-  red = "#ca3c24",
-  green = "#5cb145",
-  blue = "#3098cd";
+  yellow = "#F0D143",
+  red = "#D72C44",
+  green = "#52B8A0",
+  blue = "#439ad0";
 
 $(".start-over-btn").click(function() {
   $(".bitem-1").click();
