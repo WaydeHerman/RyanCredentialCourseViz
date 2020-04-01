@@ -1481,36 +1481,36 @@ function generateGraph(data, root_key) {
       }
       if (level === 1) {
         if (mode === "Audience") {
-          var bitem1 = "Audience: " + breadCrumbs[0].name;
-          var bitem2 = "Select Topic";
-          var bitem4 = "Select Micro-credential";
+          var bitem1 = "<span>Audience:</span>" + breadCrumbs[0].name;
+          var bitem2 = "<span class='select'>Select Topic</span>";
+          var bitem4 = "<span class='select'>Select Micro-credential</span>";
         }
         if (mode === "Stack Name") {
-          var bitem1 = "Stack Name: " + breadCrumbs[0].name;
+          var bitem1 = "<span>Stack Name:</span>" + breadCrumbs[0].name;
           var bitem2 = "Select Audience";
-          var bitem3 = "Select Topic";
-          var bitem4 = "Select Micro-credential";
+          var bitem3 = "<span class='select'>Select Topic</span>";
+          var bitem4 = "<span class='select'>Select Micro-credential</span>";
         }
         if (mode === "Education Standard") {
-          var bitem1 = "Education Standard: " + breadCrumbs[0].name;
-          var bitem2 = "Select Audience";
-          var bitem3 = "Select Topic";
-          var bitem4 = "Select Micro-credential";
+          var bitem1 = "<span>Education Standard:</span>" + breadCrumbs[0].name;
+          var bitem2 = "<span class='select'>Select Audience</span>";
+          var bitem3 = "<span class='select'>Select Topic</span>";
+          var bitem4 = "<span class='select'>Select Micro-credential</span>";
         }
         if (mode === "Topics") {
-          var bitem1 = "Topic: " + breadCrumbs[0].name;
-          var bitem2 = "Select Audience";
-          var bitem4 = "Select Micro-credential";
+          var bitem1 = "<span>Topic:</span>" + breadCrumbs[0].name;
+          var bitem2 = "<span class='select'>Select Audience</span>";
+          var bitem4 = "<span class='select'>Select Micro-credential</span>";
         }
         d3.select(".bitem-1")
           .attr("class", "bitem bitem-1")
-          .text(bitem1);
+          .html(bitem1);
         d3.select(".bitem-2")
           .attr("class", "bitem bitem-2 bitem-active")
-          .text(bitem2);
+          .html(bitem2);
         d3.select(".bitem-3")
           .attr("class", "bitem bitem-3 bitem-inactive")
-          .text(bitem3);
+          .html(bitem3);
         d3.select(".bitem-4").attr("class", "bitem bitem-4 bitem-inactive");
         d3.select(".bbox-3").attr("class", "bbox bbox-3 bbox-inactive");
         d3.select(".bbox-4").attr("class", "bbox bbox-4 bbox-inactive");
@@ -1520,68 +1520,68 @@ function generateGraph(data, root_key) {
         d3.select(".bitem-4").attr("class", "bitem bitem-4 bitem-inactive");
         d3.select(".bbox-4").attr("class", "bbox bbox-4 bbox-inactive");
         if (mode === "Audience") {
-          var bitem1 = "Audience: " + breadCrumbs[0].name;
-          var bitem2 = "Topic: " + breadCrumbs[1].name;
-          var bitem4 = "Select Micro-credential";
+          var bitem1 = "<span>Audience:</span>" + breadCrumbs[0].name;
+          var bitem2 = "<span>Topic:</span>" + breadCrumbs[1].name;
+          var bitem4 = "<span class='select'>Select Micro-credential</span>";
           d3.select(".bitem-4")
             .attr("class", "bitem bitem-4")
-            .text(bitem4);
+            .html(bitem4);
           d3.select(".bbox-4").attr("class", "bbox bbox-4");
         }
         if (mode === "Topics") {
-          var bitem1 = "Topic: " + breadCrumbs[0].name;
-          var bitem2 = "Audience: " + breadCrumbs[1].name;
-          var bitem4 = "Select Micro-credential";
+          var bitem1 = "<span>Topic:</span>" + breadCrumbs[0].name;
+          var bitem2 = "<span>Audience:</span>" + breadCrumbs[1].name;
+          var bitem4 = "<span class='select'>Select Micro-credential</span>";
           d3.select(".bitem-4")
             .attr("class", "bitem bitem-4")
-            .text(bitem4);
+            .html(bitem4);
           d3.select(".bbox-4").attr("class", "bbox bbox-4");
         }
         if (mode === "Stack Name") {
-          var bitem1 = "Stack Name: " + breadCrumbs[0].name;
-          var bitem2 = "Audience: " + breadCrumbs[1].name;
-          var bitem3 = "Select Topic";
-          var bitem4 = "Select Micro-credential";
+          var bitem1 = "<span>Stack Name:</span>" + breadCrumbs[0].name;
+          var bitem2 = "<span>Audience:</span>" + breadCrumbs[1].name;
+          var bitem3 = "<span class='select'>Select Topic</span>";
+          var bitem4 = "<span class='select'>Select Micro-credential</span>";
         }
         if (mode === "Education Standard") {
-          var bitem1 = "Education Standard: " + breadCrumbs[0].name;
-          var bitem2 = "Audience: " + breadCrumbs[1].name;
-          var bitem3 = "Select Topic";
-          var bitem4 = "Select Micro-credential";
+          var bitem1 = "<span>Education Standard:</span>" + breadCrumbs[0].name;
+          var bitem2 = "<span>Audience:</span>" + breadCrumbs[1].name;
+          var bitem3 = "<span class='select'>Select Topic</span>";
+          var bitem4 = "<span class='select'>Select Micro-credential</span>";
         }
         d3.select(".bitem-1")
           .attr("class", "bitem bitem-1")
-          .text(bitem1);
+          .html(bitem1);
         d3.select(".bitem-2")
           .attr("class", "bitem bitem-2")
-          .text(bitem2);
+          .html(bitem2);
         d3.select(".bbox-3").attr("class", "bbox bbox-3");
       }
       if (level === 3) {
         if (mode === "Stack Name") {
-          var bitem1 = "Stack Name: " + breadCrumbs[0].name;
-          var bitem2 = "Audience: " + breadCrumbs[1].name;
-          var bitem3 = "Topic: " + breadCrumbs[2].name;
-          var bitem4 = "Select Micro-credential";
+          var bitem1 = "<span>Stack Name:</span>" + breadCrumbs[0].name;
+          var bitem2 = "<span>Audience:</span>" + breadCrumbs[1].name;
+          var bitem3 = "<span>Topic:</span>" + breadCrumbs[2].name;
+          var bitem4 = "<span class='select'>Select Micro-credential</span>";
         }
         if (mode === "Education Standard") {
-          var bitem1 = "Education Standard: " + breadCrumbs[0].name;
-          var bitem2 = "Audience: " + breadCrumbs[1].name;
-          var bitem3 = "Topic: " + breadCrumbs[2].name;
-          var bitem4 = "Select Micro-credential";
+          var bitem1 = "<span>Education Standard:</span>" + breadCrumbs[0].name;
+          var bitem2 = "<span>Audience:</span>" + breadCrumbs[1].name;
+          var bitem3 = "<span>Topic:</span>" + breadCrumbs[2].name;
+          var bitem4 = "<span class='select'>Select Micro-credential</span>";
         }
         d3.select(".bitem-1")
           .attr("class", "bitem bitem-1")
-          .text(bitem1);
+          .html(bitem1);
         d3.select(".bitem-2")
           .attr("class", "bitem bitem-2")
-          .text(bitem2);
+          .html(bitem2);
         d3.select(".bitem-3")
           .attr("class", "bitem bitem-3")
-          .text(bitem3);
+          .html(bitem3);
         d3.select(".bitem-4")
           .attr("class", "bitem bitem-4 bitem-active")
-          .text(bitem4);
+          .html(bitem4);
         d3.select(".bbox-3").attr("class", "bbox bbox-3");
         d3.select(".bbox-4").attr("class", "bbox bbox-4");
       }
