@@ -7,6 +7,7 @@ var width = 800,
   audienceData,
   topicData,
   level = 0,
+  zoom,
   yellow = "#F0D143",
   red = "#D72C44",
   green = "#52B8A0",
@@ -330,27 +331,18 @@ function setZoom(bmargin) {
   var bh = Math.abs(minY - maxY);
   var kX = width / (bw + bmargin);
   var kY = height / (bh + bmargin);
-  k = kX;
+  k = d3.max([kX, kY]);
   tx = -bx * k + vx + width / 2 - (bw * k) / 2;
   ty = -by * k + vy + height / 2 - (bh * k) / 2;
-  test = -by * k + vy + (k * bh + 100) / 2 - (bh * k) / 2;
+
+  zoom.scaleExtent([k, 10]).extent([
+    [minX, minY],
+    [maxX, maxY]
+  ]);
+
   // applying the zoom transformation to the container.
-  if (nodes.length > 20) {
-    svg.attr(
-      "transform",
-      "translate(" + tx + ", " + test + ") scale(" + k + ")"
-    );
 
-    d3.select("#viz")
-      .select("svg")
-      .attr("height", k * (bh + 100) + "px");
-  } else {
-    svg.attr("transform", "translate(" + tx + ", " + ty + ") scale(" + k + ")");
-
-    d3.select("#viz")
-      .select("svg")
-      .attr("height", "650px");
-  }
+  svg.attr("transform", "translate(" + tx + ", " + ty + ") scale(" + k + ")");
 }
 
 function generateGraph(data, root_key) {
@@ -483,13 +475,26 @@ function generateGraph(data, root_key) {
   var transform = d3.zoomIdentity;
   let node, link;
 
+  zoom = d3
+    .zoom()
+    .scaleExtent([1, 10])
+    .on("zoom", zoomed);
+
   svg = d3
     .select("#viz")
     .append("svg")
     .attr("width", width)
     .attr("height", height)
     .append("g")
-    .attr("transform", "translate(0,0)");
+    .attr("transform", "translate(0,0)")
+    .call(zoom);
+
+  var rect = svg
+    .append("rect")
+    .attr("width", width)
+    .attr("height", height)
+    .style("fill", "none")
+    .style("pointer-events", "all");
 
   simulation = d3
     .forceSimulation()
@@ -1108,12 +1113,10 @@ function generateGraph(data, root_key) {
         })
     );
     simulation.force("link").links(links);
-    console.log("data.length", data.length);
     if (data.length < 10) {
       setZoom(600);
     } else {
-      console.log("here");
-      setZoom(150);
+      setZoom(300);
       //simulation.force("x", d3.forceX().strength(0.01));
     }
     simulation.alphaDecay(0.2);
@@ -1313,7 +1316,7 @@ function generateGraph(data, root_key) {
     if (data.length < 10) {
       setZoom(600);
     } else {
-      setZoom(150);
+      setZoom(300);
     }
   }
 
@@ -1586,6 +1589,11 @@ function generateGraph(data, root_key) {
         d3.select(".bbox-4").attr("class", "bbox bbox-4");
       }
     }
+  }
+
+  function zoomed() {
+    const currentTransform = d3.event.transform;
+    svg.attr("transform", currentTransform);
   }
 
   function dragstarted(d) {
