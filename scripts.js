@@ -8,6 +8,7 @@ var width = 800,
   topicData,
   level = 0,
   zoom,
+  currentData,
   yellow = "#F0D143",
   red = "#D72C44",
   green = "#52B8A0",
@@ -346,7 +347,6 @@ function setZoom(bmargin) {
 }
 
 function generateGraph(data, root_key) {
-  updateBreadcrumbs();
   d3.select(".tooltip").style("display", "none");
   d3.select(".start-screen").style("display", "none");
   d3.select("#viz")
@@ -356,6 +356,10 @@ function generateGraph(data, root_key) {
   data = data.filter(function(d) {
     return d.key != "";
   });
+
+  currentData = data;
+
+  updateBreadcrumbs();
 
   relationships = [];
   listOfRelationships = [];
@@ -485,9 +489,9 @@ function generateGraph(data, root_key) {
     .append("svg")
     .attr("width", width)
     .attr("height", height)
+    .call(zoom)
     .append("g")
-    .attr("transform", "translate(0,0)")
-    .call(zoom);
+    .attr("transform", "translate(0,0)");
 
   var rect = svg
     .append("rect")
@@ -1465,6 +1469,7 @@ function generateGraph(data, root_key) {
   }
 
   function updateBreadcrumbs() {
+    console.log("currentData", currentData);
     if (level === 0) {
       d3.select(".breadcrumbs-container").style("display", "none");
       $("#audience-selector").val("");
