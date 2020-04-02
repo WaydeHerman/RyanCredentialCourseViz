@@ -957,14 +957,14 @@ function generateGraph(data, root_key) {
             }
           }
         }
-      })
-      .call(
+      });
+    /*.call(
         d3
           .drag()
           .on("start", dragstarted)
           .on("drag", dragged)
           .on("end", dragended)
-      );
+      ); */
     //.on("mouseover", nodeMouseOver);
 
     nodeLabels = node
