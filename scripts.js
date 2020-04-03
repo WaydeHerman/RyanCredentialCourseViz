@@ -693,13 +693,26 @@ function updateUrlParams() {
   }
 }
 
+function copyToClipboard(text) {
+  var dummy = document.createElement("textarea");
+  // to avoid breaking orgain page when copying more words
+  // cant copy when adding below this code
+  // dummy.style.display = 'none'
+  document.body.appendChild(dummy);
+  //Be careful if you use texarea. setAttribute('value', value), which works with "input" does not work with "textarea". – Eduard
+  dummy.value = text;
+  dummy.select();
+  document.execCommand("copy");
+  document.body.removeChild(dummy);
+}
+
 function generateGraph(data, root_key) {
   d3.select(".tooltip").style("display", "none");
   d3.select(".start-screen").style("display", "none");
   d3.select("#viz")
     .selectAll("*")
     .remove();
-  d3.select("#viz").style("display", "");
+  d3.select("#viz").style("display", "block");
 
   data = data.filter(function(d) {
     return d.key != "";
@@ -878,7 +891,7 @@ function generateGraph(data, root_key) {
     d3.select("#viz")
       .selectAll("*")
       .remove();
-    d3.select("#viz").style("display", "");
+    d3.select("#viz").style("display", "none");
   });
 
   d3.select(".fa-home")
@@ -896,7 +909,7 @@ function generateGraph(data, root_key) {
       d3.select("#viz")
         .selectAll("*")
         .remove();
-      d3.select("#viz").style("display", "");
+      d3.select("#viz").style("display", "none");
     });
 
   d3.select(".bitem-1").on("click", function() {
@@ -912,7 +925,7 @@ function generateGraph(data, root_key) {
     d3.select("#viz")
       .selectAll("*")
       .remove();
-    d3.select("#viz").style("display", "");
+    d3.select("#viz").style("display", "none");
   });
 
   d3.select(".bitem-2").on("click", function() {
