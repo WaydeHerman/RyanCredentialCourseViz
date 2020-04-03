@@ -21,10 +21,7 @@ const urlCatA = urlParams.get("b");
 const urlCatB = urlParams.get("c");
 const urlCatC = urlParams.get("d");
 
-console.log("urlType", urlType);
 console.log("urlCatA", urlCatA);
-console.log("urlCatB", urlCatB);
-console.log("urlCatC", urlCatC);
 
 $(".start-over-btn").click(function() {
   $(".bitem-1").click();
@@ -561,7 +558,9 @@ function updateUrlParams() {
     urlParams += "a=" + breadCrumbs[0].type;
     breadCrumbs.forEach(function(v, i) {
       console.log(v, i);
-      urlParams += urlParamKeys[i] + v.name;
+      console.log(encodeURI(v.name));
+      console.log(v.name);
+      urlParams += urlParamKeys[i] + v.name.replace(/&/g, "%26");
     });
     window.history.replaceState(null, null, urlParams);
   } else {
