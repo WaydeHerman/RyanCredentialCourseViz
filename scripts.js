@@ -699,6 +699,7 @@ function generateGraph(data, root_key) {
   d3.select("#viz")
     .selectAll("*")
     .remove();
+  d3.select("#viz").style("display", "");
 
   data = data.filter(function(d) {
     return d.key != "";
@@ -877,6 +878,7 @@ function generateGraph(data, root_key) {
     d3.select("#viz")
       .selectAll("*")
       .remove();
+    d3.select("#viz").style("display", "");
   });
 
   d3.select(".fa-home")
@@ -894,6 +896,7 @@ function generateGraph(data, root_key) {
       d3.select("#viz")
         .selectAll("*")
         .remove();
+      d3.select("#viz").style("display", "");
     });
 
   d3.select(".bitem-1").on("click", function() {
@@ -909,6 +912,7 @@ function generateGraph(data, root_key) {
     d3.select("#viz")
       .selectAll("*")
       .remove();
+    d3.select("#viz").style("display", "");
   });
 
   d3.select(".bitem-2").on("click", function() {
