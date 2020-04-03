@@ -384,6 +384,8 @@ d3.csv("data.csv").then(function(data) {
         }
       });
     }
+  } else {
+    d3.select(".start-screen").style("display", "block");
   }
 
   d3.select("#audience-selector")
