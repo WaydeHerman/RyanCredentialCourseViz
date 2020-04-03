@@ -9,6 +9,7 @@ var width = 800,
   level = 0,
   zoom,
   currentData,
+  breadCrumbs,
   yellow = "#F0D143",
   red = "#D72C44",
   green = "#52B8A0",
@@ -20,8 +21,6 @@ const urlType = urlParams.get("a");
 const urlCatA = urlParams.get("b");
 const urlCatB = urlParams.get("c");
 const urlCatC = urlParams.get("d");
-
-console.log("urlCatA", urlCatA);
 
 $(".start-over-btn").click(function() {
   $(".bitem-1").click();
@@ -206,7 +205,16 @@ d3.csv("data.csv").then(function(data) {
           directory = [];
           directory.push(v.key);
           level += 1;
-          breadCrumbs = [{ name: v.key, type: "Audience", data: v }];
+          items = audienceData
+            .map(function(o) {
+              return o.key;
+            })
+            .filter(function(o) {
+              return o !== "";
+            });
+          breadCrumbs = [
+            { name: v.key, type: "Audience", data: v, list: items }
+          ];
           if (urlCatB === null) {
             var data_copy = JSON.parse(JSON.stringify(v.values));
             data_copy.push(v);
@@ -219,7 +227,19 @@ d3.csv("data.csv").then(function(data) {
                 data_copy.push(u);
                 directory.push(u.key);
                 level += 1;
-                breadCrumbs.push({ name: u.key, type: "Topics", data: u });
+                items = v.values
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs.push({
+                  name: u.key,
+                  type: "Topics",
+                  data: u,
+                  list: items
+                });
                 updateUrlParams();
                 generateGraph(
                   data_copy.filter(function(d) {
@@ -240,7 +260,14 @@ d3.csv("data.csv").then(function(data) {
           directory = [];
           directory.push(v.key);
           level += 1;
-          breadCrumbs = [{ name: v.key, type: "Topics", data: v }];
+          items = topicData
+            .map(function(o) {
+              return o.key;
+            })
+            .filter(function(o) {
+              return o !== "";
+            });
+          breadCrumbs = [{ name: v.key, type: "Topics", data: v, list: items }];
           if (urlCatB === null) {
             var data_copy = JSON.parse(JSON.stringify(v.values));
             data_copy.push(v);
@@ -253,7 +280,19 @@ d3.csv("data.csv").then(function(data) {
                 data_copy.push(u);
                 directory.push(u.key);
                 level += 1;
-                breadCrumbs.push({ name: u.key, type: "Audience", data: u });
+                items = v.values
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs.push({
+                  name: u.key,
+                  type: "Audience",
+                  data: u,
+                  list: items
+                });
                 updateUrlParams();
                 generateGraph(
                   data_copy.filter(function(d) {
@@ -274,7 +313,16 @@ d3.csv("data.csv").then(function(data) {
           directory = [];
           directory.push(v.key);
           level += 1;
-          breadCrumbs = [{ name: v.key, type: "Stack Name", data: v }];
+          items = stackNameData
+            .map(function(o) {
+              return o.key;
+            })
+            .filter(function(o) {
+              return o !== "";
+            });
+          breadCrumbs = [
+            { name: v.key, type: "Stack Name", data: v, list: items }
+          ];
           if (urlCatB === null) {
             var data_copy = JSON.parse(JSON.stringify(v.values));
             data_copy.push(v);
@@ -285,7 +333,19 @@ d3.csv("data.csv").then(function(data) {
               if (urlCatB === u.key) {
                 directory.push(u.key);
                 level += 1;
-                breadCrumbs.push({ name: u.key, type: "Audience", data: u });
+                items = v.values
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs.push({
+                  name: u.key,
+                  type: "Audience",
+                  data: u,
+                  list: items
+                });
                 if (urlCatC === null) {
                   var data_copy = JSON.parse(JSON.stringify(u.values));
                   data_copy.push(u);
@@ -303,10 +363,18 @@ d3.csv("data.csv").then(function(data) {
                       data_copy.push(w);
                       directory.push(w.key);
                       level += 1;
+                      items = u.values
+                        .map(function(o) {
+                          return o.key;
+                        })
+                        .filter(function(o) {
+                          return o !== "";
+                        });
                       breadCrumbs.push({
                         name: w.key,
                         type: "Topics",
-                        data: w
+                        data: w,
+                        list: items
                       });
                       updateUrlParams();
                       generateGraph(
@@ -331,7 +399,16 @@ d3.csv("data.csv").then(function(data) {
           directory = [];
           directory.push(v.key);
           level += 1;
-          breadCrumbs = [{ name: v.key, type: "Education Standard", data: v }];
+          items = educationStandardData
+            .map(function(o) {
+              return o.key;
+            })
+            .filter(function(o) {
+              return o !== "";
+            });
+          breadCrumbs = [
+            { name: v.key, type: "Education Standard", data: v, list: items }
+          ];
           if (urlCatB === null) {
             var data_copy = JSON.parse(JSON.stringify(v.values));
             data_copy.push(v);
@@ -342,7 +419,19 @@ d3.csv("data.csv").then(function(data) {
               if (urlCatB === u.key) {
                 directory.push(u.key);
                 level += 1;
-                breadCrumbs.push({ name: u.key, type: "Audience", data: u });
+                items = v.values
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs.push({
+                  name: u.key,
+                  type: "Audience",
+                  data: u,
+                  list: items
+                });
                 if (urlCatC === null) {
                   var data_copy = JSON.parse(JSON.stringify(u.values));
                   data_copy.push(u);
@@ -360,10 +449,18 @@ d3.csv("data.csv").then(function(data) {
                       data_copy.push(w);
                       directory.push(w.key);
                       level += 1;
+                      items = u.values
+                        .map(function(o) {
+                          return o.key;
+                        })
+                        .filter(function(o) {
+                          return o !== "";
+                        });
                       breadCrumbs.push({
                         name: w.key,
                         type: "Topics",
-                        data: w
+                        data: w,
+                        list: items
                       });
                       updateUrlParams();
                       generateGraph(
@@ -405,7 +502,14 @@ d3.csv("data.csv").then(function(data) {
         directory = [];
         directory.push(v.key);
         level += 1;
-        breadCrumbs = [{ name: v.key, type: "Audience", data: v }];
+        items = audienceData
+          .map(function(o) {
+            return o.key;
+          })
+          .filter(function(o) {
+            return o !== "";
+          });
+        breadCrumbs = [{ name: v.key, type: "Audience", data: v, list: items }];
         updateUrlParams();
         generateGraph(data_copy, v.key);
       }
@@ -432,7 +536,14 @@ d3.csv("data.csv").then(function(data) {
         directory = [];
         directory.push(v.key);
         level += 1;
-        breadCrumbs = [{ name: v.key, type: "Topics", data: v }];
+        items = topicData
+          .map(function(o) {
+            return o.key;
+          })
+          .filter(function(o) {
+            return o !== "";
+          });
+        breadCrumbs = [{ name: v.key, type: "Topics", data: v, list: items }];
         updateUrlParams();
         generateGraph(data_copy, v.key);
       }
@@ -459,7 +570,16 @@ d3.csv("data.csv").then(function(data) {
         directory = [];
         directory.push(v.key);
         level += 1;
-        breadCrumbs = [{ name: v.key, type: "Stack Name", data: v }];
+        items = stackNameData
+          .map(function(o) {
+            return o.key;
+          })
+          .filter(function(o) {
+            return o !== "";
+          });
+        breadCrumbs = [
+          { name: v.key, type: "Stack Name", data: v, list: items }
+        ];
         updateUrlParams();
         generateGraph(data_copy, v.key);
       }
@@ -486,7 +606,16 @@ d3.csv("data.csv").then(function(data) {
         directory = [];
         directory.push(v.key);
         level += 1;
-        breadCrumbs = [{ name: v.key, type: "Education Standard", data: v }];
+        items = educationStandardData
+          .map(function(o) {
+            return o.key;
+          })
+          .filter(function(o) {
+            return o !== "";
+          });
+        breadCrumbs = [
+          { name: v.key, type: "Education Standard", data: v, list: items }
+        ];
         updateUrlParams();
         generateGraph(data_copy, v.key);
       }
@@ -552,14 +681,10 @@ function setZoom(bmargin) {
 const urlParamKeys = ["&b=", "&c=", "&d="];
 
 function updateUrlParams() {
-  console.log("breadCrumbs", breadCrumbs);
   if (breadCrumbs.length >= 1) {
     var urlParams = "?";
     urlParams += "a=" + breadCrumbs[0].type;
     breadCrumbs.forEach(function(v, i) {
-      console.log(v, i);
-      console.log(encodeURI(v.name));
-      console.log(v.name);
       urlParams += urlParamKeys[i] + v.name.replace(/&/g, "%26");
     });
     window.history.replaceState(null, null, urlParams);
@@ -1039,10 +1164,18 @@ function generateGraph(data, root_key) {
                         var data_copy = JSON.parse(JSON.stringify(w.values));
                         data_copy.push(w);
                         level += 1;
+                        items = v.values
+                          .map(function(o) {
+                            return o.key;
+                          })
+                          .filter(function(o) {
+                            return o !== "";
+                          });
                         breadCrumbs.push({
                           name: w.key,
                           type: "Topics",
-                          data: w
+                          data: w,
+                          list: items
                         });
                         updateUrlParams();
                         generateGraph(
@@ -1069,10 +1202,18 @@ function generateGraph(data, root_key) {
                         var data_copy = JSON.parse(JSON.stringify(w.values));
                         data_copy.push(w);
                         level += 1;
+                        items = v.values
+                          .map(function(o) {
+                            return o.key;
+                          })
+                          .filter(function(o) {
+                            return o !== "";
+                          });
                         breadCrumbs.push({
                           name: w.key,
                           type: "Audience",
-                          data: w
+                          data: w,
+                          list: items
                         });
                         updateUrlParams();
                         generateGraph(
@@ -1099,10 +1240,18 @@ function generateGraph(data, root_key) {
                         var data_copy = JSON.parse(JSON.stringify(w.values));
                         data_copy.push(w);
                         level += 1;
+                        items = v.values
+                          .map(function(o) {
+                            return o.key;
+                          })
+                          .filter(function(o) {
+                            return o !== "";
+                          });
                         breadCrumbs.push({
                           name: w.key,
                           type: "Audience",
-                          data: w
+                          data: w,
+                          list: items
                         });
                         updateUrlParams();
                         generateGraph(
@@ -1123,10 +1272,18 @@ function generateGraph(data, root_key) {
                           var data_copy = JSON.parse(JSON.stringify(u.values));
                           data_copy.push(u);
                           level += 1;
+                          items = w.values
+                            .map(function(o) {
+                              return o.key;
+                            })
+                            .filter(function(o) {
+                              return o !== "";
+                            });
                           breadCrumbs.push({
                             name: u.key,
                             type: "Topics",
-                            data: u
+                            data: u,
+                            list: items
                           });
                           updateUrlParams();
                           generateGraph(
@@ -1154,10 +1311,18 @@ function generateGraph(data, root_key) {
                         var data_copy = JSON.parse(JSON.stringify(w.values));
                         data_copy.push(w);
                         level += 1;
+                        items = v.values
+                          .map(function(o) {
+                            return o.key;
+                          })
+                          .filter(function(o) {
+                            return o !== "";
+                          });
                         breadCrumbs.push({
                           name: w.key,
                           type: "Audience",
-                          data: w
+                          data: w,
+                          list: items
                         });
                         updateUrlParams();
                         generateGraph(
@@ -1178,10 +1343,18 @@ function generateGraph(data, root_key) {
                           var data_copy = JSON.parse(JSON.stringify(u.values));
                           data_copy.push(u);
                           level += 1;
+                          items = w.values
+                            .map(function(o) {
+                              return o.key;
+                            })
+                            .filter(function(o) {
+                              return o !== "";
+                            });
                           breadCrumbs.push({
                             name: u.key,
                             type: "Topics",
-                            data: u
+                            data: u,
+                            list: items
                           });
                           updateUrlParams();
                           generateGraph(
@@ -1638,7 +1811,16 @@ function generateGraph(data, root_key) {
             directory = [];
             directory.push(w.key);
             level = 1;
-            breadCrumbs = [{ name: w.key, type: "Audience", data: w }];
+            items = audienceData
+              .map(function(o) {
+                return o.key;
+              })
+              .filter(function(o) {
+                return o !== "";
+              });
+            breadCrumbs = [
+              { name: w.key, type: "Audience", data: w, list: items }
+            ];
             updateUrlParams();
             generateGraph(data_copy, w.key);
           }
@@ -1655,8 +1837,15 @@ function generateGraph(data, root_key) {
             directory = [];
             directory.push(w.key);
             level = 1;
+            items = educationStandardData
+              .map(function(o) {
+                return o.key;
+              })
+              .filter(function(o) {
+                return o !== "";
+              });
             breadCrumbs = [
-              { name: w.key, type: "Education Standard", data: w }
+              { name: w.key, type: "Education Standard", data: w, list: items }
             ];
             updateUrlParams();
             generateGraph(data_copy, w.key);
@@ -1674,7 +1863,16 @@ function generateGraph(data, root_key) {
             directory = [];
             directory.push(w.key);
             level = 1;
-            breadCrumbs = [{ name: w.key, type: "Topics", data: w }];
+            items = topicData
+              .map(function(o) {
+                return o.key;
+              })
+              .filter(function(o) {
+                return o !== "";
+              });
+            breadCrumbs = [
+              { name: w.key, type: "Topics", data: w, list: items }
+            ];
             updateUrlParams();
             generateGraph(data_copy, w.key);
           }
@@ -1690,8 +1888,20 @@ function generateGraph(data, root_key) {
           directory = [];
           directory.push(w.key);
           level = 1;
+          items = stackNameData
+            .map(function(o) {
+              return o.key;
+            })
+            .filter(function(o) {
+              return o !== "";
+            });
           breadCrumbs = [
-            { name: w.key, type: "Micro-credential Stack Name", data: w }
+            {
+              name: w.key,
+              type: "Micro-credential Stack Name",
+              data: w,
+              list: items
+            }
           ];
           updateUrlParams();
           generateGraph(data_copy, w.key);
@@ -1701,6 +1911,10 @@ function generateGraph(data, root_key) {
   }
 
   function updateBreadcrumbs() {
+    d3.select("#bitem-selector-1").html("");
+    d3.select("#bitem-selector-2").html("");
+    d3.select("#bitem-selector-3").html("");
+    d3.select("#bitem-selector-4").html("");
     if (level === 0) {
       d3.select(".breadcrumbs-container").style("display", "none");
       $("#audience-selector").val("");
@@ -1711,35 +1925,442 @@ function generateGraph(data, root_key) {
       d3.select(".breadcrumbs-container").style("display", "block");
       if (mode === "Topics" || mode === "Audience") {
         d3.select(".bitem-3").style("display", "none");
+        d3.select("#bitem-selector-3").style("display", "none");
         d3.select(".bitem-icon-3").style("display", "none");
         d3.select(".bbox-3").style("display", "none");
       } else {
         d3.select(".bitem-3").style("display", "inline-block");
         d3.select(".bitem-icon-3").style("display", "inline-block");
         d3.select(".bbox-3").style("display", "");
+        d3.select("#bitem-selector-3").style("display", "inline-block");
       }
       if (level === 1) {
+        var currentList = currentData
+          .map(function(w) {
+            return w.key;
+          })
+          .filter(function(o) {
+            return o !== root_key;
+          })
+          .sort(d3.ascending);
+
         if (mode === "Audience") {
-          var bitem1 = "<span>Audience:</span>" + breadCrumbs[0].name;
+          var bitem1 = "<span>Audience: </span>";
+          d3.select("#bitem-selector-1")
+            .selectAll("option")
+            .data(breadCrumbs[0].list)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+
+          $("#bitem-selector-1").val(breadCrumbs[0].name);
+
+          d3.select("#bitem-selector-1").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            audienceData.forEach(function(v) {
+              if (v.key === d) {
+                var data_copy = JSON.parse(JSON.stringify(v.values));
+                data_copy.push(v);
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = audienceData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  { name: v.key, type: "Audience", data: v, list: items }
+                ];
+
+                generateGraph(data_copy, v.key);
+                updateUrlParams();
+              }
+            });
+          });
           var bitem2 = "<span class='select'>Select Topic</span>";
+          d3.select("#bitem-selector-2")
+            .selectAll("option")
+            .data(currentList)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-2").val("");
+
+          d3.select("#bitem-selector-2").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            audienceData.forEach(function(v) {
+              if (v.key === breadCrumbs[0].name) {
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = audienceData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  { name: v.key, type: "Audience", data: v, list: items }
+                ];
+                v.values.forEach(function(w) {
+                  if (w.key === d) {
+                    var data_copy = JSON.parse(JSON.stringify(w.values));
+                    data_copy.push(w);
+                    level += 1;
+                    items = v.values
+                      .map(function(o) {
+                        return o.key;
+                      })
+                      .filter(function(o) {
+                        return o !== "";
+                      });
+                    breadCrumbs.push({
+                      name: w.key,
+                      type: "Topics",
+                      data: w,
+                      list: items
+                    });
+
+                    generateGraph(
+                      data_copy.filter(function(d) {
+                        return d != null;
+                      }),
+                      w.key
+                    );
+                    updateUrlParams();
+                    updateBreadcrumbs();
+                  }
+                });
+              }
+            });
+          });
+
           var bitem4 = "<span class='select'>Select Micro-credential</span>";
+          d3.select("#bitem-selector-4").style("display", "none");
         }
         if (mode === "Stack Name") {
-          var bitem1 = "<span>Stack Name:</span>" + breadCrumbs[0].name;
-          var bitem2 = "Select Audience";
+          var bitem1 = "<span>Stack Name: </span>";
+          d3.select("#bitem-selector-1")
+            .selectAll("option")
+            .data(breadCrumbs[0].list)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+
+          $("#bitem-selector-1").val(breadCrumbs[0].name);
+          d3.select("#bitem-selector-1").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            stackNameData.forEach(function(v) {
+              if (v.key === d) {
+                var data_copy = JSON.parse(JSON.stringify(v.values));
+                data_copy.push(v);
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = stackNameData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  { name: v.key, type: "Stack Name", data: v, list: items }
+                ];
+                updateUrlParams();
+                generateGraph(data_copy, v.key);
+              }
+            });
+          });
+
+          var bitem2 = "<span class='select'>Select Audience</span>";
+          d3.select("#bitem-selector-2")
+            .selectAll("option")
+            .data(currentList)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-2").val("");
+
+          d3.select("#bitem-selector-2").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            stackNameData.forEach(function(v) {
+              if (v.key === breadCrumbs[0].name) {
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = stackNameData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  { name: v.key, type: "Stack Name", data: v, list: items }
+                ];
+                v.values.forEach(function(w) {
+                  if (w.key === d) {
+                    var data_copy = JSON.parse(JSON.stringify(w.values));
+                    data_copy.push(w);
+                    level += 1;
+                    items = v.values
+                      .map(function(o) {
+                        return o.key;
+                      })
+                      .filter(function(o) {
+                        return o !== "";
+                      });
+                    breadCrumbs.push({
+                      name: w.key,
+                      type: "Audience",
+                      data: w,
+                      list: items
+                    });
+
+                    generateGraph(
+                      data_copy.filter(function(d) {
+                        return d != null;
+                      }),
+                      w.key
+                    );
+                    updateUrlParams();
+                  }
+                });
+              }
+            });
+          });
+
           var bitem3 = "<span class='select'>Select Topic</span>";
           var bitem4 = "<span class='select'>Select Micro-credential</span>";
+          d3.select("#bitem-selector-3").style("display", "none");
+          d3.select("#bitem-selector-4").style("display", "none");
         }
         if (mode === "Education Standard") {
-          var bitem1 = "<span>Education Standard:</span>" + breadCrumbs[0].name;
+          var bitem1 = "<span>Education Standard: </span>";
+          d3.select("#bitem-selector-1")
+            .selectAll("option")
+            .data(breadCrumbs[0].list)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-1").val(breadCrumbs[0].name);
+
+          d3.select("#bitem-selector-1").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            educationStandardData.forEach(function(v) {
+              if (v.key === d) {
+                var data_copy = JSON.parse(JSON.stringify(v.values));
+                data_copy.push(v);
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = educationStandardData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  {
+                    name: v.key,
+                    type: "Education Standard",
+                    data: v,
+                    list: items
+                  }
+                ];
+
+                generateGraph(data_copy, v.key);
+                updateUrlParams();
+              }
+            });
+          });
           var bitem2 = "<span class='select'>Select Audience</span>";
+          d3.select("#bitem-selector-2")
+            .selectAll("option")
+            .data(currentList)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-2").val("");
+
+          d3.select("#bitem-selector-2").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            educationStandardData.forEach(function(v) {
+              if (v.key === breadCrumbs[0].name) {
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = educationStandardData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  {
+                    name: v.key,
+                    type: "Education Standard",
+                    data: v,
+                    list: items
+                  }
+                ];
+                v.values.forEach(function(w) {
+                  if (w.key === d) {
+                    var data_copy = JSON.parse(JSON.stringify(w.values));
+                    data_copy.push(w);
+                    level += 1;
+                    items = v.values
+                      .map(function(o) {
+                        return o.key;
+                      })
+                      .filter(function(o) {
+                        return o !== "";
+                      });
+                    breadCrumbs.push({
+                      name: w.key,
+                      type: "Audience",
+                      data: w,
+                      list: items
+                    });
+                    updateUrlParams();
+                    generateGraph(
+                      data_copy.filter(function(d) {
+                        return d != null;
+                      }),
+                      w.key
+                    );
+                  }
+                });
+              }
+            });
+          });
           var bitem3 = "<span class='select'>Select Topic</span>";
           var bitem4 = "<span class='select'>Select Micro-credential</span>";
+          d3.select("#bitem-selector-3").style("display", "none");
+          d3.select("#bitem-selector-4").style("display", "none");
         }
         if (mode === "Topics") {
-          var bitem1 = "<span>Topic:</span>" + breadCrumbs[0].name;
+          d3.select("#bitem-selector-1")
+            .selectAll("option")
+            .data(breadCrumbs[0].list)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-1").val(breadCrumbs[0].name);
+
+          d3.select("#bitem-selector-1").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            topicData.forEach(function(v) {
+              if (v.key === d) {
+                var data_copy = JSON.parse(JSON.stringify(v.values));
+                data_copy.push(v);
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = topicData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  { name: v.key, type: "Topics", data: v, list: items }
+                ];
+                updateUrlParams();
+                generateGraph(data_copy, v.key);
+              }
+            });
+          });
           var bitem2 = "<span class='select'>Select Audience</span>";
+          d3.select("#bitem-selector-2")
+            .selectAll("option")
+            .data(currentList)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-2").val("");
+
+          d3.select("#bitem-selector-2").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            topicData.forEach(function(v) {
+              if (v.key === breadCrumbs[0].name) {
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = topicData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  { name: v.key, type: "Topics", data: v, list: items }
+                ];
+                v.values.forEach(function(w) {
+                  if (w.key === d) {
+                    var data_copy = JSON.parse(JSON.stringify(w.values));
+                    data_copy.push(w);
+                    level += 1;
+                    items = v.values
+                      .map(function(o) {
+                        return o.key;
+                      })
+                      .filter(function(o) {
+                        return o !== "";
+                      });
+                    breadCrumbs.push({
+                      name: w.key,
+                      type: "Audience",
+                      data: w,
+                      list: items
+                    });
+                    updateUrlParams();
+                    generateGraph(
+                      data_copy.filter(function(d) {
+                        return d != null;
+                      }),
+                      w.key
+                    );
+                  }
+                });
+              }
+            });
+          });
           var bitem4 = "<span class='select'>Select Micro-credential</span>";
+          d3.select("#bitem-selector-4").style("display", "none");
         }
         d3.select(".bitem-1")
           .attr("class", "bitem bitem-1")
@@ -1759,34 +2380,669 @@ function generateGraph(data, root_key) {
         d3.select(".bitem-4").attr("class", "bitem bitem-4 bitem-inactive");
         d3.select(".bbox-4").attr("class", "bbox bbox-4 bbox-inactive");
         if (mode === "Audience") {
-          var bitem1 = "<span>Audience:</span>" + breadCrumbs[0].name;
-          var bitem2 = "<span>Topic:</span>" + breadCrumbs[1].name;
+          var currentList = currentData
+            .map(function(w) {
+              return w["Micro-credential Name"];
+            })
+            .filter(function(o) {
+              return o != null;
+            })
+            .sort(d3.ascending);
+
+          var bitem1 = "<span>Audience: </span>";
+          d3.select("#bitem-selector-1")
+            .selectAll("option")
+            .data(breadCrumbs[0].list)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-1").val(breadCrumbs[0].name);
+
+          d3.select("#bitem-selector-1").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            audienceData.forEach(function(v) {
+              if (v.key === d) {
+                var data_copy = JSON.parse(JSON.stringify(v.values));
+                data_copy.push(v);
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = audienceData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  { name: v.key, type: "Audience", data: v, list: items }
+                ];
+                generateGraph(data_copy, v.key);
+                updateUrlParams();
+              }
+            });
+          });
+          var bitem2 = "<span>Topic: </span>";
+          d3.select("#bitem-selector-2")
+            .selectAll("option")
+            .data(breadCrumbs[1].list)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-2").val(breadCrumbs[1].name);
+
+          d3.select("#bitem-selector-2").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            audienceData.forEach(function(v) {
+              if (v.key === breadCrumbs[0].name) {
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = audienceData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  { name: v.key, type: "Audience", data: v, list: items }
+                ];
+                v.values.forEach(function(w) {
+                  if (w.key === d) {
+                    var data_copy = JSON.parse(JSON.stringify(w.values));
+                    data_copy.push(w);
+                    level += 1;
+                    items = v.values
+                      .map(function(o) {
+                        return o.key;
+                      })
+                      .filter(function(o) {
+                        return o !== "";
+                      });
+                    breadCrumbs.push({
+                      name: w.key,
+                      type: "Topics",
+                      data: w,
+                      list: items
+                    });
+
+                    generateGraph(
+                      data_copy.filter(function(d) {
+                        return d != null;
+                      }),
+                      w.key
+                    );
+                  }
+                });
+              }
+            });
+          });
+
           var bitem4 = "<span class='select'>Select Micro-credential</span>";
+          d3.select("#bitem-selector-4")
+            .selectAll("option")
+            .data(currentList)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-4").val("");
+          d3.select("#bitem-selector-4").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            audienceData.forEach(function(v) {
+              if (v.key === breadCrumbs[0].name) {
+                v.values.forEach(function(w) {
+                  if (w.key === breadCrumbs[1].name) {
+                    w.values.forEach(function(u) {
+                      if (u["Micro-credential Name"] === d) {
+                        showTooltip(u);
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          });
           d3.select(".bitem-4")
             .attr("class", "bitem bitem-4")
             .html(bitem4);
           d3.select(".bbox-4").attr("class", "bbox bbox-4");
+          d3.select("#bitem-selector-4").style("display", "");
         }
         if (mode === "Topics") {
-          var bitem1 = "<span>Topic:</span>" + breadCrumbs[0].name;
-          var bitem2 = "<span>Audience:</span>" + breadCrumbs[1].name;
+          var currentList = currentData
+            .map(function(w) {
+              return w["Micro-credential Name"];
+            })
+            .filter(function(o) {
+              return o != null;
+            })
+            .sort(d3.ascending);
+
+          var bitem1 = "<span>Topics: </span>";
+          d3.select("#bitem-selector-1")
+            .selectAll("option")
+            .data(breadCrumbs[0].list)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-1").val(breadCrumbs[0].name);
+          d3.select("#bitem-selector-1").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            topicData.forEach(function(v) {
+              if (v.key === d) {
+                var data_copy = JSON.parse(JSON.stringify(v.values));
+                data_copy.push(v);
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = topicData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  { name: v.key, type: "Topics", data: v, list: items }
+                ];
+                generateGraph(data_copy, v.key);
+                updateUrlParams();
+              }
+            });
+          });
+
+          var bitem2 = "<span>Audience: </span>";
+          d3.select("#bitem-selector-2")
+            .selectAll("option")
+            .data(breadCrumbs[1].list)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-2").val(breadCrumbs[1].name);
+          d3.select("#bitem-selector-2").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            topicData.forEach(function(v) {
+              if (v.key === breadCrumbs[0].name) {
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = topicData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  { name: v.key, type: "Topics", data: v, list: items }
+                ];
+                v.values.forEach(function(w) {
+                  if (w.key === d) {
+                    var data_copy = JSON.parse(JSON.stringify(w.values));
+                    data_copy.push(w);
+                    level += 1;
+                    items = v.values
+                      .map(function(o) {
+                        return o.key;
+                      })
+                      .filter(function(o) {
+                        return o !== "";
+                      });
+                    breadCrumbs.push({
+                      name: w.key,
+                      type: "Audience",
+                      data: w,
+                      list: items
+                    });
+
+                    generateGraph(
+                      data_copy.filter(function(d) {
+                        return d != null;
+                      }),
+                      w.key
+                    );
+                    updateUrlParams();
+                  }
+                });
+              }
+            });
+          });
           var bitem4 = "<span class='select'>Select Micro-credential</span>";
+          d3.select("#bitem-selector-4")
+            .selectAll("option")
+            .data(currentList)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-4").val("");
+          d3.select("#bitem-selector-4").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            topicData.forEach(function(v) {
+              if (v.key === breadCrumbs[0].name) {
+                v.values.forEach(function(w) {
+                  if (w.key === breadCrumbs[1].name) {
+                    w.values.forEach(function(u) {
+                      if (u["Micro-credential Name"] === d) {
+                        showTooltip(u);
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          });
           d3.select(".bitem-4")
             .attr("class", "bitem bitem-4")
             .html(bitem4);
           d3.select(".bbox-4").attr("class", "bbox bbox-4");
+          d3.select("#bitem-selector-4").style("display", "");
         }
         if (mode === "Stack Name") {
-          var bitem1 = "<span>Stack Name:</span>" + breadCrumbs[0].name;
-          var bitem2 = "<span>Audience:</span>" + breadCrumbs[1].name;
-          var bitem3 = "<span class='select'>Select Topic</span>";
+          var currentList = currentData
+            .map(function(w) {
+              return w.key;
+            })
+            .filter(function(o) {
+              return o !== root_key;
+            })
+            .sort(d3.ascending);
+          var bitem1 = "<span>Stack Name: </span>";
+          d3.select("#bitem-selector-1")
+            .selectAll("option")
+            .data(breadCrumbs[0].list)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-1").val(breadCrumbs[0].name);
+          d3.select("#bitem-selector-1").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            stackNameData.forEach(function(v) {
+              if (v.key === d) {
+                var data_copy = JSON.parse(JSON.stringify(v.values));
+                data_copy.push(v);
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = stackNameData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  { name: v.key, type: "Stack Name", data: v, list: items }
+                ];
+                updateUrlParams();
+                generateGraph(data_copy, v.key);
+              }
+            });
+          });
+
+          var bitem2 = "<span>Topic: </span>";
+          d3.select("#bitem-selector-2")
+            .selectAll("option")
+            .data(breadCrumbs[1].list)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-2").val(breadCrumbs[1].name);
+          d3.select("#bitem-selector-2").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            stackNameData.forEach(function(v) {
+              if (v.key === breadCrumbs[0].name) {
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = stackNameData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  { name: v.key, type: "Stack Name", data: v, list: items }
+                ];
+                v.values.forEach(function(w) {
+                  if (w.key === d) {
+                    var data_copy = JSON.parse(JSON.stringify(w.values));
+                    data_copy.push(w);
+                    level += 1;
+                    items = v.values
+                      .map(function(o) {
+                        return o.key;
+                      })
+                      .filter(function(o) {
+                        return o !== "";
+                      });
+                    breadCrumbs.push({
+                      name: w.key,
+                      type: "Audience",
+                      data: w,
+                      list: items
+                    });
+
+                    generateGraph(
+                      data_copy.filter(function(d) {
+                        return d != null;
+                      }),
+                      w.key
+                    );
+                    updateUrlParams();
+                  }
+                });
+              }
+            });
+          });
+
+          var bitem3 = "<span class='select'>Select Audience</span>";
+          d3.select("#bitem-selector-3")
+            .selectAll("option")
+            .data(currentList)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-3").val("");
+          d3.select("#bitem-selector-3").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            stackNameData.forEach(function(v) {
+              if (v.key === breadCrumbs[0].name) {
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = stackNameData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  { name: v.key, type: "Stack Name", data: v, list: items }
+                ];
+                v.values.forEach(function(w) {
+                  if (w.key === breadCrumbs[1].name) {
+                    level += 1;
+                    items = v.values
+                      .map(function(o) {
+                        return o.key;
+                      })
+                      .filter(function(o) {
+                        return o !== "";
+                      });
+                    breadCrumbs.push({
+                      name: w.key,
+                      type: "Audience",
+                      data: w,
+                      list: items
+                    });
+                    w.values.forEach(function(u) {
+                      if (u.key === d) {
+                        var data_copy = JSON.parse(JSON.stringify(u.values));
+                        data_copy.push(u);
+                        level += 1;
+                        items = u.values
+                          .map(function(o) {
+                            return o.key;
+                          })
+                          .filter(function(o) {
+                            return o !== "";
+                          });
+                        breadCrumbs.push({
+                          name: u.key,
+                          type: "Topics",
+                          data: u,
+                          list: items
+                        });
+                        generateGraph(
+                          data_copy.filter(function(d) {
+                            return d != null;
+                          }),
+                          u.key
+                        );
+                        updateUrlParams();
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          });
           var bitem4 = "<span class='select'>Select Micro-credential</span>";
+          d3.select("#bitem-selector-3").style("display", "");
+          d3.select("#bitem-selector-4").style("display", "none");
         }
         if (mode === "Education Standard") {
-          var bitem1 = "<span>Education Standard:</span>" + breadCrumbs[0].name;
-          var bitem2 = "<span>Audience:</span>" + breadCrumbs[1].name;
-          var bitem3 = "<span class='select'>Select Topic</span>";
+          var currentList = currentData
+            .map(function(w) {
+              return w.key;
+            })
+            .filter(function(o) {
+              return o !== root_key;
+            })
+            .sort(d3.ascending);
+
+          var bitem1 = "<span>Education Standard: </span>";
+          d3.select("#bitem-selector-1")
+            .selectAll("option")
+            .data(breadCrumbs[0].list)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-1").val(breadCrumbs[0].name);
+          d3.select("#bitem-selector-1").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            educationStandardData.forEach(function(v) {
+              if (v.key === d) {
+                var data_copy = JSON.parse(JSON.stringify(v.values));
+                data_copy.push(v);
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = educationStandardData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  {
+                    name: v.key,
+                    type: "Education Standard",
+                    data: v,
+                    list: items
+                  }
+                ];
+                updateUrlParams();
+                generateGraph(data_copy, v.key);
+              }
+            });
+          });
+
+          var bitem2 = "<span>Topic: </span>";
+          d3.select("#bitem-selector-2")
+            .selectAll("option")
+            .data(breadCrumbs[1].list)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-2").val(breadCrumbs[1].name);
+          d3.select("#bitem-selector-2").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            educationStandardData.forEach(function(v) {
+              if (v.key === breadCrumbs[0].name) {
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = educationStandardData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  {
+                    name: v.key,
+                    type: "Education Standard",
+                    data: v,
+                    list: items
+                  }
+                ];
+                v.values.forEach(function(w) {
+                  if (w.key === d) {
+                    var data_copy = JSON.parse(JSON.stringify(w.values));
+                    data_copy.push(w);
+                    level += 1;
+                    items = v.values
+                      .map(function(o) {
+                        return o.key;
+                      })
+                      .filter(function(o) {
+                        return o !== "";
+                      });
+                    breadCrumbs.push({
+                      name: w.key,
+                      type: "Audience",
+                      data: w,
+                      list: items
+                    });
+
+                    generateGraph(
+                      data_copy.filter(function(d) {
+                        return d != null;
+                      }),
+                      w.key
+                    );
+                    updateUrlParams();
+                  }
+                });
+              }
+            });
+          });
+
+          var bitem3 = "<span class='select'>Select Audience</span>";
+          d3.select("#bitem-selector-3")
+            .selectAll("option")
+            .data(currentList)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-3").val("");
+          d3.select("#bitem-selector-3").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            educationStandardData.forEach(function(v) {
+              if (v.key === breadCrumbs[0].name) {
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = educationStandardData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  {
+                    name: v.key,
+                    type: "Education Standard",
+                    data: v,
+                    list: items
+                  }
+                ];
+
+                v.values.forEach(function(w) {
+                  if (w.key === breadCrumbs[1].name) {
+                    level += 1;
+                    items = v.values
+                      .map(function(o) {
+                        return o.key;
+                      })
+                      .filter(function(o) {
+                        return o !== "";
+                      });
+                    breadCrumbs.push({
+                      name: w.key,
+                      type: "Audience",
+                      data: w,
+                      list: items
+                    });
+                    w.values.forEach(function(u) {
+                      if (u.key === d) {
+                        var data_copy = JSON.parse(JSON.stringify(u.values));
+                        data_copy.push(u);
+                        level += 1;
+                        items = u.values
+                          .map(function(o) {
+                            return o.key;
+                          })
+                          .filter(function(o) {
+                            return o !== "";
+                          });
+                        breadCrumbs.push({
+                          name: u.key,
+                          type: "Topics",
+                          data: u,
+                          list: items
+                        });
+                        generateGraph(
+                          data_copy.filter(function(d) {
+                            return d != null;
+                          }),
+                          u.key
+                        );
+                        updateUrlParams();
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          });
+
           var bitem4 = "<span class='select'>Select Micro-credential</span>";
+          d3.select("#bitem-selector-3").style("display", "");
+          d3.select("#bitem-selector-4").style("display", "none");
         }
         d3.select(".bitem-1")
           .attr("class", "bitem bitem-1")
@@ -1798,16 +3054,451 @@ function generateGraph(data, root_key) {
       }
       if (level === 3) {
         if (mode === "Stack Name") {
-          var bitem1 = "<span>Stack Name:</span>" + breadCrumbs[0].name;
-          var bitem2 = "<span>Audience:</span>" + breadCrumbs[1].name;
-          var bitem3 = "<span>Topic:</span>" + breadCrumbs[2].name;
+          var currentList = currentData
+            .map(function(w) {
+              return w["Micro-credential Name"];
+            })
+            .filter(function(o) {
+              return o != null;
+            })
+            .sort(d3.ascending);
+          var bitem1 = "<span>Stack Name: </span>";
+          d3.select("#bitem-selector-1")
+            .selectAll("option")
+            .data(breadCrumbs[0].list)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-1").val(breadCrumbs[0].name);
+          d3.select("#bitem-selector-1").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            stackNameData.forEach(function(v) {
+              if (v.key === d) {
+                var data_copy = JSON.parse(JSON.stringify(v.values));
+                data_copy.push(v);
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = stackNameData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  { name: v.key, type: "Stack Name", data: v, list: items }
+                ];
+                updateUrlParams();
+                generateGraph(data_copy, v.key);
+              }
+            });
+          });
+
+          var bitem2 = "<span>Topic: </span>";
+          d3.select("#bitem-selector-2")
+            .selectAll("option")
+            .data(breadCrumbs[1].list)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-2").val(breadCrumbs[1].name);
+          d3.select("#bitem-selector-2").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            stackNameData.forEach(function(v) {
+              if (v.key === breadCrumbs[0].name) {
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = stackNameData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  { name: v.key, type: "Stack Name", data: v, list: items }
+                ];
+                v.values.forEach(function(w) {
+                  if (w.key === d) {
+                    var data_copy = JSON.parse(JSON.stringify(w.values));
+                    data_copy.push(w);
+                    level += 1;
+                    items = v.values
+                      .map(function(o) {
+                        return o.key;
+                      })
+                      .filter(function(o) {
+                        return o !== "";
+                      });
+                    breadCrumbs.push({
+                      name: w.key,
+                      type: "Audience",
+                      data: w,
+                      list: items
+                    });
+
+                    generateGraph(
+                      data_copy.filter(function(d) {
+                        return d != null;
+                      }),
+                      w.key
+                    );
+                    updateUrlParams();
+                    updateBreadcrumbs();
+                  }
+                });
+              }
+            });
+          });
+
+          var bitem3 = "<span>Audience: </span>";
+          d3.select("#bitem-selector-3")
+            .selectAll("option")
+            .data(breadCrumbs[2].list)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-3").val(breadCrumbs[2].name);
+          d3.select("#bitem-selector-3").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            stackNameData.forEach(function(v) {
+              if (v.key === breadCrumbs[0].name) {
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = stackNameData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  { name: v.key, type: "Stack Name", data: v, list: items }
+                ];
+                v.values.forEach(function(w) {
+                  if (w.key === breadCrumbs[1].name) {
+                    level += 1;
+                    items = v.values
+                      .map(function(o) {
+                        return o.key;
+                      })
+                      .filter(function(o) {
+                        return o !== "";
+                      });
+                    breadCrumbs.push({
+                      name: w.key,
+                      type: "Audience",
+                      data: w,
+                      list: items
+                    });
+                    w.values.forEach(function(u) {
+                      if (u.key === d) {
+                        var data_copy = JSON.parse(JSON.stringify(u.values));
+                        data_copy.push(u);
+                        level += 1;
+                        items = u.values
+                          .map(function(o) {
+                            return o.key;
+                          })
+                          .filter(function(o) {
+                            return o !== "";
+                          });
+                        breadCrumbs.push({
+                          name: u.key,
+                          type: "Topics",
+                          data: u,
+                          list: items
+                        });
+                        generateGraph(
+                          data_copy.filter(function(d) {
+                            return d != null;
+                          }),
+                          u.key
+                        );
+                        updateUrlParams();
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          });
+
           var bitem4 = "<span class='select'>Select Micro-credential</span>";
+          d3.select("#bitem-selector-4")
+            .selectAll("option")
+            .data(currentList)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-4").val("");
+          d3.select("#bitem-selector-4").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            stackNameData.forEach(function(v) {
+              if (v.key === breadCrumbs[0].name) {
+                v.values.forEach(function(w) {
+                  if (w.key === breadCrumbs[1].name) {
+                    w.values.forEach(function(u) {
+                      if (u.key === breadCrumbs[2].name) {
+                        u.values.forEach(function(o) {
+                          if (o["Micro-credential Name"] === d) {
+                            showTooltip(o);
+                          }
+                        });
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          });
+
+          d3.select("#bitem-selector-4").style("display", "");
         }
         if (mode === "Education Standard") {
-          var bitem1 = "<span>Education Standard:</span>" + breadCrumbs[0].name;
-          var bitem2 = "<span>Audience:</span>" + breadCrumbs[1].name;
-          var bitem3 = "<span>Topic:</span>" + breadCrumbs[2].name;
+          var currentList = currentData
+            .map(function(w) {
+              return w["Micro-credential Name"];
+            })
+            .filter(function(o) {
+              return o != null;
+            })
+            .sort(d3.ascending);
+          var bitem1 = "<span>Education Standard: </span>";
+          d3.select("#bitem-selector-1")
+            .selectAll("option")
+            .data(breadCrumbs[0].list)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-1").val(breadCrumbs[0].name);
+          d3.select("#bitem-selector-1").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            educationStandardData.forEach(function(v) {
+              if (v.key === d) {
+                var data_copy = JSON.parse(JSON.stringify(v.values));
+                data_copy.push(v);
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = educationStandardData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  {
+                    name: v.key,
+                    type: "Education Standard",
+                    data: v,
+                    list: items
+                  }
+                ];
+                updateUrlParams();
+                generateGraph(data_copy, v.key);
+              }
+            });
+          });
+
+          var bitem2 = "<span>Topic: </span>";
+          d3.select("#bitem-selector-2")
+            .selectAll("option")
+            .data(breadCrumbs[1].list)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-2").val(breadCrumbs[1].name);
+          d3.select("#bitem-selector-2").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            educationStandardData.forEach(function(v) {
+              if (v.key === breadCrumbs[0].name) {
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = educationStandardData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  {
+                    name: v.key,
+                    type: "Education Standard",
+                    data: v,
+                    list: items
+                  }
+                ];
+                v.values.forEach(function(w) {
+                  if (w.key === d) {
+                    var data_copy = JSON.parse(JSON.stringify(w.values));
+                    data_copy.push(w);
+                    level += 1;
+                    items = v.values
+                      .map(function(o) {
+                        return o.key;
+                      })
+                      .filter(function(o) {
+                        return o !== "";
+                      });
+                    breadCrumbs.push({
+                      name: w.key,
+                      type: "Audience",
+                      data: w,
+                      list: items
+                    });
+
+                    generateGraph(
+                      data_copy.filter(function(d) {
+                        return d != null;
+                      }),
+                      w.key
+                    );
+                    updateUrlParams();
+                  }
+                });
+              }
+            });
+          });
+
+          var bitem3 = "<span>Audience: </span>";
+          d3.select("#bitem-selector-3")
+            .selectAll("option")
+            .data(breadCrumbs[2].list)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-3").val(breadCrumbs[2].name);
+          d3.select("#bitem-selector-3").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            educationStandardData.forEach(function(v) {
+              if (v.key === breadCrumbs[0].name) {
+                directory = [];
+                directory.push(v.key);
+                level = 1;
+                items = educationStandardData
+                  .map(function(o) {
+                    return o.key;
+                  })
+                  .filter(function(o) {
+                    return o !== "";
+                  });
+                breadCrumbs = [
+                  {
+                    name: v.key,
+                    type: "Education Standard",
+                    data: v,
+                    list: items
+                  }
+                ];
+                v.values.forEach(function(w) {
+                  if (w.key === breadCrumbs[1].name) {
+                    level += 1;
+                    items = v.values
+                      .map(function(o) {
+                        return o.key;
+                      })
+                      .filter(function(o) {
+                        return o !== "";
+                      });
+                    breadCrumbs.push({
+                      name: w.key,
+                      type: "Audience",
+                      data: w,
+                      list: items
+                    });
+                    w.values.forEach(function(u) {
+                      if (u.key === d) {
+                        var data_copy = JSON.parse(JSON.stringify(u.values));
+                        data_copy.push(u);
+                        level += 1;
+                        items = u.values
+                          .map(function(o) {
+                            return o.key;
+                          })
+                          .filter(function(o) {
+                            return o !== "";
+                          });
+                        breadCrumbs.push({
+                          name: u.key,
+                          type: "Topics",
+                          data: u,
+                          list: items
+                        });
+                        generateGraph(
+                          data_copy.filter(function(d) {
+                            return d != null;
+                          }),
+                          u.key
+                        );
+                        updateUrlParams();
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          });
+
           var bitem4 = "<span class='select'>Select Micro-credential</span>";
+          d3.select("#bitem-selector-4")
+            .selectAll("option")
+            .data(currentList)
+            .enter()
+            .append("option")
+            .html(function(d) {
+              return "<option value='" + d + "'>" + d + "</option>";
+            });
+          $("#bitem-selector-4").val("");
+          d3.select("#bitem-selector-4").on("change", function() {
+            d = this.value;
+            if (d == "") return;
+            educationStandardData.forEach(function(v) {
+              if (v.key === breadCrumbs[0].name) {
+                v.values.forEach(function(w) {
+                  if (w.key === breadCrumbs[1].name) {
+                    w.values.forEach(function(u) {
+                      if (u.key === breadCrumbs[2].name) {
+                        u.values.forEach(function(o) {
+                          if (o["Micro-credential Name"] === d) {
+                            showTooltip(o);
+                          }
+                        });
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          });
+          d3.select("#bitem-selector-4").style("display", "");
         }
         d3.select(".bitem-1")
           .attr("class", "bitem bitem-1")
