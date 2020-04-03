@@ -627,6 +627,12 @@ d3.select(".tooltip-close-btn").on("click", function() {
   d3.select(".tooltip").style("display", "none");
 });
 
+d3.select(".copy-url-btn").on("click", function() {
+  var queryStringCurrent = window.location;
+  console.log(queryStringCurrent);
+  copyToClipboard(queryStringCurrent);
+});
+
 function setZoom(bmargin) {
   /* Function to zoom out to see entire graph.
           Used when graph is initialized and when zoom is reset.
