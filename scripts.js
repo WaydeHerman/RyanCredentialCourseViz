@@ -1934,6 +1934,7 @@ function generateGraph(data, root_key) {
   }
 
   function updateBreadcrumbs() {
+    console.log(level);
     d3.select("#bitem-selector-1").html("");
     d3.select("#bitem-selector-2").html("");
     d3.select("#bitem-selector-3").html("");
@@ -2551,7 +2552,7 @@ function generateGraph(data, root_key) {
             })
             .sort(d3.ascending);
 
-          var bitem1 = "<span>Topics: </span>";
+          var bitem1 = "<span>Topic: </span>";
           d3.select("#bitem-selector-1")
             .selectAll("option")
             .data(breadCrumbs[0].list)
@@ -2797,8 +2798,9 @@ function generateGraph(data, root_key) {
           d3.select("#bitem-selector-3").on("change", function() {
             d = this.value;
             if (d == "") return;
+            var oldBreadCrumbs = JSON.parse(JSON.stringify(breadCrumbs));
             stackNameData.forEach(function(v) {
-              if (v.key === breadCrumbs[0].name) {
+              if (v.key === oldBreadCrumbs[0].name) {
                 directory = [];
                 directory.push(v.key);
                 level = 1;
@@ -2813,7 +2815,7 @@ function generateGraph(data, root_key) {
                   { name: v.key, type: "Stack Name", data: v, list: items }
                 ];
                 v.values.forEach(function(w) {
-                  if (w.key === breadCrumbs[1].name) {
+                  if (w.key === oldBreadCrumbs[1].name) {
                     level += 1;
                     items = v.values
                       .map(function(o) {
@@ -2833,7 +2835,7 @@ function generateGraph(data, root_key) {
                         var data_copy = JSON.parse(JSON.stringify(u.values));
                         data_copy.push(u);
                         level += 1;
-                        items = u.values
+                        items = w.values
                           .map(function(o) {
                             return o.key;
                           })
@@ -2993,8 +2995,9 @@ function generateGraph(data, root_key) {
           d3.select("#bitem-selector-3").on("change", function() {
             d = this.value;
             if (d == "") return;
+            var oldBreadCrumbs = JSON.parse(JSON.stringify(breadCrumbs));
             educationStandardData.forEach(function(v) {
-              if (v.key === breadCrumbs[0].name) {
+              if (v.key === oldBreadCrumbs[0].name) {
                 directory = [];
                 directory.push(v.key);
                 level = 1;
@@ -3015,7 +3018,7 @@ function generateGraph(data, root_key) {
                 ];
 
                 v.values.forEach(function(w) {
-                  if (w.key === breadCrumbs[1].name) {
+                  if (w.key === oldBreadCrumbs[1].name) {
                     level += 1;
                     items = v.values
                       .map(function(o) {
@@ -3035,7 +3038,7 @@ function generateGraph(data, root_key) {
                         var data_copy = JSON.parse(JSON.stringify(u.values));
                         data_copy.push(u);
                         level += 1;
-                        items = u.values
+                        items = w.values
                           .map(function(o) {
                             return o.key;
                           })
@@ -3121,7 +3124,7 @@ function generateGraph(data, root_key) {
             });
           });
 
-          var bitem2 = "<span>Topic: </span>";
+          var bitem2 = "<span>Audience: </span>";
           d3.select("#bitem-selector-2")
             .selectAll("option")
             .data(breadCrumbs[1].list)
@@ -3182,7 +3185,8 @@ function generateGraph(data, root_key) {
             });
           });
 
-          var bitem3 = "<span>Audience: </span>";
+          console.log("breadCrumbs", breadCrumbs);
+          var bitem3 = "<span>Topic: </span>";
           d3.select("#bitem-selector-3")
             .selectAll("option")
             .data(breadCrumbs[2].list)
@@ -3195,8 +3199,9 @@ function generateGraph(data, root_key) {
           d3.select("#bitem-selector-3").on("change", function() {
             d = this.value;
             if (d == "") return;
+            var oldBreadCrumbs = JSON.parse(JSON.stringify(breadCrumbs));
             stackNameData.forEach(function(v) {
-              if (v.key === breadCrumbs[0].name) {
+              if (v.key === oldBreadCrumbs[0].name) {
                 directory = [];
                 directory.push(v.key);
                 level = 1;
@@ -3211,7 +3216,7 @@ function generateGraph(data, root_key) {
                   { name: v.key, type: "Stack Name", data: v, list: items }
                 ];
                 v.values.forEach(function(w) {
-                  if (w.key === breadCrumbs[1].name) {
+                  if (w.key === oldBreadCrumbs[1].name) {
                     level += 1;
                     items = v.values
                       .map(function(o) {
@@ -3231,13 +3236,14 @@ function generateGraph(data, root_key) {
                         var data_copy = JSON.parse(JSON.stringify(u.values));
                         data_copy.push(u);
                         level += 1;
-                        items = u.values
+                        items = w.values
                           .map(function(o) {
                             return o.key;
                           })
                           .filter(function(o) {
                             return o !== "";
                           });
+                        console.log("u", u);
                         breadCrumbs.push({
                           name: u.key,
                           type: "Topics",
@@ -3343,7 +3349,7 @@ function generateGraph(data, root_key) {
             });
           });
 
-          var bitem2 = "<span>Topic: </span>";
+          var bitem2 = "<span>Audience: </span>";
           d3.select("#bitem-selector-2")
             .selectAll("option")
             .data(breadCrumbs[1].list)
@@ -3408,7 +3414,7 @@ function generateGraph(data, root_key) {
             });
           });
 
-          var bitem3 = "<span>Audience: </span>";
+          var bitem3 = "<span>Topic: </span>";
           d3.select("#bitem-selector-3")
             .selectAll("option")
             .data(breadCrumbs[2].list)
@@ -3418,11 +3424,13 @@ function generateGraph(data, root_key) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-3").val(breadCrumbs[2].name);
+          console.log("breadCrumbs", breadCrumbs);
           d3.select("#bitem-selector-3").on("change", function() {
             d = this.value;
             if (d == "") return;
+            var oldBreadCrumbs = JSON.parse(JSON.stringify(breadCrumbs));
             educationStandardData.forEach(function(v) {
-              if (v.key === breadCrumbs[0].name) {
+              if (v.key === oldBreadCrumbs[0].name) {
                 directory = [];
                 directory.push(v.key);
                 level = 1;
@@ -3442,7 +3450,7 @@ function generateGraph(data, root_key) {
                   }
                 ];
                 v.values.forEach(function(w) {
-                  if (w.key === breadCrumbs[1].name) {
+                  if (w.key === oldBreadCrumbs[1].name) {
                     level += 1;
                     items = v.values
                       .map(function(o) {
@@ -3462,13 +3470,14 @@ function generateGraph(data, root_key) {
                         var data_copy = JSON.parse(JSON.stringify(u.values));
                         data_copy.push(u);
                         level += 1;
-                        items = u.values
+                        items = w.values
                           .map(function(o) {
                             return o.key;
                           })
                           .filter(function(o) {
                             return o !== "";
                           });
+                        console.log("items", items);
                         breadCrumbs.push({
                           name: u.key,
                           type: "Topics",
