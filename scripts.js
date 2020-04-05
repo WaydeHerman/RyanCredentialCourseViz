@@ -22,18 +22,18 @@ const urlCatA = urlParams.get("b");
 const urlCatB = urlParams.get("c");
 const urlCatC = urlParams.get("d");
 
-$(".start-over-btn").click(function() {
+$(".start-over-btn").click(function () {
   $(".bitem-1").click();
 });
 
 // d3.csv("/wp-content/themes/digital-promise-new/js/micro-credentials/visualization.csv").then(function (data) {
-d3.csv("data.csv").then(function(data) {
+d3.csv("data.csv").then(function (data) {
   breadCrumbs = [];
 
   new_data = [];
-  data.forEach(function(v) {
+  data.forEach(function (v) {
     var audiences = v["Audience"].split(",");
-    audiences.forEach(function(w) {
+    audiences.forEach(function (w) {
       v_copy = JSON.parse(JSON.stringify(v));
       v_copy["Audience_alt"] = w.replace(/"/g, "").trim();
       new_data.push(v_copy);
@@ -42,9 +42,9 @@ d3.csv("data.csv").then(function(data) {
 
   data = new_data;
   new_data = [];
-  data.forEach(function(v) {
+  data.forEach(function (v) {
     var topics = v["Topics"].split(",");
-    topics.forEach(function(w) {
+    topics.forEach(function (w) {
       v_copy = JSON.parse(JSON.stringify(v));
       v_copy["Topics_alt"] = w.replace(/"/g, "").trim();
       new_data.push(v_copy);
@@ -53,9 +53,9 @@ d3.csv("data.csv").then(function(data) {
 
   data = new_data;
   new_data = [];
-  data.forEach(function(v) {
+  data.forEach(function (v) {
     var stackNames = v["Micro-credential Stack Name"].split(",");
-    stackNames.forEach(function(w) {
+    stackNames.forEach(function (w) {
       v_copy = JSON.parse(JSON.stringify(v));
       v_copy["Micro-credential Stack Name_alt"] = w.replace(/"/g, "").trim();
       new_data.push(v_copy);
@@ -64,9 +64,9 @@ d3.csv("data.csv").then(function(data) {
 
   data = new_data;
   new_data = [];
-  data.forEach(function(v) {
+  data.forEach(function (v) {
     var educationStandards = v["Education Standard"].split(",");
-    educationStandards.forEach(function(w) {
+    educationStandards.forEach(function (w) {
       v_copy = JSON.parse(JSON.stringify(v));
       v_copy["Education Standard_alt"] = w.replace(/"/g, "").trim();
       new_data.push(v_copy);
@@ -77,62 +77,62 @@ d3.csv("data.csv").then(function(data) {
 
   audienceData = d3
     .nest()
-    .key(function(d) {
+    .key(function (d) {
       return d["Audience_alt"];
     })
     .sortKeys(d3.ascending)
-    .key(function(d) {
+    .key(function (d) {
       return d["Topics_alt"];
     })
     .entries(data);
 
   topicData = d3
     .nest()
-    .key(function(d) {
+    .key(function (d) {
       return d["Topics_alt"];
     })
     .sortKeys(d3.ascending)
-    .key(function(d) {
+    .key(function (d) {
       return d["Audience_alt"];
     })
     .entries(data);
 
   stackNameData = d3
     .nest()
-    .key(function(d) {
+    .key(function (d) {
       return d["Micro-credential Stack Name_alt"];
     })
     .sortKeys(d3.ascending)
-    .key(function(d) {
+    .key(function (d) {
       return d["Audience_alt"];
     })
-    .key(function(d) {
+    .key(function (d) {
       return d["Topics_alt"];
     })
     .entries(data);
 
   educationStandardData = d3
     .nest()
-    .key(function(d) {
+    .key(function (d) {
       return d["Education Standard_alt"];
     })
     .sortKeys(d3.ascending)
-    .key(function(d) {
+    .key(function (d) {
       return d["Audience_alt"];
     })
-    .key(function(d) {
+    .key(function (d) {
       return d["Topics_alt"];
     })
     .entries(data);
 
   var audienceList = [];
-  audienceData.forEach(function(w) {
+  audienceData.forEach(function (w) {
     if (w.key !== "") {
       audienceList.push(w.key);
     }
-    w.values.forEach(function(v) {
+    w.values.forEach(function (v) {
       var tmp_list = [];
-      v.values.forEach(function(u, i) {
+      v.values.forEach(function (u, i) {
         if (tmp_list.indexOf(u["MC ID #"]) < 0) {
           tmp_list.push(u["MC ID #"]);
         } else {
@@ -143,13 +143,13 @@ d3.csv("data.csv").then(function(data) {
   });
 
   var topicList = [];
-  topicData.forEach(function(w) {
+  topicData.forEach(function (w) {
     if (w.key !== "") {
       topicList.push(w.key);
     }
-    w.values.forEach(function(v) {
+    w.values.forEach(function (v) {
       var tmp_list = [];
-      v.values.forEach(function(u, i) {
+      v.values.forEach(function (u, i) {
         if (tmp_list.indexOf(u["MC ID #"]) < 0) {
           tmp_list.push(u["MC ID #"]);
         } else {
@@ -160,14 +160,14 @@ d3.csv("data.csv").then(function(data) {
   });
 
   var stackNameList = [];
-  stackNameData.forEach(function(w) {
+  stackNameData.forEach(function (w) {
     if (w.key !== "") {
       stackNameList.push(w.key);
     }
-    w.values.forEach(function(v) {
-      v.values.forEach(function(u) {
+    w.values.forEach(function (v) {
+      v.values.forEach(function (u) {
         var tmp_list = [];
-        u.values.forEach(function(o, i) {
+        u.values.forEach(function (o, i) {
           if (tmp_list.indexOf(o["MC ID #"]) < 0) {
             tmp_list.push(o["MC ID #"]);
           } else {
@@ -179,14 +179,14 @@ d3.csv("data.csv").then(function(data) {
   });
 
   var educationStandardList = [];
-  educationStandardData.forEach(function(w) {
+  educationStandardData.forEach(function (w) {
     if (w.key !== "") {
       educationStandardList.push(w.key);
     }
-    w.values.forEach(function(v) {
-      v.values.forEach(function(u) {
+    w.values.forEach(function (v) {
+      v.values.forEach(function (u) {
         var tmp_list = [];
-        u.values.forEach(function(o, i) {
+        u.values.forEach(function (o, i) {
           if (tmp_list.indexOf(o["MC ID #"]) < 0) {
             tmp_list.push(o["MC ID #"]);
           } else {
@@ -199,21 +199,22 @@ d3.csv("data.csv").then(function(data) {
 
   if (urlType !== null) {
     if (urlType === "Audience") {
-      audienceData.forEach(function(v) {
+      audienceData.forEach(function (v) {
         if (urlCatA === v.key) {
           mode = urlType;
           directory = [];
           directory.push(v.key);
           level += 1;
           items = audienceData
-            .map(function(o) {
+            .map(function (o) {
               return o.key;
             })
-            .filter(function(o) {
+            .filter(function (o) {
               return o !== "";
-            });
+            })
+            .sort(d3.ascending);
           breadCrumbs = [
-            { name: v.key, type: "Audience", data: v, list: items }
+            { name: v.key, type: "Audience", data: v, list: items },
           ];
           if (urlCatB === null) {
             var data_copy = JSON.parse(JSON.stringify(v.values));
@@ -221,28 +222,29 @@ d3.csv("data.csv").then(function(data) {
             updateUrlParams();
             generateGraph(data_copy, v.key);
           } else {
-            v.values.forEach(function(u) {
+            v.values.forEach(function (u) {
               if (urlCatB === u.key) {
                 var data_copy = JSON.parse(JSON.stringify(u.values));
                 data_copy.push(u);
                 directory.push(u.key);
                 level += 1;
                 items = v.values
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs.push({
                   name: u.key,
                   type: "Topics",
                   data: u,
-                  list: items
+                  list: items,
                 });
                 updateUrlParams();
                 generateGraph(
-                  data_copy.filter(function(d) {
+                  data_copy.filter(function (d) {
                     return d != null;
                   }),
                   u.key
@@ -254,19 +256,20 @@ d3.csv("data.csv").then(function(data) {
       });
     }
     if (urlType === "Topics") {
-      topicData.forEach(function(v) {
+      topicData.forEach(function (v) {
         if (urlCatA === v.key) {
           mode = urlType;
           directory = [];
           directory.push(v.key);
           level += 1;
           items = topicData
-            .map(function(o) {
+            .map(function (o) {
               return o.key;
             })
-            .filter(function(o) {
+            .filter(function (o) {
               return o !== "";
-            });
+            })
+            .sort(d3.ascending);
           breadCrumbs = [{ name: v.key, type: "Topics", data: v, list: items }];
           if (urlCatB === null) {
             var data_copy = JSON.parse(JSON.stringify(v.values));
@@ -274,28 +277,29 @@ d3.csv("data.csv").then(function(data) {
             updateUrlParams();
             generateGraph(data_copy, v.key);
           } else {
-            v.values.forEach(function(u) {
+            v.values.forEach(function (u) {
               if (urlCatB === u.key) {
                 var data_copy = JSON.parse(JSON.stringify(u.values));
                 data_copy.push(u);
                 directory.push(u.key);
                 level += 1;
                 items = v.values
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs.push({
                   name: u.key,
                   type: "Audience",
                   data: u,
-                  list: items
+                  list: items,
                 });
                 updateUrlParams();
                 generateGraph(
-                  data_copy.filter(function(d) {
+                  data_copy.filter(function (d) {
                     return d != null;
                   }),
                   u.key
@@ -307,21 +311,22 @@ d3.csv("data.csv").then(function(data) {
       });
     }
     if (urlType === "Stack Name") {
-      stackNameData.forEach(function(v) {
+      stackNameData.forEach(function (v) {
         if (urlCatA === v.key) {
           mode = urlType;
           directory = [];
           directory.push(v.key);
           level += 1;
           items = stackNameData
-            .map(function(o) {
+            .map(function (o) {
               return o.key;
             })
-            .filter(function(o) {
+            .filter(function (o) {
               return o !== "";
-            });
+            })
+            .sort(d3.ascending);
           breadCrumbs = [
-            { name: v.key, type: "Stack Name", data: v, list: items }
+            { name: v.key, type: "Stack Name", data: v, list: items },
           ];
           if (urlCatB === null) {
             var data_copy = JSON.parse(JSON.stringify(v.values));
@@ -329,56 +334,58 @@ d3.csv("data.csv").then(function(data) {
             updateUrlParams();
             generateGraph(data_copy, v.key);
           } else {
-            v.values.forEach(function(u) {
+            v.values.forEach(function (u) {
               if (urlCatB === u.key) {
                 directory.push(u.key);
                 level += 1;
                 items = v.values
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs.push({
                   name: u.key,
                   type: "Audience",
                   data: u,
-                  list: items
+                  list: items,
                 });
                 if (urlCatC === null) {
                   var data_copy = JSON.parse(JSON.stringify(u.values));
                   data_copy.push(u);
                   updateUrlParams();
                   generateGraph(
-                    data_copy.filter(function(d) {
+                    data_copy.filter(function (d) {
                       return d != null;
                     }),
                     u.key
                   );
                 } else {
-                  u.values.forEach(function(w) {
+                  u.values.forEach(function (w) {
                     if (urlCatC === w.key) {
                       var data_copy = JSON.parse(JSON.stringify(w.values));
                       data_copy.push(w);
                       directory.push(w.key);
                       level += 1;
                       items = u.values
-                        .map(function(o) {
+                        .map(function (o) {
                           return o.key;
                         })
-                        .filter(function(o) {
+                        .filter(function (o) {
                           return o !== "";
-                        });
+                        })
+                        .sort(d3.ascending);
                       breadCrumbs.push({
                         name: w.key,
                         type: "Topics",
                         data: w,
-                        list: items
+                        list: items,
                       });
                       updateUrlParams();
                       generateGraph(
-                        data_copy.filter(function(d) {
+                        data_copy.filter(function (d) {
                           return d != null;
                         }),
                         w.key
@@ -393,21 +400,22 @@ d3.csv("data.csv").then(function(data) {
       });
     }
     if (urlType === "Education Standard") {
-      educationStandardData.forEach(function(v) {
+      educationStandardData.forEach(function (v) {
         if (urlCatA === v.key) {
           mode = urlType;
           directory = [];
           directory.push(v.key);
           level += 1;
           items = educationStandardData
-            .map(function(o) {
+            .map(function (o) {
               return o.key;
             })
-            .filter(function(o) {
+            .filter(function (o) {
               return o !== "";
-            });
+            })
+            .sort(d3.ascending);
           breadCrumbs = [
-            { name: v.key, type: "Education Standard", data: v, list: items }
+            { name: v.key, type: "Education Standard", data: v, list: items },
           ];
           if (urlCatB === null) {
             var data_copy = JSON.parse(JSON.stringify(v.values));
@@ -415,56 +423,58 @@ d3.csv("data.csv").then(function(data) {
             updateUrlParams();
             generateGraph(data_copy, v.key);
           } else {
-            v.values.forEach(function(u) {
+            v.values.forEach(function (u) {
               if (urlCatB === u.key) {
                 directory.push(u.key);
                 level += 1;
                 items = v.values
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs.push({
                   name: u.key,
                   type: "Audience",
                   data: u,
-                  list: items
+                  list: items,
                 });
                 if (urlCatC === null) {
                   var data_copy = JSON.parse(JSON.stringify(u.values));
                   data_copy.push(u);
                   updateUrlParams();
                   generateGraph(
-                    data_copy.filter(function(d) {
+                    data_copy.filter(function (d) {
                       return d != null;
                     }),
                     u.key
                   );
                 } else {
-                  u.values.forEach(function(w) {
+                  u.values.forEach(function (w) {
                     if (urlCatC === w.key) {
                       var data_copy = JSON.parse(JSON.stringify(w.values));
                       data_copy.push(w);
                       directory.push(w.key);
                       level += 1;
                       items = u.values
-                        .map(function(o) {
+                        .map(function (o) {
                           return o.key;
                         })
-                        .filter(function(o) {
+                        .filter(function (o) {
                           return o !== "";
-                        });
+                        })
+                        .sort(d3.ascending);
                       breadCrumbs.push({
                         name: w.key,
                         type: "Topics",
                         data: w,
-                        list: items
+                        list: items,
                       });
                       updateUrlParams();
                       generateGraph(
-                        data_copy.filter(function(d) {
+                        data_copy.filter(function (d) {
                           return d != null;
                         }),
                         w.key
@@ -487,14 +497,14 @@ d3.csv("data.csv").then(function(data) {
     .data(audienceList)
     .enter()
     .append("option")
-    .html(function(d) {
+    .html(function (d) {
       return "<option value='" + d + "'>" + d + "</option>";
     });
 
-  d3.select("#audience-selector").on("change", function() {
+  d3.select("#audience-selector").on("change", function () {
     d = this.value;
     if (d == "") return;
-    audienceData.forEach(function(v) {
+    audienceData.forEach(function (v) {
       if (v.key === d) {
         mode = "Audience";
         var data_copy = JSON.parse(JSON.stringify(v.values));
@@ -503,12 +513,13 @@ d3.csv("data.csv").then(function(data) {
         directory.push(v.key);
         level += 1;
         items = audienceData
-          .map(function(o) {
+          .map(function (o) {
             return o.key;
           })
-          .filter(function(o) {
+          .filter(function (o) {
             return o !== "";
-          });
+          })
+          .sort(d3.ascending);
         breadCrumbs = [{ name: v.key, type: "Audience", data: v, list: items }];
         updateUrlParams();
         generateGraph(data_copy, v.key);
@@ -521,14 +532,14 @@ d3.csv("data.csv").then(function(data) {
     .data(topicList)
     .enter()
     .append("option")
-    .html(function(d) {
+    .html(function (d) {
       return "<option value='" + d + "'>" + d + "</option>";
     });
 
-  d3.select("#topic-selector").on("change", function() {
+  d3.select("#topic-selector").on("change", function () {
     d = this.value;
     if (d == "") return;
-    topicData.forEach(function(v) {
+    topicData.forEach(function (v) {
       if (v.key === d) {
         mode = "Topics";
         var data_copy = JSON.parse(JSON.stringify(v.values));
@@ -537,12 +548,13 @@ d3.csv("data.csv").then(function(data) {
         directory.push(v.key);
         level += 1;
         items = topicData
-          .map(function(o) {
+          .map(function (o) {
             return o.key;
           })
-          .filter(function(o) {
+          .filter(function (o) {
             return o !== "";
-          });
+          })
+          .sort(d3.ascending);
         breadCrumbs = [{ name: v.key, type: "Topics", data: v, list: items }];
         updateUrlParams();
         generateGraph(data_copy, v.key);
@@ -555,14 +567,14 @@ d3.csv("data.csv").then(function(data) {
     .data(stackNameList)
     .enter()
     .append("option")
-    .html(function(d) {
+    .html(function (d) {
       return "<option value='" + d + "'>" + d + "</option>";
     });
 
-  d3.select("#stack-name-selector").on("change", function() {
+  d3.select("#stack-name-selector").on("change", function () {
     d = this.value;
     if (d == "") return;
-    stackNameData.forEach(function(v) {
+    stackNameData.forEach(function (v) {
       if (v.key === d) {
         mode = "Stack Name";
         var data_copy = JSON.parse(JSON.stringify(v.values));
@@ -571,14 +583,15 @@ d3.csv("data.csv").then(function(data) {
         directory.push(v.key);
         level += 1;
         items = stackNameData
-          .map(function(o) {
+          .map(function (o) {
             return o.key;
           })
-          .filter(function(o) {
+          .filter(function (o) {
             return o !== "";
-          });
+          })
+          .sort(d3.ascending);
         breadCrumbs = [
-          { name: v.key, type: "Stack Name", data: v, list: items }
+          { name: v.key, type: "Stack Name", data: v, list: items },
         ];
         updateUrlParams();
         generateGraph(data_copy, v.key);
@@ -591,14 +604,14 @@ d3.csv("data.csv").then(function(data) {
     .data(educationStandardList)
     .enter()
     .append("option")
-    .html(function(d) {
+    .html(function (d) {
       return "<option value='" + d + "'>" + d + "</option>";
     });
 
-  d3.select("#education-standard-selector").on("change", function() {
+  d3.select("#education-standard-selector").on("change", function () {
     d = this.value;
     if (d == "") return;
-    educationStandardData.forEach(function(v) {
+    educationStandardData.forEach(function (v) {
       if (v.key === d) {
         mode = "Education Standard";
         var data_copy = JSON.parse(JSON.stringify(v.values));
@@ -607,14 +620,15 @@ d3.csv("data.csv").then(function(data) {
         directory.push(v.key);
         level += 1;
         items = educationStandardData
-          .map(function(o) {
+          .map(function (o) {
             return o.key;
           })
-          .filter(function(o) {
+          .filter(function (o) {
             return o !== "";
-          });
+          })
+          .sort(d3.ascending);
         breadCrumbs = [
-          { name: v.key, type: "Education Standard", data: v, list: items }
+          { name: v.key, type: "Education Standard", data: v, list: items },
         ];
         updateUrlParams();
         generateGraph(data_copy, v.key);
@@ -623,11 +637,11 @@ d3.csv("data.csv").then(function(data) {
   });
 });
 
-d3.select(".tooltip-close-btn").on("click", function() {
+d3.select(".tooltip-close-btn").on("click", function () {
   d3.select(".tooltip").style("display", "none");
 });
 
-d3.select(".copy-url-btn").on("click", function() {
+d3.select(".copy-url-btn").on("click", function () {
   var queryStringCurrent = window.location;
   console.log(queryStringCurrent);
   copyToClipboard(queryStringCurrent);
@@ -640,19 +654,19 @@ function setZoom(bmargin) {
 
   zoomState = 0; // Set zoom state to 0 to enable mouseover and mouseout functions
   // determine Min/Max of x, y node values:
-  var maxX = d3.max(nodes, function(d) {
+  var maxX = d3.max(nodes, function (d) {
     return d.x;
   });
 
-  var maxY = d3.max(nodes, function(d) {
+  var maxY = d3.max(nodes, function (d) {
     return d.y;
   });
 
-  var minX = d3.min(nodes, function(d) {
+  var minX = d3.min(nodes, function (d) {
     return d.x;
   });
 
-  var minY = d3.min(nodes, function(d) {
+  var minY = d3.min(nodes, function (d) {
     return d.y;
   });
 
@@ -676,7 +690,7 @@ function setZoom(bmargin) {
 
   zoom.scaleExtent([k, 10]).extent([
     [minX, minY],
-    [maxX, maxY]
+    [maxX, maxY],
   ]);
 
   // applying the zoom transformation to the container.
@@ -690,7 +704,7 @@ function updateUrlParams() {
   if (breadCrumbs.length >= 1) {
     var urlParams = "?";
     urlParams += "a=" + breadCrumbs[0].type;
-    breadCrumbs.forEach(function(v, i) {
+    breadCrumbs.forEach(function (v, i) {
       urlParams += urlParamKeys[i] + v.name.replace(/&/g, "%26");
     });
     window.history.replaceState(null, null, urlParams);
@@ -715,12 +729,10 @@ function copyToClipboard(text) {
 function generateGraph(data, root_key) {
   d3.select(".tooltip").style("display", "none");
   d3.select(".start-screen").style("display", "none");
-  d3.select("#viz")
-    .selectAll("*")
-    .remove();
+  d3.select("#viz").selectAll("*").remove();
   d3.select("#viz").style("display", "block");
 
-  data = data.filter(function(d) {
+  data = data.filter(function (d) {
     return d.key != "";
   });
 
@@ -735,13 +747,13 @@ function generateGraph(data, root_key) {
     ((mode !== "Topics" && mode !== "Audience" && breadCrumbs.length < 3) ||
       ((mode === "Topics" || mode === "Audience") && breadCrumbs.length < 2))
   ) {
-    data.forEach(function(v, i) {
+    data.forEach(function (v, i) {
       if (v.key !== root_key) {
-        v.values.forEach(function(w) {
+        v.values.forEach(function (w) {
           if (w !== null) {
-            data.forEach(function(u, j) {
+            data.forEach(function (u, j) {
               if (u.key !== v.key && i > j) {
-                u.values.forEach(function(o) {
+                u.values.forEach(function (o) {
                   if (o !== null) {
                     if (
                       (mode !== "Topics" &&
@@ -759,10 +771,10 @@ function generateGraph(data, root_key) {
                             target: u,
                             id: relationships.length,
                             ref: ref,
-                            value: 1
+                            value: 1,
                           });
                         } else {
-                          relationships.forEach(function(k) {
+                          relationships.forEach(function (k) {
                             if (k.ref === ref) {
                               k.value += 1;
                             }
@@ -779,10 +791,10 @@ function generateGraph(data, root_key) {
                             target: u,
                             id: relationships.length,
                             ref: ref,
-                            value: 1
+                            value: 1,
                           });
                         } else {
-                          relationships.forEach(function(k) {
+                          relationships.forEach(function (k) {
                             if (k.ref === ref) {
                               k.value += 1;
                             }
@@ -799,15 +811,15 @@ function generateGraph(data, root_key) {
       }
     });
   } else {
-    data.forEach(function(v, i) {
-      data.forEach(function(w, j) {
+    data.forEach(function (v, i) {
+      data.forEach(function (w, j) {
         if (i > j) {
           relationships.push({
             source: v,
             target: w,
             id: relationships.length,
             ref: "",
-            value: 1
+            value: 1,
           });
         }
       });
@@ -830,10 +842,10 @@ function generateGraph(data, root_key) {
 
   var root_init = d3
     .stratify()
-    .id(function(d) {
+    .id(function (d) {
       return d.key;
     })
-    .parentId(function(d) {
+    .parentId(function (d) {
       if (d.key != root_key) {
         return root_key;
       } else {
@@ -846,10 +858,41 @@ function generateGraph(data, root_key) {
   var transform = d3.zoomIdentity;
   let node, link;
 
-  zoom = d3
-    .zoom()
-    .scaleExtent([1, 10])
-    .on("zoom", zoomed);
+  zoom = d3.zoom().scaleExtent([1, 10]).on("zoom", zoomed);
+
+  function responsivefy(svg) {
+    console.log("triggered");
+    // get container + svg aspect ratio
+    var container = d3.select(svg.node().parentNode),
+      width = parseInt(svg.style("width")),
+      height = parseInt(svg.style("height")),
+      aspect = width / height;
+
+    console.log("wdith", width);
+    console.log("height", height);
+    console.log("aspect", aspect);
+
+    // add viewBox and preserveAspectRatio properties,
+    // and call resize so that svg resizes on inital page load
+    svg
+      .attr("viewBox", "0 0 " + width + " " + height)
+      .attr("perserveAspectRatio", "xMinYMid")
+      .call(resize);
+
+    // to register multiple listeners for same event type,
+    // you need to add namespace, i.e., 'click.foo'
+    // necessary if you call invoke this function for multiple svgs
+    // api docs: https://github.com/mbostock/d3/wiki/Selections#on
+    d3.select(window).on("resize." + container.attr("id"), resize);
+
+    // get width of container and resize svg to fit it
+    function resize() {
+      targetWidth = parseInt(container.style("width"));
+      svg.attr("width", targetWidth);
+      svg.attr("height", Math.round(targetWidth / aspect));
+      console.log("targetWidth", targetWidth);
+    }
+  }
 
   svg = d3
     .select("#viz")
@@ -857,6 +900,7 @@ function generateGraph(data, root_key) {
     .attr("id", "svg")
     .attr("width", width)
     .attr("height", height)
+    .call(responsivefy)
     .call(zoom)
     .append("g")
     .attr("transform", "translate(0,0)")
@@ -874,7 +918,7 @@ function generateGraph(data, root_key) {
     .force("collision", d3.forceCollide(50))
     .force(
       "link",
-      d3.forceLink().id(function(d) {
+      d3.forceLink().id(function (d) {
         return d.data.id;
       })
     )
@@ -884,7 +928,7 @@ function generateGraph(data, root_key) {
 
   //simulation.iterations(100);
 
-  d3.select(".bitem-0").on("click", function() {
+  d3.select(".bitem-0").on("click", function () {
     level = 0;
     breadCrumbs = [];
     mode = "";
@@ -894,15 +938,13 @@ function generateGraph(data, root_key) {
     updateUrlParams();
     d3.select(".start-screen").style("display", "block");
     d3.select(".tooltip").style("display", "none");
-    d3.select("#viz")
-      .selectAll("*")
-      .remove();
+    d3.select("#viz").selectAll("*").remove();
     d3.select("#viz").style("display", "none");
   });
 
   d3.select(".fa-home")
     .style("cursor", "pointer")
-    .on("click", function() {
+    .on("click", function () {
       level = 0;
       breadCrumbs = [];
       mode = "";
@@ -912,13 +954,11 @@ function generateGraph(data, root_key) {
       updateUrlParams();
       d3.select(".start-screen").style("display", "block");
       d3.select(".tooltip").style("display", "none");
-      d3.select("#viz")
-        .selectAll("*")
-        .remove();
+      d3.select("#viz").selectAll("*").remove();
       d3.select("#viz").style("display", "none");
     });
 
-  d3.select(".bitem-1").on("click", function() {
+  d3.select(".bitem-1").on("click", function () {
     level = 0;
     breadCrumbs = [];
     mode = "";
@@ -928,18 +968,16 @@ function generateGraph(data, root_key) {
     updateUrlParams();
     d3.select(".start-screen").style("display", "block");
     d3.select(".tooltip").style("display", "none");
-    d3.select("#viz")
-      .selectAll("*")
-      .remove();
+    d3.select("#viz").selectAll("*").remove();
     d3.select("#viz").style("display", "none");
   });
 
-  d3.select(".bitem-2").on("click", function() {
+  d3.select(".bitem-2").on("click", function () {
     level = 1;
     breadCrumbs = breadCrumbs.slice(0, 1);
     directory = directory.slice(0, 1);
     if (mode === "Audience") {
-      audienceData.forEach(function(v) {
+      audienceData.forEach(function (v) {
         if (v.key === breadCrumbs[0].name) {
           var data_copy = JSON.parse(JSON.stringify(v.values));
           data_copy.push(v);
@@ -949,7 +987,7 @@ function generateGraph(data, root_key) {
       });
     }
     if (mode === "Topics") {
-      topicData.forEach(function(v) {
+      topicData.forEach(function (v) {
         if (v.key === breadCrumbs[0].name) {
           var data_copy = JSON.parse(JSON.stringify(v.values));
           data_copy.push(v);
@@ -959,7 +997,7 @@ function generateGraph(data, root_key) {
       });
     }
     if (mode === "Stack Name") {
-      stackNameData.forEach(function(v) {
+      stackNameData.forEach(function (v) {
         if (v.key === breadCrumbs[0].name) {
           var data_copy = JSON.parse(JSON.stringify(v.values));
           data_copy.push(v);
@@ -969,7 +1007,7 @@ function generateGraph(data, root_key) {
       });
     }
     if (mode === "Education Standard") {
-      educationStandardData.forEach(function(v) {
+      educationStandardData.forEach(function (v) {
         if (v.key === breadCrumbs[0].name) {
           var data_copy = JSON.parse(JSON.stringify(v.values));
           data_copy.push(v);
@@ -980,7 +1018,7 @@ function generateGraph(data, root_key) {
     }
   });
 
-  d3.select(".bitem-3").on("click", function() {
+  d3.select(".bitem-3").on("click", function () {
     level = 2;
     breadCrumbs = breadCrumbs.slice(0, 2);
     directory = directory.slice(0, 2);
@@ -991,9 +1029,9 @@ function generateGraph(data, root_key) {
       //
     }
     if (mode === "Stack Name") {
-      stackNameData.forEach(function(v) {
+      stackNameData.forEach(function (v) {
         if (v.key === breadCrumbs[0].name) {
-          v.values.forEach(function(u) {
+          v.values.forEach(function (u) {
             if (u.key === breadCrumbs[1].name) {
               var data_copy = JSON.parse(JSON.stringify(u.values));
               data_copy.push(u);
@@ -1005,9 +1043,9 @@ function generateGraph(data, root_key) {
       });
     }
     if (mode === "Education Standard") {
-      educationStandardData.forEach(function(v) {
+      educationStandardData.forEach(function (v) {
         if (v.key === breadCrumbs[0].name) {
-          v.values.forEach(function(u) {
+          v.values.forEach(function (u) {
             if (u.key === breadCrumbs[1].name) {
               var data_copy = JSON.parse(JSON.stringify(u.values));
               data_copy.push(u);
@@ -1025,14 +1063,14 @@ function generateGraph(data, root_key) {
 
     links = relationships;
 
-    nodes.forEach(function(v) {
+    nodes.forEach(function (v) {
       if (v.parent === null) {
         rootNode = v;
       }
     });
 
-    relationships.forEach(function(v) {
-      nodes.forEach(function(w) {
+    relationships.forEach(function (v) {
+      nodes.forEach(function (w) {
         if (w.data.id === v.source.key) {
           v.source = w;
         }
@@ -1046,7 +1084,7 @@ function generateGraph(data, root_key) {
 
     rootLink.exit().remove();
 
-    link = svg.selectAll(".link").data(links, function(d) {
+    link = svg.selectAll(".link").data(links, function (d) {
       return d.target.id;
     });
 
@@ -1056,17 +1094,17 @@ function generateGraph(data, root_key) {
       .enter()
       .append("line")
       .attr("class", "root-link")
-      .style("stroke", function(d) {
+      .style("stroke", function (d) {
         if (d.value > 0) {
           return "white";
         } else {
           return "#000";
         }
       })
-      .style("opacity", function(d) {
+      .style("opacity", function (d) {
         return 0.2;
       })
-      .style("stroke-width", function(d) {
+      .style("stroke-width", function (d) {
         if (d.value > 0) {
           return d.value / 2;
         } else {
@@ -1080,17 +1118,17 @@ function generateGraph(data, root_key) {
       .enter()
       .append("line")
       .attr("class", "link")
-      .style("stroke", function(d) {
+      .style("stroke", function (d) {
         if (d.value > 0) {
           return "#000";
         } else {
           return "#000";
         }
       })
-      .style("opacity", function(d) {
+      .style("opacity", function (d) {
         return 0.2;
       })
-      .style("stroke-width", function(d) {
+      .style("stroke-width", function (d) {
         if (d.value > 0) {
           if (d.value / 2 > 8) {
             return 8;
@@ -1104,7 +1142,7 @@ function generateGraph(data, root_key) {
 
     link = linkEnter.merge(link);
 
-    node = svg.selectAll(".node").data(nodes, function(d) {
+    node = svg.selectAll(".node").data(nodes, function (d) {
       return d.id;
     });
 
@@ -1114,7 +1152,7 @@ function generateGraph(data, root_key) {
       .enter()
       .append("g")
       .attr("class", "node")
-      .style("fill", function(d) {
+      .style("fill", function (d) {
         if (d.data.id === root_key) {
           if (mode === "Topics" || mode === "Audience") {
             if (breadCrumbs.length == 1) {
@@ -1157,10 +1195,10 @@ function generateGraph(data, root_key) {
           }
         }
       })
-      .on("mouseover", function(d) {
+      .on("mouseover", function (d) {
         //
       })
-      .on("click", function(d) {
+      .on("click", function (d) {
         if (d.data.id !== root_key) {
           if (
             breadCrumbs.length === 2 &&
@@ -1179,30 +1217,31 @@ function generateGraph(data, root_key) {
           if (mode === "Audience") {
             if (breadCrumbs.length < 2) {
               directory.push(d.data.id);
-              audienceData.forEach(function(v) {
+              audienceData.forEach(function (v) {
                 if (v.key === directory[0]) {
-                  v.values.forEach(function(w) {
+                  v.values.forEach(function (w) {
                     if (w) {
                       if (w.key === directory[1]) {
                         var data_copy = JSON.parse(JSON.stringify(w.values));
                         data_copy.push(w);
                         level += 1;
                         items = v.values
-                          .map(function(o) {
+                          .map(function (o) {
                             return o.key;
                           })
-                          .filter(function(o) {
+                          .filter(function (o) {
                             return o !== "";
-                          });
+                          })
+                          .sort(d3.ascending);
                         breadCrumbs.push({
                           name: w.key,
                           type: "Topics",
                           data: w,
-                          list: items
+                          list: items,
                         });
                         updateUrlParams();
                         generateGraph(
-                          data_copy.filter(function(d) {
+                          data_copy.filter(function (d) {
                             return d != null;
                           }),
                           w.key
@@ -1217,30 +1256,31 @@ function generateGraph(data, root_key) {
           if (mode === "Topics") {
             if (breadCrumbs.length < 2) {
               directory.push(d.data.id);
-              topicData.forEach(function(v) {
+              topicData.forEach(function (v) {
                 if (v.key === directory[0]) {
-                  v.values.forEach(function(w) {
+                  v.values.forEach(function (w) {
                     if (w) {
                       if (w.key === directory[1]) {
                         var data_copy = JSON.parse(JSON.stringify(w.values));
                         data_copy.push(w);
                         level += 1;
                         items = v.values
-                          .map(function(o) {
+                          .map(function (o) {
                             return o.key;
                           })
-                          .filter(function(o) {
+                          .filter(function (o) {
                             return o !== "";
-                          });
+                          })
+                          .sort(d3.ascending);
                         breadCrumbs.push({
                           name: w.key,
                           type: "Audience",
                           data: w,
-                          list: items
+                          list: items,
                         });
                         updateUrlParams();
                         generateGraph(
-                          data_copy.filter(function(d) {
+                          data_copy.filter(function (d) {
                             return d != null;
                           }),
                           w.key
@@ -1255,30 +1295,31 @@ function generateGraph(data, root_key) {
           if (mode === "Stack Name") {
             if (breadCrumbs.length < 3) {
               directory.push(d.data.id);
-              stackNameData.forEach(function(v) {
+              stackNameData.forEach(function (v) {
                 if (v.key === directory[0] && v.key === root_key) {
-                  v.values.forEach(function(w) {
+                  v.values.forEach(function (w) {
                     if (w) {
                       if (w.key === directory[1]) {
                         var data_copy = JSON.parse(JSON.stringify(w.values));
                         data_copy.push(w);
                         level += 1;
                         items = v.values
-                          .map(function(o) {
+                          .map(function (o) {
                             return o.key;
                           })
-                          .filter(function(o) {
+                          .filter(function (o) {
                             return o !== "";
-                          });
+                          })
+                          .sort(d3.ascending);
                         breadCrumbs.push({
                           name: w.key,
                           type: "Audience",
                           data: w,
-                          list: items
+                          list: items,
                         });
                         updateUrlParams();
                         generateGraph(
-                          data_copy.filter(function(d) {
+                          data_copy.filter(function (d) {
                             return d != null;
                           }),
                           w.key
@@ -1288,29 +1329,30 @@ function generateGraph(data, root_key) {
                   });
                 }
                 if (v.key === directory[0]) {
-                  v.values.forEach(function(w) {
+                  v.values.forEach(function (w) {
                     if (w.key === directory[1] && w.key === root_key) {
-                      w.values.forEach(function(u) {
+                      w.values.forEach(function (u) {
                         if (u.key === d.data.id) {
                           var data_copy = JSON.parse(JSON.stringify(u.values));
                           data_copy.push(u);
                           level += 1;
                           items = w.values
-                            .map(function(o) {
+                            .map(function (o) {
                               return o.key;
                             })
-                            .filter(function(o) {
+                            .filter(function (o) {
                               return o !== "";
-                            });
+                            })
+                            .sort(d3.ascending);
                           breadCrumbs.push({
                             name: u.key,
                             type: "Topics",
                             data: u,
-                            list: items
+                            list: items,
                           });
                           updateUrlParams();
                           generateGraph(
-                            data_copy.filter(function(d) {
+                            data_copy.filter(function (d) {
                               return d != null;
                             }),
                             u.key
@@ -1326,30 +1368,31 @@ function generateGraph(data, root_key) {
           if (mode === "Education Standard") {
             if (breadCrumbs.length < 3) {
               directory.push(d.data.id);
-              educationStandardData.forEach(function(v) {
+              educationStandardData.forEach(function (v) {
                 if (v.key === directory[0] && v.key === root_key) {
-                  v.values.forEach(function(w) {
+                  v.values.forEach(function (w) {
                     if (w) {
                       if (w.key === directory[1]) {
                         var data_copy = JSON.parse(JSON.stringify(w.values));
                         data_copy.push(w);
                         level += 1;
                         items = v.values
-                          .map(function(o) {
+                          .map(function (o) {
                             return o.key;
                           })
-                          .filter(function(o) {
+                          .filter(function (o) {
                             return o !== "";
-                          });
+                          })
+                          .sort(d3.ascending);
                         breadCrumbs.push({
                           name: w.key,
                           type: "Audience",
                           data: w,
-                          list: items
+                          list: items,
                         });
                         updateUrlParams();
                         generateGraph(
-                          data_copy.filter(function(d) {
+                          data_copy.filter(function (d) {
                             return d != null;
                           }),
                           w.key
@@ -1359,29 +1402,30 @@ function generateGraph(data, root_key) {
                   });
                 }
                 if (v.key === directory[0]) {
-                  v.values.forEach(function(w) {
+                  v.values.forEach(function (w) {
                     if (w.key === directory[1] && w.key === root_key) {
-                      w.values.forEach(function(u) {
+                      w.values.forEach(function (u) {
                         if (u.key === d.data.id) {
                           var data_copy = JSON.parse(JSON.stringify(u.values));
                           data_copy.push(u);
                           level += 1;
                           items = w.values
-                            .map(function(o) {
+                            .map(function (o) {
                               return o.key;
                             })
-                            .filter(function(o) {
+                            .filter(function (o) {
                               return o !== "";
-                            });
+                            })
+                            .sort(d3.ascending);
                           breadCrumbs.push({
                             name: u.key,
                             type: "Topics",
                             data: u,
-                            list: items
+                            list: items,
                           });
                           updateUrlParams();
                           generateGraph(
-                            data_copy.filter(function(d) {
+                            data_copy.filter(function (d) {
                               return d != null;
                             }),
                             u.key
@@ -1408,14 +1452,14 @@ function generateGraph(data, root_key) {
     nodeLabels = node
       .enter()
       .append("text")
-      .attr("class", function(d) {
+      .attr("class", function (d) {
         if (d.data.id === root_key) {
           return "node-label-key";
         } else {
           return "node-label";
         }
       })
-      .text(function(d) {
+      .text(function (d) {
         if (d.data.id) {
           var text = d.data.id;
         }
@@ -1444,14 +1488,14 @@ function generateGraph(data, root_key) {
     nodeLabels0 = node
       .enter()
       .append("text")
-      .attr("class", function(d) {
+      .attr("class", function (d) {
         if (d.data.id === root_key) {
           return "node-label-key";
         } else {
           return "node-label";
         }
       })
-      .text(function(d) {
+      .text(function (d) {
         if (d.data.id) {
           var text = d.data.id;
         }
@@ -1480,14 +1524,14 @@ function generateGraph(data, root_key) {
     nodeLabels1 = node
       .enter()
       .append("text")
-      .attr("class", function(d) {
+      .attr("class", function (d) {
         if (d.data.id === root_key) {
           return "node-label-key";
         } else {
           return "node-label";
         }
       })
-      .text(function(d) {
+      .text(function (d) {
         if (d.data.id) {
           var text = d.data.id;
         }
@@ -1513,7 +1557,7 @@ function generateGraph(data, root_key) {
         }
       });
 
-    nodeEnter.append("circle").style("r", function(d) {
+    nodeEnter.append("circle").style("r", function (d) {
       if (d.data.id === root_key) {
         return 14;
       } else {
@@ -1522,10 +1566,7 @@ function generateGraph(data, root_key) {
     });
 
     // distance based on number of nodes?
-    distanceScale = d3
-      .scaleSqrt()
-      .domain([0, 80])
-      .range([200, 60]);
+    distanceScale = d3.scaleSqrt().domain([0, 80]).range([200, 60]);
 
     node = nodeEnter.merge(node);
     simulation.nodes(nodes);
@@ -1533,10 +1574,10 @@ function generateGraph(data, root_key) {
       "link",
       d3
         .forceLink()
-        .id(function(d) {
+        .id(function (d) {
           return d.data.id;
         })
-        .distance(function(d) {
+        .distance(function (d) {
           return distanceScale(nodes.length);
         })
     );
@@ -1555,38 +1596,38 @@ function generateGraph(data, root_key) {
 
   function ticked() {
     link
-      .attr("x1", function(d) {
+      .attr("x1", function (d) {
         return d.source.x;
       })
-      .attr("y1", function(d) {
+      .attr("y1", function (d) {
         return d.source.y;
       })
-      .attr("x2", function(d) {
+      .attr("x2", function (d) {
         return d.target.x;
       })
-      .attr("y2", function(d) {
+      .attr("y2", function (d) {
         return d.target.y;
       });
 
     rootLink
-      .attr("x1", function(d) {
+      .attr("x1", function (d) {
         return d.x;
       })
-      .attr("y1", function(d) {
+      .attr("y1", function (d) {
         return d.y;
       })
-      .attr("x2", function(d) {
+      .attr("x2", function (d) {
         return rootNode.x;
       })
-      .attr("y2", function(d) {
+      .attr("y2", function (d) {
         return rootNode.y;
       });
 
     node
-      .attr("transform", function(d) {
+      .attr("transform", function (d) {
         return `translate(${d.x}, ${d.y})`;
       })
-      .on("mouseover", function(d) {
+      .on("mouseover", function (d) {
         if (
           d.data.id !== root_key &&
           (((mode === "Topics" || mode === "Audience") &&
@@ -1596,7 +1637,7 @@ function generateGraph(data, root_key) {
               breadCrumbs.length !== 3))
         ) {
           toShow = [];
-          link.style("opacity", function(v) {
+          link.style("opacity", function (v) {
             var show = false;
             if (d.data.id === v.source.data.id) {
               toShow.push(v.target.data.id);
@@ -1614,21 +1655,21 @@ function generateGraph(data, root_key) {
           });
           toShow.push(root_key);
           toShow.push(d.data.id);
-          rootLink.style("opacity", function(v) {
+          rootLink.style("opacity", function (v) {
             if (v.data.id === d.data.id) {
               return 0.2;
             } else {
               return 0.1;
             }
           });
-          node.attr("opacity", function(v) {
+          node.attr("opacity", function (v) {
             if (toShow.indexOf(v.data.id) >= 0) {
               return 1;
             } else {
               return 0.3;
             }
           });
-          nodeLabels1.attr("opacity", function(v) {
+          nodeLabels1.attr("opacity", function (v) {
             if (d.data.id === v.data.id) {
               d3.select(this).moveToFront();
             }
@@ -1638,7 +1679,7 @@ function generateGraph(data, root_key) {
               return 0.3;
             }
           });
-          nodeLabels0.attr("opacity", function(v) {
+          nodeLabels0.attr("opacity", function (v) {
             if (d.data.id === v.data.id) {
               d3.select(this).moveToFront();
             }
@@ -1648,7 +1689,7 @@ function generateGraph(data, root_key) {
               return 0.3;
             }
           });
-          nodeLabels.attr("opacity", function(v) {
+          nodeLabels.attr("opacity", function (v) {
             if (d.data.id === v.data.id) {
               d3.select(this).moveToFront();
             }
@@ -1659,7 +1700,7 @@ function generateGraph(data, root_key) {
             }
           });
         } else {
-          node.attr("opacity", function(v) {
+          node.attr("opacity", function (v) {
             if (
               d.data.data["Micro-credential Name"] ===
                 v.data.data["Micro-credential Name"] ||
@@ -1671,7 +1712,7 @@ function generateGraph(data, root_key) {
               return 0.3;
             }
           });
-          nodeLabels1.attr("opacity", function(v) {
+          nodeLabels1.attr("opacity", function (v) {
             if (
               d.data.data["Micro-credential Name"] ===
                 v.data.data["Micro-credential Name"] ||
@@ -1683,7 +1724,7 @@ function generateGraph(data, root_key) {
               return 0.3;
             }
           });
-          nodeLabels0.attr("opacity", function(v) {
+          nodeLabels0.attr("opacity", function (v) {
             if (
               d.data.data["Micro-credential Name"] ===
                 v.data.data["Micro-credential Name"] ||
@@ -1695,7 +1736,7 @@ function generateGraph(data, root_key) {
               return 0.3;
             }
           });
-          nodeLabels.attr("opacity", function(v) {
+          nodeLabels.attr("opacity", function (v) {
             if (
               d.data.data["Micro-credential Name"] ===
                 v.data.data["Micro-credential Name"] ||
@@ -1709,7 +1750,7 @@ function generateGraph(data, root_key) {
           });
         }
       })
-      .on("mouseout", function() {
+      .on("mouseout", function () {
         node.attr("opacity", 1);
         nodeLabels0.attr("opacity", 1);
         nodeLabels1.attr("opacity", 1);
@@ -1719,26 +1760,26 @@ function generateGraph(data, root_key) {
       });
 
     nodeLabels1
-      .attr("x", function(d) {
+      .attr("x", function (d) {
         return d.x;
       })
-      .attr("y", function(d) {
+      .attr("y", function (d) {
         return d.y - 50;
       });
 
     nodeLabels0
-      .attr("x", function(d) {
+      .attr("x", function (d) {
         return d.x;
       })
-      .attr("y", function(d) {
+      .attr("y", function (d) {
         return d.y - 35;
       });
 
     nodeLabels
-      .attr("x", function(d) {
+      .attr("x", function (d) {
         return d.x;
       })
-      .attr("y", function(d) {
+      .attr("y", function (d) {
         return d.y - 20;
       });
     if (data.length < 10) {
@@ -1752,10 +1793,10 @@ function generateGraph(data, root_key) {
     d3.select(".tooltip").style("display", "block");
     d3.select(".tooltip-name")
       .text(d["Micro-credential Name"])
-      .on("click", function() {
+      .on("click", function () {
         window.open(d["Direct Link to MC on the platform"], "_blank");
       });
-    d3.select(".visit-btn").on("click", function() {
+    d3.select(".visit-btn").on("click", function () {
       window.open(d["Direct Link to MC on the platform"], "_blank");
     });
     if (d["Badge Image Link (Badgr)"]) {
@@ -1777,7 +1818,7 @@ function generateGraph(data, root_key) {
       "<span>Topics: </span><span class='tooltip-link stack-name-link-0'>" +
       stackName +
       "</span>";
-    audiences.forEach(function(v, i) {
+    audiences.forEach(function (v, i) {
       if (i > 0) {
         audienceHTML +=
           "<span class='tooltip-link audience-link-" + i + "'>" + v + "</span>";
@@ -1787,7 +1828,7 @@ function generateGraph(data, root_key) {
       }
     });
 
-    educationStandards.forEach(function(v, i) {
+    educationStandards.forEach(function (v, i) {
       if (i > 0) {
         educationStandardsHTML +=
           "<span class='tooltip-link education-standards-link-" +
@@ -1804,7 +1845,7 @@ function generateGraph(data, root_key) {
           "</span>";
       }
     });
-    topics.forEach(function(v, i) {
+    topics.forEach(function (v, i) {
       if (i > 0) {
         topicsHTML +=
           "<span class='tooltip-link topics-link-" + i + "'>" + v + "</span>";
@@ -1824,9 +1865,9 @@ function generateGraph(data, root_key) {
     d3.select(".tooltip-description").text(
       d["Competency Statement (Description)"]
     );
-    audiences.forEach(function(v, i) {
-      d3.select(".audience-link-" + i).on("click", function() {
-        audienceData.forEach(function(w) {
+    audiences.forEach(function (v, i) {
+      d3.select(".audience-link-" + i).on("click", function () {
+        audienceData.forEach(function (w) {
           if (w.key === v) {
             mode = "Audience";
             var data_copy = JSON.parse(JSON.stringify(w.values));
@@ -1835,14 +1876,15 @@ function generateGraph(data, root_key) {
             directory.push(w.key);
             level = 1;
             items = audienceData
-              .map(function(o) {
+              .map(function (o) {
                 return o.key;
               })
-              .filter(function(o) {
+              .filter(function (o) {
                 return o !== "";
-              });
+              })
+              .sort(d3.ascending);
             breadCrumbs = [
-              { name: w.key, type: "Audience", data: w, list: items }
+              { name: w.key, type: "Audience", data: w, list: items },
             ];
             updateUrlParams();
             generateGraph(data_copy, w.key);
@@ -1850,9 +1892,9 @@ function generateGraph(data, root_key) {
         });
       });
     });
-    educationStandards.forEach(function(v, i) {
-      d3.select(".education-standards-link-" + i).on("click", function() {
-        educationStandardData.forEach(function(w) {
+    educationStandards.forEach(function (v, i) {
+      d3.select(".education-standards-link-" + i).on("click", function () {
+        educationStandardData.forEach(function (w) {
           if (w.key === v) {
             mode = "Education Standard";
             var data_copy = JSON.parse(JSON.stringify(w.values));
@@ -1861,14 +1903,15 @@ function generateGraph(data, root_key) {
             directory.push(w.key);
             level = 1;
             items = educationStandardData
-              .map(function(o) {
+              .map(function (o) {
                 return o.key;
               })
-              .filter(function(o) {
+              .filter(function (o) {
                 return o !== "";
-              });
+              })
+              .sort(d3.ascending);
             breadCrumbs = [
-              { name: w.key, type: "Education Standard", data: w, list: items }
+              { name: w.key, type: "Education Standard", data: w, list: items },
             ];
             updateUrlParams();
             generateGraph(data_copy, w.key);
@@ -1876,9 +1919,9 @@ function generateGraph(data, root_key) {
         });
       });
     });
-    topics.forEach(function(v, i) {
-      d3.select(".topics-link-" + i).on("click", function() {
-        topicData.forEach(function(w) {
+    topics.forEach(function (v, i) {
+      d3.select(".topics-link-" + i).on("click", function () {
+        topicData.forEach(function (w) {
           if (w.key === v) {
             mode = "Topics";
             var data_copy = JSON.parse(JSON.stringify(w.values));
@@ -1887,14 +1930,15 @@ function generateGraph(data, root_key) {
             directory.push(w.key);
             level = 1;
             items = topicData
-              .map(function(o) {
+              .map(function (o) {
                 return o.key;
               })
-              .filter(function(o) {
+              .filter(function (o) {
                 return o !== "";
-              });
+              })
+              .sort(d3.ascending);
             breadCrumbs = [
-              { name: w.key, type: "Topics", data: w, list: items }
+              { name: w.key, type: "Topics", data: w, list: items },
             ];
             updateUrlParams();
             generateGraph(data_copy, w.key);
@@ -1902,8 +1946,8 @@ function generateGraph(data, root_key) {
         });
       });
     });
-    d3.select(".stack-name-link-0").on("click", function() {
-      stackNameData.forEach(function(w) {
+    d3.select(".stack-name-link-0").on("click", function () {
+      stackNameData.forEach(function (w) {
         if (w.key === v) {
           mode = "Stack Name";
           var data_copy = JSON.parse(JSON.stringify(w.values));
@@ -1912,19 +1956,20 @@ function generateGraph(data, root_key) {
           directory.push(w.key);
           level = 1;
           items = stackNameData
-            .map(function(o) {
+            .map(function (o) {
               return o.key;
             })
-            .filter(function(o) {
+            .filter(function (o) {
               return o !== "";
-            });
+            })
+            .sort(d3.ascending);
           breadCrumbs = [
             {
               name: w.key,
               type: "Micro-credential Stack Name",
               data: w,
-              list: items
-            }
+              list: items,
+            },
           ];
           updateUrlParams();
           generateGraph(data_copy, w.key);
@@ -1960,10 +2005,10 @@ function generateGraph(data, root_key) {
       }
       if (level === 1) {
         var currentList = currentData
-          .map(function(w) {
+          .map(function (w) {
             return w.key;
           })
-          .filter(function(o) {
+          .filter(function (o) {
             return o !== root_key;
           })
           .sort(d3.ascending);
@@ -1975,16 +2020,16 @@ function generateGraph(data, root_key) {
             .data(breadCrumbs[0].list)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
 
           $("#bitem-selector-1").val(breadCrumbs[0].name);
 
-          d3.select("#bitem-selector-1").on("change", function() {
+          d3.select("#bitem-selector-1").on("change", function () {
             d = this.value;
             if (d == "") return;
-            audienceData.forEach(function(v) {
+            audienceData.forEach(function (v) {
               if (v.key === d) {
                 var data_copy = JSON.parse(JSON.stringify(v.values));
                 data_copy.push(v);
@@ -1992,14 +2037,15 @@ function generateGraph(data, root_key) {
                 directory.push(v.key);
                 level = 1;
                 items = audienceData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
-                  { name: v.key, type: "Audience", data: v, list: items }
+                  { name: v.key, type: "Audience", data: v, list: items },
                 ];
 
                 generateGraph(data_copy, v.key);
@@ -2013,50 +2059,52 @@ function generateGraph(data, root_key) {
             .data(currentList)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-2").val("");
 
-          d3.select("#bitem-selector-2").on("change", function() {
+          d3.select("#bitem-selector-2").on("change", function () {
             d = this.value;
             if (d == "") return;
-            audienceData.forEach(function(v) {
+            audienceData.forEach(function (v) {
               if (v.key === breadCrumbs[0].name) {
                 directory = [];
                 directory.push(v.key);
                 level = 1;
                 items = audienceData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
+
                 breadCrumbs = [
-                  { name: v.key, type: "Audience", data: v, list: items }
+                  { name: v.key, type: "Audience", data: v, list: items },
                 ];
-                v.values.forEach(function(w) {
+                v.values.forEach(function (w) {
                   if (w.key === d) {
                     var data_copy = JSON.parse(JSON.stringify(w.values));
                     data_copy.push(w);
                     level += 1;
                     items = v.values
-                      .map(function(o) {
+                      .map(function (o) {
                         return o.key;
                       })
-                      .filter(function(o) {
+                      .filter(function (o) {
                         return o !== "";
                       });
                     breadCrumbs.push({
                       name: w.key,
                       type: "Topics",
                       data: w,
-                      list: items
+                      list: items,
                     });
 
                     generateGraph(
-                      data_copy.filter(function(d) {
+                      data_copy.filter(function (d) {
                         return d != null;
                       }),
                       w.key
@@ -2079,15 +2127,15 @@ function generateGraph(data, root_key) {
             .data(breadCrumbs[0].list)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
 
           $("#bitem-selector-1").val(breadCrumbs[0].name);
-          d3.select("#bitem-selector-1").on("change", function() {
+          d3.select("#bitem-selector-1").on("change", function () {
             d = this.value;
             if (d == "") return;
-            stackNameData.forEach(function(v) {
+            stackNameData.forEach(function (v) {
               if (v.key === d) {
                 var data_copy = JSON.parse(JSON.stringify(v.values));
                 data_copy.push(v);
@@ -2095,14 +2143,14 @@ function generateGraph(data, root_key) {
                 directory.push(v.key);
                 level = 1;
                 items = stackNameData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
-                  { name: v.key, type: "Stack Name", data: v, list: items }
+                  { name: v.key, type: "Stack Name", data: v, list: items },
                 ];
                 updateUrlParams();
                 generateGraph(data_copy, v.key);
@@ -2116,50 +2164,50 @@ function generateGraph(data, root_key) {
             .data(currentList)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-2").val("");
 
-          d3.select("#bitem-selector-2").on("change", function() {
+          d3.select("#bitem-selector-2").on("change", function () {
             d = this.value;
             if (d == "") return;
-            stackNameData.forEach(function(v) {
+            stackNameData.forEach(function (v) {
               if (v.key === breadCrumbs[0].name) {
                 directory = [];
                 directory.push(v.key);
                 level = 1;
                 items = stackNameData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
-                  { name: v.key, type: "Stack Name", data: v, list: items }
+                  { name: v.key, type: "Stack Name", data: v, list: items },
                 ];
-                v.values.forEach(function(w) {
+                v.values.forEach(function (w) {
                   if (w.key === d) {
                     var data_copy = JSON.parse(JSON.stringify(w.values));
                     data_copy.push(w);
                     level += 1;
                     items = v.values
-                      .map(function(o) {
+                      .map(function (o) {
                         return o.key;
                       })
-                      .filter(function(o) {
+                      .filter(function (o) {
                         return o !== "";
                       });
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
                       data: w,
-                      list: items
+                      list: items,
                     });
 
                     generateGraph(
-                      data_copy.filter(function(d) {
+                      data_copy.filter(function (d) {
                         return d != null;
                       }),
                       w.key
@@ -2183,15 +2231,15 @@ function generateGraph(data, root_key) {
             .data(breadCrumbs[0].list)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-1").val(breadCrumbs[0].name);
 
-          d3.select("#bitem-selector-1").on("change", function() {
+          d3.select("#bitem-selector-1").on("change", function () {
             d = this.value;
             if (d == "") return;
-            educationStandardData.forEach(function(v) {
+            educationStandardData.forEach(function (v) {
               if (v.key === d) {
                 var data_copy = JSON.parse(JSON.stringify(v.values));
                 data_copy.push(v);
@@ -2199,10 +2247,10 @@ function generateGraph(data, root_key) {
                 directory.push(v.key);
                 level = 1;
                 items = educationStandardData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
@@ -2210,8 +2258,8 @@ function generateGraph(data, root_key) {
                     name: v.key,
                     type: "Education Standard",
                     data: v,
-                    list: items
-                  }
+                    list: items,
+                  },
                 ];
 
                 generateGraph(data_copy, v.key);
@@ -2225,24 +2273,24 @@ function generateGraph(data, root_key) {
             .data(currentList)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-2").val("");
 
-          d3.select("#bitem-selector-2").on("change", function() {
+          d3.select("#bitem-selector-2").on("change", function () {
             d = this.value;
             if (d == "") return;
-            educationStandardData.forEach(function(v) {
+            educationStandardData.forEach(function (v) {
               if (v.key === breadCrumbs[0].name) {
                 directory = [];
                 directory.push(v.key);
                 level = 1;
                 items = educationStandardData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
@@ -2250,30 +2298,30 @@ function generateGraph(data, root_key) {
                     name: v.key,
                     type: "Education Standard",
                     data: v,
-                    list: items
-                  }
+                    list: items,
+                  },
                 ];
-                v.values.forEach(function(w) {
+                v.values.forEach(function (w) {
                   if (w.key === d) {
                     var data_copy = JSON.parse(JSON.stringify(w.values));
                     data_copy.push(w);
                     level += 1;
                     items = v.values
-                      .map(function(o) {
+                      .map(function (o) {
                         return o.key;
                       })
-                      .filter(function(o) {
+                      .filter(function (o) {
                         return o !== "";
                       });
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
                       data: w,
-                      list: items
+                      list: items,
                     });
                     updateUrlParams();
                     generateGraph(
-                      data_copy.filter(function(d) {
+                      data_copy.filter(function (d) {
                         return d != null;
                       }),
                       w.key
@@ -2294,15 +2342,15 @@ function generateGraph(data, root_key) {
             .data(breadCrumbs[0].list)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-1").val(breadCrumbs[0].name);
 
-          d3.select("#bitem-selector-1").on("change", function() {
+          d3.select("#bitem-selector-1").on("change", function () {
             d = this.value;
             if (d == "") return;
-            topicData.forEach(function(v) {
+            topicData.forEach(function (v) {
               if (v.key === d) {
                 var data_copy = JSON.parse(JSON.stringify(v.values));
                 data_copy.push(v);
@@ -2310,14 +2358,14 @@ function generateGraph(data, root_key) {
                 directory.push(v.key);
                 level = 1;
                 items = topicData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
-                  { name: v.key, type: "Topics", data: v, list: items }
+                  { name: v.key, type: "Topics", data: v, list: items },
                 ];
                 updateUrlParams();
                 generateGraph(data_copy, v.key);
@@ -2330,50 +2378,50 @@ function generateGraph(data, root_key) {
             .data(currentList)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-2").val("");
 
-          d3.select("#bitem-selector-2").on("change", function() {
+          d3.select("#bitem-selector-2").on("change", function () {
             d = this.value;
             if (d == "") return;
-            topicData.forEach(function(v) {
+            topicData.forEach(function (v) {
               if (v.key === breadCrumbs[0].name) {
                 directory = [];
                 directory.push(v.key);
                 level = 1;
                 items = topicData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
-                  { name: v.key, type: "Topics", data: v, list: items }
+                  { name: v.key, type: "Topics", data: v, list: items },
                 ];
-                v.values.forEach(function(w) {
+                v.values.forEach(function (w) {
                   if (w.key === d) {
                     var data_copy = JSON.parse(JSON.stringify(w.values));
                     data_copy.push(w);
                     level += 1;
                     items = v.values
-                      .map(function(o) {
+                      .map(function (o) {
                         return o.key;
                       })
-                      .filter(function(o) {
+                      .filter(function (o) {
                         return o !== "";
                       });
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
                       data: w,
-                      list: items
+                      list: items,
                     });
                     updateUrlParams();
                     generateGraph(
-                      data_copy.filter(function(d) {
+                      data_copy.filter(function (d) {
                         return d != null;
                       }),
                       w.key
@@ -2386,9 +2434,7 @@ function generateGraph(data, root_key) {
           var bitem4 = "<span class='select'>Select Micro-credential</span>";
           d3.select("#bitem-selector-4").style("display", "none");
         }
-        d3.select(".bitem-1")
-          .attr("class", "bitem bitem-1")
-          .html(bitem1);
+        d3.select(".bitem-1").attr("class", "bitem bitem-1").html(bitem1);
         d3.select(".bitem-2")
           .attr("class", "bitem bitem-2 bitem-active")
           .html(bitem2);
@@ -2405,10 +2451,10 @@ function generateGraph(data, root_key) {
         d3.select(".bbox-4").attr("class", "bbox bbox-4 bbox-inactive");
         if (mode === "Audience") {
           var currentList = currentData
-            .map(function(w) {
+            .map(function (w) {
               return w["Micro-credential Name"];
             })
-            .filter(function(o) {
+            .filter(function (o) {
               return o != null;
             })
             .sort(d3.ascending);
@@ -2419,15 +2465,15 @@ function generateGraph(data, root_key) {
             .data(breadCrumbs[0].list)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-1").val(breadCrumbs[0].name);
 
-          d3.select("#bitem-selector-1").on("change", function() {
+          d3.select("#bitem-selector-1").on("change", function () {
             d = this.value;
             if (d == "") return;
-            audienceData.forEach(function(v) {
+            audienceData.forEach(function (v) {
               if (v.key === d) {
                 var data_copy = JSON.parse(JSON.stringify(v.values));
                 data_copy.push(v);
@@ -2435,14 +2481,14 @@ function generateGraph(data, root_key) {
                 directory.push(v.key);
                 level = 1;
                 items = audienceData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
-                  { name: v.key, type: "Audience", data: v, list: items }
+                  { name: v.key, type: "Audience", data: v, list: items },
                 ];
                 generateGraph(data_copy, v.key);
                 updateUrlParams();
@@ -2455,50 +2501,50 @@ function generateGraph(data, root_key) {
             .data(breadCrumbs[1].list)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-2").val(breadCrumbs[1].name);
 
-          d3.select("#bitem-selector-2").on("change", function() {
+          d3.select("#bitem-selector-2").on("change", function () {
             d = this.value;
             if (d == "") return;
-            audienceData.forEach(function(v) {
+            audienceData.forEach(function (v) {
               if (v.key === breadCrumbs[0].name) {
                 directory = [];
                 directory.push(v.key);
                 level = 1;
                 items = audienceData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
-                  { name: v.key, type: "Audience", data: v, list: items }
+                  { name: v.key, type: "Audience", data: v, list: items },
                 ];
-                v.values.forEach(function(w) {
+                v.values.forEach(function (w) {
                   if (w.key === d) {
                     var data_copy = JSON.parse(JSON.stringify(w.values));
                     data_copy.push(w);
                     level += 1;
                     items = v.values
-                      .map(function(o) {
+                      .map(function (o) {
                         return o.key;
                       })
-                      .filter(function(o) {
+                      .filter(function (o) {
                         return o !== "";
                       });
                     breadCrumbs.push({
                       name: w.key,
                       type: "Topics",
                       data: w,
-                      list: items
+                      list: items,
                     });
 
                     generateGraph(
-                      data_copy.filter(function(d) {
+                      data_copy.filter(function (d) {
                         return d != null;
                       }),
                       w.key
@@ -2515,18 +2561,18 @@ function generateGraph(data, root_key) {
             .data(currentList)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-4").val("");
-          d3.select("#bitem-selector-4").on("change", function() {
+          d3.select("#bitem-selector-4").on("change", function () {
             d = this.value;
             if (d == "") return;
-            audienceData.forEach(function(v) {
+            audienceData.forEach(function (v) {
               if (v.key === breadCrumbs[0].name) {
-                v.values.forEach(function(w) {
+                v.values.forEach(function (w) {
                   if (w.key === breadCrumbs[1].name) {
-                    w.values.forEach(function(u) {
+                    w.values.forEach(function (u) {
                       if (u["Micro-credential Name"] === d) {
                         showTooltip(u);
                       }
@@ -2536,18 +2582,16 @@ function generateGraph(data, root_key) {
               }
             });
           });
-          d3.select(".bitem-4")
-            .attr("class", "bitem bitem-4")
-            .html(bitem4);
+          d3.select(".bitem-4").attr("class", "bitem bitem-4").html(bitem4);
           d3.select(".bbox-4").attr("class", "bbox bbox-4");
           d3.select("#bitem-selector-4").style("display", "");
         }
         if (mode === "Topics") {
           var currentList = currentData
-            .map(function(w) {
+            .map(function (w) {
               return w["Micro-credential Name"];
             })
-            .filter(function(o) {
+            .filter(function (o) {
               return o != null;
             })
             .sort(d3.ascending);
@@ -2558,14 +2602,14 @@ function generateGraph(data, root_key) {
             .data(breadCrumbs[0].list)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-1").val(breadCrumbs[0].name);
-          d3.select("#bitem-selector-1").on("change", function() {
+          d3.select("#bitem-selector-1").on("change", function () {
             d = this.value;
             if (d == "") return;
-            topicData.forEach(function(v) {
+            topicData.forEach(function (v) {
               if (v.key === d) {
                 var data_copy = JSON.parse(JSON.stringify(v.values));
                 data_copy.push(v);
@@ -2573,14 +2617,14 @@ function generateGraph(data, root_key) {
                 directory.push(v.key);
                 level = 1;
                 items = topicData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
-                  { name: v.key, type: "Topics", data: v, list: items }
+                  { name: v.key, type: "Topics", data: v, list: items },
                 ];
                 generateGraph(data_copy, v.key);
                 updateUrlParams();
@@ -2594,49 +2638,49 @@ function generateGraph(data, root_key) {
             .data(breadCrumbs[1].list)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-2").val(breadCrumbs[1].name);
-          d3.select("#bitem-selector-2").on("change", function() {
+          d3.select("#bitem-selector-2").on("change", function () {
             d = this.value;
             if (d == "") return;
-            topicData.forEach(function(v) {
+            topicData.forEach(function (v) {
               if (v.key === breadCrumbs[0].name) {
                 directory = [];
                 directory.push(v.key);
                 level = 1;
                 items = topicData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
-                  { name: v.key, type: "Topics", data: v, list: items }
+                  { name: v.key, type: "Topics", data: v, list: items },
                 ];
-                v.values.forEach(function(w) {
+                v.values.forEach(function (w) {
                   if (w.key === d) {
                     var data_copy = JSON.parse(JSON.stringify(w.values));
                     data_copy.push(w);
                     level += 1;
                     items = v.values
-                      .map(function(o) {
+                      .map(function (o) {
                         return o.key;
                       })
-                      .filter(function(o) {
+                      .filter(function (o) {
                         return o !== "";
                       });
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
                       data: w,
-                      list: items
+                      list: items,
                     });
 
                     generateGraph(
-                      data_copy.filter(function(d) {
+                      data_copy.filter(function (d) {
                         return d != null;
                       }),
                       w.key
@@ -2653,18 +2697,18 @@ function generateGraph(data, root_key) {
             .data(currentList)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-4").val("");
-          d3.select("#bitem-selector-4").on("change", function() {
+          d3.select("#bitem-selector-4").on("change", function () {
             d = this.value;
             if (d == "") return;
-            topicData.forEach(function(v) {
+            topicData.forEach(function (v) {
               if (v.key === breadCrumbs[0].name) {
-                v.values.forEach(function(w) {
+                v.values.forEach(function (w) {
                   if (w.key === breadCrumbs[1].name) {
-                    w.values.forEach(function(u) {
+                    w.values.forEach(function (u) {
                       if (u["Micro-credential Name"] === d) {
                         showTooltip(u);
                       }
@@ -2674,18 +2718,16 @@ function generateGraph(data, root_key) {
               }
             });
           });
-          d3.select(".bitem-4")
-            .attr("class", "bitem bitem-4")
-            .html(bitem4);
+          d3.select(".bitem-4").attr("class", "bitem bitem-4").html(bitem4);
           d3.select(".bbox-4").attr("class", "bbox bbox-4");
           d3.select("#bitem-selector-4").style("display", "");
         }
         if (mode === "Stack Name") {
           var currentList = currentData
-            .map(function(w) {
+            .map(function (w) {
               return w.key;
             })
-            .filter(function(o) {
+            .filter(function (o) {
               return o !== root_key;
             })
             .sort(d3.ascending);
@@ -2695,14 +2737,14 @@ function generateGraph(data, root_key) {
             .data(breadCrumbs[0].list)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-1").val(breadCrumbs[0].name);
-          d3.select("#bitem-selector-1").on("change", function() {
+          d3.select("#bitem-selector-1").on("change", function () {
             d = this.value;
             if (d == "") return;
-            stackNameData.forEach(function(v) {
+            stackNameData.forEach(function (v) {
               if (v.key === d) {
                 var data_copy = JSON.parse(JSON.stringify(v.values));
                 data_copy.push(v);
@@ -2710,14 +2752,14 @@ function generateGraph(data, root_key) {
                 directory.push(v.key);
                 level = 1;
                 items = stackNameData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
-                  { name: v.key, type: "Stack Name", data: v, list: items }
+                  { name: v.key, type: "Stack Name", data: v, list: items },
                 ];
                 updateUrlParams();
                 generateGraph(data_copy, v.key);
@@ -2731,49 +2773,49 @@ function generateGraph(data, root_key) {
             .data(breadCrumbs[1].list)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-2").val(breadCrumbs[1].name);
-          d3.select("#bitem-selector-2").on("change", function() {
+          d3.select("#bitem-selector-2").on("change", function () {
             d = this.value;
             if (d == "") return;
-            stackNameData.forEach(function(v) {
+            stackNameData.forEach(function (v) {
               if (v.key === breadCrumbs[0].name) {
                 directory = [];
                 directory.push(v.key);
                 level = 1;
                 items = stackNameData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
-                  { name: v.key, type: "Stack Name", data: v, list: items }
+                  { name: v.key, type: "Stack Name", data: v, list: items },
                 ];
-                v.values.forEach(function(w) {
+                v.values.forEach(function (w) {
                   if (w.key === d) {
                     var data_copy = JSON.parse(JSON.stringify(w.values));
                     data_copy.push(w);
                     level += 1;
                     items = v.values
-                      .map(function(o) {
+                      .map(function (o) {
                         return o.key;
                       })
-                      .filter(function(o) {
+                      .filter(function (o) {
                         return o !== "";
                       });
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
                       data: w,
-                      list: items
+                      list: items,
                     });
 
                     generateGraph(
-                      data_copy.filter(function(d) {
+                      data_copy.filter(function (d) {
                         return d != null;
                       }),
                       w.key
@@ -2791,65 +2833,65 @@ function generateGraph(data, root_key) {
             .data(currentList)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-3").val("");
-          d3.select("#bitem-selector-3").on("change", function() {
+          d3.select("#bitem-selector-3").on("change", function () {
             d = this.value;
             if (d == "") return;
             var oldBreadCrumbs = JSON.parse(JSON.stringify(breadCrumbs));
-            stackNameData.forEach(function(v) {
+            stackNameData.forEach(function (v) {
               if (v.key === oldBreadCrumbs[0].name) {
                 directory = [];
                 directory.push(v.key);
                 level = 1;
                 items = stackNameData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
-                  { name: v.key, type: "Stack Name", data: v, list: items }
+                  { name: v.key, type: "Stack Name", data: v, list: items },
                 ];
-                v.values.forEach(function(w) {
+                v.values.forEach(function (w) {
                   if (w.key === oldBreadCrumbs[1].name) {
                     level += 1;
                     items = v.values
-                      .map(function(o) {
+                      .map(function (o) {
                         return o.key;
                       })
-                      .filter(function(o) {
+                      .filter(function (o) {
                         return o !== "";
                       });
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
                       data: w,
-                      list: items
+                      list: items,
                     });
-                    w.values.forEach(function(u) {
+                    w.values.forEach(function (u) {
                       if (u.key === d) {
                         var data_copy = JSON.parse(JSON.stringify(u.values));
                         data_copy.push(u);
                         level += 1;
                         items = w.values
-                          .map(function(o) {
+                          .map(function (o) {
                             return o.key;
                           })
-                          .filter(function(o) {
+                          .filter(function (o) {
                             return o !== "";
                           });
                         breadCrumbs.push({
                           name: u.key,
                           type: "Topics",
                           data: u,
-                          list: items
+                          list: items,
                         });
                         generateGraph(
-                          data_copy.filter(function(d) {
+                          data_copy.filter(function (d) {
                             return d != null;
                           }),
                           u.key
@@ -2868,10 +2910,10 @@ function generateGraph(data, root_key) {
         }
         if (mode === "Education Standard") {
           var currentList = currentData
-            .map(function(w) {
+            .map(function (w) {
               return w.key;
             })
-            .filter(function(o) {
+            .filter(function (o) {
               return o !== root_key;
             })
             .sort(d3.ascending);
@@ -2882,14 +2924,14 @@ function generateGraph(data, root_key) {
             .data(breadCrumbs[0].list)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-1").val(breadCrumbs[0].name);
-          d3.select("#bitem-selector-1").on("change", function() {
+          d3.select("#bitem-selector-1").on("change", function () {
             d = this.value;
             if (d == "") return;
-            educationStandardData.forEach(function(v) {
+            educationStandardData.forEach(function (v) {
               if (v.key === d) {
                 var data_copy = JSON.parse(JSON.stringify(v.values));
                 data_copy.push(v);
@@ -2897,10 +2939,10 @@ function generateGraph(data, root_key) {
                 directory.push(v.key);
                 level = 1;
                 items = educationStandardData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
@@ -2908,8 +2950,8 @@ function generateGraph(data, root_key) {
                     name: v.key,
                     type: "Education Standard",
                     data: v,
-                    list: items
-                  }
+                    list: items,
+                  },
                 ];
                 updateUrlParams();
                 generateGraph(data_copy, v.key);
@@ -2923,23 +2965,23 @@ function generateGraph(data, root_key) {
             .data(breadCrumbs[1].list)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-2").val(breadCrumbs[1].name);
-          d3.select("#bitem-selector-2").on("change", function() {
+          d3.select("#bitem-selector-2").on("change", function () {
             d = this.value;
             if (d == "") return;
-            educationStandardData.forEach(function(v) {
+            educationStandardData.forEach(function (v) {
               if (v.key === breadCrumbs[0].name) {
                 directory = [];
                 directory.push(v.key);
                 level = 1;
                 items = educationStandardData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
@@ -2947,30 +2989,30 @@ function generateGraph(data, root_key) {
                     name: v.key,
                     type: "Education Standard",
                     data: v,
-                    list: items
-                  }
+                    list: items,
+                  },
                 ];
-                v.values.forEach(function(w) {
+                v.values.forEach(function (w) {
                   if (w.key === d) {
                     var data_copy = JSON.parse(JSON.stringify(w.values));
                     data_copy.push(w);
                     level += 1;
                     items = v.values
-                      .map(function(o) {
+                      .map(function (o) {
                         return o.key;
                       })
-                      .filter(function(o) {
+                      .filter(function (o) {
                         return o !== "";
                       });
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
                       data: w,
-                      list: items
+                      list: items,
                     });
 
                     generateGraph(
-                      data_copy.filter(function(d) {
+                      data_copy.filter(function (d) {
                         return d != null;
                       }),
                       w.key
@@ -2988,24 +3030,24 @@ function generateGraph(data, root_key) {
             .data(currentList)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-3").val("");
-          d3.select("#bitem-selector-3").on("change", function() {
+          d3.select("#bitem-selector-3").on("change", function () {
             d = this.value;
             if (d == "") return;
             var oldBreadCrumbs = JSON.parse(JSON.stringify(breadCrumbs));
-            educationStandardData.forEach(function(v) {
+            educationStandardData.forEach(function (v) {
               if (v.key === oldBreadCrumbs[0].name) {
                 directory = [];
                 directory.push(v.key);
                 level = 1;
                 items = educationStandardData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
@@ -3013,46 +3055,46 @@ function generateGraph(data, root_key) {
                     name: v.key,
                     type: "Education Standard",
                     data: v,
-                    list: items
-                  }
+                    list: items,
+                  },
                 ];
 
-                v.values.forEach(function(w) {
+                v.values.forEach(function (w) {
                   if (w.key === oldBreadCrumbs[1].name) {
                     level += 1;
                     items = v.values
-                      .map(function(o) {
+                      .map(function (o) {
                         return o.key;
                       })
-                      .filter(function(o) {
+                      .filter(function (o) {
                         return o !== "";
                       });
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
                       data: w,
-                      list: items
+                      list: items,
                     });
-                    w.values.forEach(function(u) {
+                    w.values.forEach(function (u) {
                       if (u.key === d) {
                         var data_copy = JSON.parse(JSON.stringify(u.values));
                         data_copy.push(u);
                         level += 1;
                         items = w.values
-                          .map(function(o) {
+                          .map(function (o) {
                             return o.key;
                           })
-                          .filter(function(o) {
+                          .filter(function (o) {
                             return o !== "";
                           });
                         breadCrumbs.push({
                           name: u.key,
                           type: "Topics",
                           data: u,
-                          list: items
+                          list: items,
                         });
                         generateGraph(
-                          data_copy.filter(function(d) {
+                          data_copy.filter(function (d) {
                             return d != null;
                           }),
                           u.key
@@ -3070,21 +3112,17 @@ function generateGraph(data, root_key) {
           d3.select("#bitem-selector-3").style("display", "");
           d3.select("#bitem-selector-4").style("display", "none");
         }
-        d3.select(".bitem-1")
-          .attr("class", "bitem bitem-1")
-          .html(bitem1);
-        d3.select(".bitem-2")
-          .attr("class", "bitem bitem-2")
-          .html(bitem2);
+        d3.select(".bitem-1").attr("class", "bitem bitem-1").html(bitem1);
+        d3.select(".bitem-2").attr("class", "bitem bitem-2").html(bitem2);
         d3.select(".bbox-3").attr("class", "bbox bbox-3");
       }
       if (level === 3) {
         if (mode === "Stack Name") {
           var currentList = currentData
-            .map(function(w) {
+            .map(function (w) {
               return w["Micro-credential Name"];
             })
-            .filter(function(o) {
+            .filter(function (o) {
               return o != null;
             })
             .sort(d3.ascending);
@@ -3094,14 +3132,14 @@ function generateGraph(data, root_key) {
             .data(breadCrumbs[0].list)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-1").val(breadCrumbs[0].name);
-          d3.select("#bitem-selector-1").on("change", function() {
+          d3.select("#bitem-selector-1").on("change", function () {
             d = this.value;
             if (d == "") return;
-            stackNameData.forEach(function(v) {
+            stackNameData.forEach(function (v) {
               if (v.key === d) {
                 var data_copy = JSON.parse(JSON.stringify(v.values));
                 data_copy.push(v);
@@ -3109,14 +3147,14 @@ function generateGraph(data, root_key) {
                 directory.push(v.key);
                 level = 1;
                 items = stackNameData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
-                  { name: v.key, type: "Stack Name", data: v, list: items }
+                  { name: v.key, type: "Stack Name", data: v, list: items },
                 ];
                 updateUrlParams();
                 generateGraph(data_copy, v.key);
@@ -3130,49 +3168,49 @@ function generateGraph(data, root_key) {
             .data(breadCrumbs[1].list)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-2").val(breadCrumbs[1].name);
-          d3.select("#bitem-selector-2").on("change", function() {
+          d3.select("#bitem-selector-2").on("change", function () {
             d = this.value;
             if (d == "") return;
-            stackNameData.forEach(function(v) {
+            stackNameData.forEach(function (v) {
               if (v.key === breadCrumbs[0].name) {
                 directory = [];
                 directory.push(v.key);
                 level = 1;
                 items = stackNameData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
-                  { name: v.key, type: "Stack Name", data: v, list: items }
+                  { name: v.key, type: "Stack Name", data: v, list: items },
                 ];
-                v.values.forEach(function(w) {
+                v.values.forEach(function (w) {
                   if (w.key === d) {
                     var data_copy = JSON.parse(JSON.stringify(w.values));
                     data_copy.push(w);
                     level += 1;
                     items = v.values
-                      .map(function(o) {
+                      .map(function (o) {
                         return o.key;
                       })
-                      .filter(function(o) {
+                      .filter(function (o) {
                         return o !== "";
                       });
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
                       data: w,
-                      list: items
+                      list: items,
                     });
 
                     generateGraph(
-                      data_copy.filter(function(d) {
+                      data_copy.filter(function (d) {
                         return d != null;
                       }),
                       w.key
@@ -3192,55 +3230,55 @@ function generateGraph(data, root_key) {
             .data(breadCrumbs[2].list)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-3").val(breadCrumbs[2].name);
-          d3.select("#bitem-selector-3").on("change", function() {
+          d3.select("#bitem-selector-3").on("change", function () {
             d = this.value;
             if (d == "") return;
             var oldBreadCrumbs = JSON.parse(JSON.stringify(breadCrumbs));
-            stackNameData.forEach(function(v) {
+            stackNameData.forEach(function (v) {
               if (v.key === oldBreadCrumbs[0].name) {
                 directory = [];
                 directory.push(v.key);
                 level = 1;
                 items = stackNameData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
-                  { name: v.key, type: "Stack Name", data: v, list: items }
+                  { name: v.key, type: "Stack Name", data: v, list: items },
                 ];
-                v.values.forEach(function(w) {
+                v.values.forEach(function (w) {
                   if (w.key === oldBreadCrumbs[1].name) {
                     level += 1;
                     items = v.values
-                      .map(function(o) {
+                      .map(function (o) {
                         return o.key;
                       })
-                      .filter(function(o) {
+                      .filter(function (o) {
                         return o !== "";
                       });
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
                       data: w,
-                      list: items
+                      list: items,
                     });
-                    w.values.forEach(function(u) {
+                    w.values.forEach(function (u) {
                       if (u.key === d) {
                         var data_copy = JSON.parse(JSON.stringify(u.values));
                         data_copy.push(u);
                         level += 1;
                         items = w.values
-                          .map(function(o) {
+                          .map(function (o) {
                             return o.key;
                           })
-                          .filter(function(o) {
+                          .filter(function (o) {
                             return o !== "";
                           });
                         console.log("u", u);
@@ -3248,10 +3286,10 @@ function generateGraph(data, root_key) {
                           name: u.key,
                           type: "Topics",
                           data: u,
-                          list: items
+                          list: items,
                         });
                         generateGraph(
-                          data_copy.filter(function(d) {
+                          data_copy.filter(function (d) {
                             return d != null;
                           }),
                           u.key
@@ -3271,20 +3309,20 @@ function generateGraph(data, root_key) {
             .data(currentList)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-4").val("");
-          d3.select("#bitem-selector-4").on("change", function() {
+          d3.select("#bitem-selector-4").on("change", function () {
             d = this.value;
             if (d == "") return;
-            stackNameData.forEach(function(v) {
+            stackNameData.forEach(function (v) {
               if (v.key === breadCrumbs[0].name) {
-                v.values.forEach(function(w) {
+                v.values.forEach(function (w) {
                   if (w.key === breadCrumbs[1].name) {
-                    w.values.forEach(function(u) {
+                    w.values.forEach(function (u) {
                       if (u.key === breadCrumbs[2].name) {
-                        u.values.forEach(function(o) {
+                        u.values.forEach(function (o) {
                           if (o["Micro-credential Name"] === d) {
                             showTooltip(o);
                           }
@@ -3301,10 +3339,10 @@ function generateGraph(data, root_key) {
         }
         if (mode === "Education Standard") {
           var currentList = currentData
-            .map(function(w) {
+            .map(function (w) {
               return w["Micro-credential Name"];
             })
-            .filter(function(o) {
+            .filter(function (o) {
               return o != null;
             })
             .sort(d3.ascending);
@@ -3314,14 +3352,14 @@ function generateGraph(data, root_key) {
             .data(breadCrumbs[0].list)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-1").val(breadCrumbs[0].name);
-          d3.select("#bitem-selector-1").on("change", function() {
+          d3.select("#bitem-selector-1").on("change", function () {
             d = this.value;
             if (d == "") return;
-            educationStandardData.forEach(function(v) {
+            educationStandardData.forEach(function (v) {
               if (v.key === d) {
                 var data_copy = JSON.parse(JSON.stringify(v.values));
                 data_copy.push(v);
@@ -3329,10 +3367,10 @@ function generateGraph(data, root_key) {
                 directory.push(v.key);
                 level = 1;
                 items = educationStandardData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
@@ -3340,8 +3378,8 @@ function generateGraph(data, root_key) {
                     name: v.key,
                     type: "Education Standard",
                     data: v,
-                    list: items
-                  }
+                    list: items,
+                  },
                 ];
                 updateUrlParams();
                 generateGraph(data_copy, v.key);
@@ -3355,23 +3393,23 @@ function generateGraph(data, root_key) {
             .data(breadCrumbs[1].list)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-2").val(breadCrumbs[1].name);
-          d3.select("#bitem-selector-2").on("change", function() {
+          d3.select("#bitem-selector-2").on("change", function () {
             d = this.value;
             if (d == "") return;
-            educationStandardData.forEach(function(v) {
+            educationStandardData.forEach(function (v) {
               if (v.key === breadCrumbs[0].name) {
                 directory = [];
                 directory.push(v.key);
                 level = 1;
                 items = educationStandardData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
@@ -3379,30 +3417,30 @@ function generateGraph(data, root_key) {
                     name: v.key,
                     type: "Education Standard",
                     data: v,
-                    list: items
-                  }
+                    list: items,
+                  },
                 ];
-                v.values.forEach(function(w) {
+                v.values.forEach(function (w) {
                   if (w.key === d) {
                     var data_copy = JSON.parse(JSON.stringify(w.values));
                     data_copy.push(w);
                     level += 1;
                     items = v.values
-                      .map(function(o) {
+                      .map(function (o) {
                         return o.key;
                       })
-                      .filter(function(o) {
+                      .filter(function (o) {
                         return o !== "";
                       });
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
                       data: w,
-                      list: items
+                      list: items,
                     });
 
                     generateGraph(
-                      data_copy.filter(function(d) {
+                      data_copy.filter(function (d) {
                         return d != null;
                       }),
                       w.key
@@ -3420,25 +3458,25 @@ function generateGraph(data, root_key) {
             .data(breadCrumbs[2].list)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-3").val(breadCrumbs[2].name);
           console.log("breadCrumbs", breadCrumbs);
-          d3.select("#bitem-selector-3").on("change", function() {
+          d3.select("#bitem-selector-3").on("change", function () {
             d = this.value;
             if (d == "") return;
             var oldBreadCrumbs = JSON.parse(JSON.stringify(breadCrumbs));
-            educationStandardData.forEach(function(v) {
+            educationStandardData.forEach(function (v) {
               if (v.key === oldBreadCrumbs[0].name) {
                 directory = [];
                 directory.push(v.key);
                 level = 1;
                 items = educationStandardData
-                  .map(function(o) {
+                  .map(function (o) {
                     return o.key;
                   })
-                  .filter(function(o) {
+                  .filter(function (o) {
                     return o !== "";
                   });
                 breadCrumbs = [
@@ -3446,35 +3484,35 @@ function generateGraph(data, root_key) {
                     name: v.key,
                     type: "Education Standard",
                     data: v,
-                    list: items
-                  }
+                    list: items,
+                  },
                 ];
-                v.values.forEach(function(w) {
+                v.values.forEach(function (w) {
                   if (w.key === oldBreadCrumbs[1].name) {
                     level += 1;
                     items = v.values
-                      .map(function(o) {
+                      .map(function (o) {
                         return o.key;
                       })
-                      .filter(function(o) {
+                      .filter(function (o) {
                         return o !== "";
                       });
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
                       data: w,
-                      list: items
+                      list: items,
                     });
-                    w.values.forEach(function(u) {
+                    w.values.forEach(function (u) {
                       if (u.key === d) {
                         var data_copy = JSON.parse(JSON.stringify(u.values));
                         data_copy.push(u);
                         level += 1;
                         items = w.values
-                          .map(function(o) {
+                          .map(function (o) {
                             return o.key;
                           })
-                          .filter(function(o) {
+                          .filter(function (o) {
                             return o !== "";
                           });
                         console.log("items", items);
@@ -3482,10 +3520,10 @@ function generateGraph(data, root_key) {
                           name: u.key,
                           type: "Topics",
                           data: u,
-                          list: items
+                          list: items,
                         });
                         generateGraph(
-                          data_copy.filter(function(d) {
+                          data_copy.filter(function (d) {
                             return d != null;
                           }),
                           u.key
@@ -3505,20 +3543,20 @@ function generateGraph(data, root_key) {
             .data(currentList)
             .enter()
             .append("option")
-            .html(function(d) {
+            .html(function (d) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-4").val("");
-          d3.select("#bitem-selector-4").on("change", function() {
+          d3.select("#bitem-selector-4").on("change", function () {
             d = this.value;
             if (d == "") return;
-            educationStandardData.forEach(function(v) {
+            educationStandardData.forEach(function (v) {
               if (v.key === breadCrumbs[0].name) {
-                v.values.forEach(function(w) {
+                v.values.forEach(function (w) {
                   if (w.key === breadCrumbs[1].name) {
-                    w.values.forEach(function(u) {
+                    w.values.forEach(function (u) {
                       if (u.key === breadCrumbs[2].name) {
-                        u.values.forEach(function(o) {
+                        u.values.forEach(function (o) {
                           if (o["Micro-credential Name"] === d) {
                             showTooltip(o);
                           }
@@ -3532,15 +3570,9 @@ function generateGraph(data, root_key) {
           });
           d3.select("#bitem-selector-4").style("display", "");
         }
-        d3.select(".bitem-1")
-          .attr("class", "bitem bitem-1")
-          .html(bitem1);
-        d3.select(".bitem-2")
-          .attr("class", "bitem bitem-2")
-          .html(bitem2);
-        d3.select(".bitem-3")
-          .attr("class", "bitem bitem-3")
-          .html(bitem3);
+        d3.select(".bitem-1").attr("class", "bitem bitem-1").html(bitem1);
+        d3.select(".bitem-2").attr("class", "bitem bitem-2").html(bitem2);
+        d3.select(".bitem-3").attr("class", "bitem bitem-3").html(bitem3);
         d3.select(".bitem-4")
           .attr("class", "bitem bitem-4 bitem-active")
           .html(bitem4);
@@ -3573,21 +3605,21 @@ function generateGraph(data, root_key) {
   }
 
   function getTopXpercent(array, param, x) {
-    var arrayCopy = array.sort(function(a, b) {
+    var arrayCopy = array.sort(function (a, b) {
       return d3.descending(a[param], b[param]);
     });
 
     var threshold = arrayCopy[Math.round(x * arrayCopy.length)][param];
 
-    arrayCopy = arrayCopy.filter(function(d) {
+    arrayCopy = arrayCopy.filter(function (d) {
       return d[param] >= threshold;
     });
 
     return arrayCopy;
   }
 
-  d3.selection.prototype.moveToFront = function() {
-    return this.each(function() {
+  d3.selection.prototype.moveToFront = function () {
+    return this.each(function () {
       this.parentNode.appendChild(this);
     });
   };
