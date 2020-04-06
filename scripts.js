@@ -643,7 +643,6 @@ d3.select(".tooltip-close-btn").on("click", function () {
 
 d3.select(".copy-url-btn").on("click", function () {
   var queryStringCurrent = window.location;
-  console.log(queryStringCurrent);
   copyToClipboard(queryStringCurrent);
 });
 
@@ -861,16 +860,11 @@ function generateGraph(data, root_key) {
   zoom = d3.zoom().scaleExtent([1, 10]).on("zoom", zoomed);
 
   function responsivefy(svg) {
-    console.log("triggered");
     // get container + svg aspect ratio
     var container = d3.select(svg.node().parentNode),
       width = parseInt(svg.style("width")),
       height = parseInt(svg.style("height")),
       aspect = width / height;
-
-    console.log("wdith", width);
-    console.log("height", height);
-    console.log("aspect", aspect);
 
     // add viewBox and preserveAspectRatio properties,
     // and call resize so that svg resizes on inital page load
@@ -890,7 +884,6 @@ function generateGraph(data, root_key) {
       targetWidth = parseInt(container.style("width"));
       svg.attr("width", targetWidth);
       svg.attr("height", Math.round(targetWidth / aspect));
-      console.log("targetWidth", targetWidth);
     }
   }
 
@@ -1218,10 +1211,10 @@ function generateGraph(data, root_key) {
             if (breadCrumbs.length < 2) {
               directory.push(d.data.id);
               audienceData.forEach(function (v) {
-                if (v.key === directory[0]) {
+                if (v.key === breadCrumbs[0].name) {
                   v.values.forEach(function (w) {
                     if (w) {
-                      if (w.key === directory[1]) {
+                      if (w.key === breadCrumbs[1].name) {
                         var data_copy = JSON.parse(JSON.stringify(w.values));
                         data_copy.push(w);
                         level += 1;
@@ -1257,10 +1250,10 @@ function generateGraph(data, root_key) {
             if (breadCrumbs.length < 2) {
               directory.push(d.data.id);
               topicData.forEach(function (v) {
-                if (v.key === directory[0]) {
+                if (v.key === breadCrumbs[0].name) {
                   v.values.forEach(function (w) {
                     if (w) {
-                      if (w.key === directory[1]) {
+                      if (w.key === breadCrumbs[1].name) {
                         var data_copy = JSON.parse(JSON.stringify(w.values));
                         data_copy.push(w);
                         level += 1;
@@ -1296,10 +1289,10 @@ function generateGraph(data, root_key) {
             if (breadCrumbs.length < 3) {
               directory.push(d.data.id);
               stackNameData.forEach(function (v) {
-                if (v.key === directory[0] && v.key === root_key) {
+                if (v.key === breadCrumbs[0].name && v.key === root_key) {
                   v.values.forEach(function (w) {
                     if (w) {
-                      if (w.key === directory[1]) {
+                      if (w.key === breadCrumbs[1].name) {
                         var data_copy = JSON.parse(JSON.stringify(w.values));
                         data_copy.push(w);
                         level += 1;
@@ -1328,9 +1321,9 @@ function generateGraph(data, root_key) {
                     }
                   });
                 }
-                if (v.key === directory[0]) {
+                if (v.key === breadCrumbs[0].name) {
                   v.values.forEach(function (w) {
-                    if (w.key === directory[1] && w.key === root_key) {
+                    if (w.key === breadCrumbs[1].name && w.key === root_key) {
                       w.values.forEach(function (u) {
                         if (u.key === d.data.id) {
                           var data_copy = JSON.parse(JSON.stringify(u.values));
@@ -1369,10 +1362,10 @@ function generateGraph(data, root_key) {
             if (breadCrumbs.length < 3) {
               directory.push(d.data.id);
               educationStandardData.forEach(function (v) {
-                if (v.key === directory[0] && v.key === root_key) {
+                if (v.key === breadCrumbs[0].name && v.key === root_key) {
                   v.values.forEach(function (w) {
                     if (w) {
-                      if (w.key === directory[1]) {
+                      if (w.key === breadCrumbs[1].name) {
                         var data_copy = JSON.parse(JSON.stringify(w.values));
                         data_copy.push(w);
                         level += 1;
@@ -1401,9 +1394,9 @@ function generateGraph(data, root_key) {
                     }
                   });
                 }
-                if (v.key === directory[0]) {
+                if (v.key === breadCrumbs[0].name) {
                   v.values.forEach(function (w) {
-                    if (w.key === directory[1] && w.key === root_key) {
+                    if (w.key === breadCrumbs[1].name && w.key === root_key) {
                       w.values.forEach(function (u) {
                         if (u.key === d.data.id) {
                           var data_copy = JSON.parse(JSON.stringify(u.values));
@@ -1979,7 +1972,6 @@ function generateGraph(data, root_key) {
   }
 
   function updateBreadcrumbs() {
-    console.log(level);
     d3.select("#bitem-selector-1").html("");
     d3.select("#bitem-selector-2").html("");
     d3.select("#bitem-selector-3").html("");
@@ -2095,7 +2087,8 @@ function generateGraph(data, root_key) {
                       })
                       .filter(function (o) {
                         return o !== "";
-                      });
+                      })
+                      .sort(d3.ascending);
                     breadCrumbs.push({
                       name: w.key,
                       type: "Topics",
@@ -2148,7 +2141,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   { name: v.key, type: "Stack Name", data: v, list: items },
                 ];
@@ -2183,7 +2177,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   { name: v.key, type: "Stack Name", data: v, list: items },
                 ];
@@ -2198,7 +2193,8 @@ function generateGraph(data, root_key) {
                       })
                       .filter(function (o) {
                         return o !== "";
-                      });
+                      })
+                      .sort(d3.ascending);
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
@@ -2252,7 +2248,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   {
                     name: v.key,
@@ -2292,7 +2289,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   {
                     name: v.key,
@@ -2363,7 +2361,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   { name: v.key, type: "Topics", data: v, list: items },
                 ];
@@ -2397,7 +2396,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   { name: v.key, type: "Topics", data: v, list: items },
                 ];
@@ -2412,7 +2412,8 @@ function generateGraph(data, root_key) {
                       })
                       .filter(function (o) {
                         return o !== "";
-                      });
+                      })
+                      .sort(d3.ascending);
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
@@ -2486,7 +2487,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   { name: v.key, type: "Audience", data: v, list: items },
                 ];
@@ -2520,7 +2522,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   { name: v.key, type: "Audience", data: v, list: items },
                 ];
@@ -2535,7 +2538,8 @@ function generateGraph(data, root_key) {
                       })
                       .filter(function (o) {
                         return o !== "";
-                      });
+                      })
+                      .sort(d3.ascending);
                     breadCrumbs.push({
                       name: w.key,
                       type: "Topics",
@@ -2622,7 +2626,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   { name: v.key, type: "Topics", data: v, list: items },
                 ];
@@ -2656,7 +2661,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   { name: v.key, type: "Topics", data: v, list: items },
                 ];
@@ -2671,7 +2677,8 @@ function generateGraph(data, root_key) {
                       })
                       .filter(function (o) {
                         return o !== "";
-                      });
+                      })
+                      .sort(d3.ascending);
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
@@ -2757,7 +2764,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   { name: v.key, type: "Stack Name", data: v, list: items },
                 ];
@@ -2791,7 +2799,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   { name: v.key, type: "Stack Name", data: v, list: items },
                 ];
@@ -2806,7 +2815,8 @@ function generateGraph(data, root_key) {
                       })
                       .filter(function (o) {
                         return o !== "";
-                      });
+                      })
+                      .sort(d3.ascending);
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
@@ -2852,7 +2862,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   { name: v.key, type: "Stack Name", data: v, list: items },
                 ];
@@ -2865,7 +2876,8 @@ function generateGraph(data, root_key) {
                       })
                       .filter(function (o) {
                         return o !== "";
-                      });
+                      })
+                      .sort(d3.ascending);
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
@@ -2883,7 +2895,8 @@ function generateGraph(data, root_key) {
                           })
                           .filter(function (o) {
                             return o !== "";
-                          });
+                          })
+                          .sort(d3.ascending);
                         breadCrumbs.push({
                           name: u.key,
                           type: "Topics",
@@ -2944,7 +2957,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   {
                     name: v.key,
@@ -2983,7 +2997,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   {
                     name: v.key,
@@ -3003,7 +3018,8 @@ function generateGraph(data, root_key) {
                       })
                       .filter(function (o) {
                         return o !== "";
-                      });
+                      })
+                      .sort(d3.ascending);
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
@@ -3049,7 +3065,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   {
                     name: v.key,
@@ -3068,7 +3085,8 @@ function generateGraph(data, root_key) {
                       })
                       .filter(function (o) {
                         return o !== "";
-                      });
+                      })
+                      .sort(d3.ascending);
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
@@ -3086,7 +3104,8 @@ function generateGraph(data, root_key) {
                           })
                           .filter(function (o) {
                             return o !== "";
-                          });
+                          })
+                          .sort(d3.ascending);
                         breadCrumbs.push({
                           name: u.key,
                           type: "Topics",
@@ -3152,7 +3171,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   { name: v.key, type: "Stack Name", data: v, list: items },
                 ];
@@ -3186,7 +3206,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   { name: v.key, type: "Stack Name", data: v, list: items },
                 ];
@@ -3201,7 +3222,8 @@ function generateGraph(data, root_key) {
                       })
                       .filter(function (o) {
                         return o !== "";
-                      });
+                      })
+                      .sort(d3.ascending);
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
@@ -3223,7 +3245,6 @@ function generateGraph(data, root_key) {
             });
           });
 
-          console.log("breadCrumbs", breadCrumbs);
           var bitem3 = "<span>Topic: </span>";
           d3.select("#bitem-selector-3")
             .selectAll("option")
@@ -3249,7 +3270,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   { name: v.key, type: "Stack Name", data: v, list: items },
                 ];
@@ -3262,7 +3284,8 @@ function generateGraph(data, root_key) {
                       })
                       .filter(function (o) {
                         return o !== "";
-                      });
+                      })
+                      .sort(d3.ascending);
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
@@ -3280,8 +3303,8 @@ function generateGraph(data, root_key) {
                           })
                           .filter(function (o) {
                             return o !== "";
-                          });
-                        console.log("u", u);
+                          })
+                          .sort(d3.ascending);
                         breadCrumbs.push({
                           name: u.key,
                           type: "Topics",
@@ -3372,7 +3395,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   {
                     name: v.key,
@@ -3411,7 +3435,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   {
                     name: v.key,
@@ -3431,7 +3456,8 @@ function generateGraph(data, root_key) {
                       })
                       .filter(function (o) {
                         return o !== "";
-                      });
+                      })
+                      .sort(d3.ascending);
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
@@ -3462,7 +3488,7 @@ function generateGraph(data, root_key) {
               return "<option value='" + d + "'>" + d + "</option>";
             });
           $("#bitem-selector-3").val(breadCrumbs[2].name);
-          console.log("breadCrumbs", breadCrumbs);
+
           d3.select("#bitem-selector-3").on("change", function () {
             d = this.value;
             if (d == "") return;
@@ -3478,7 +3504,8 @@ function generateGraph(data, root_key) {
                   })
                   .filter(function (o) {
                     return o !== "";
-                  });
+                  })
+                  .sort(d3.ascending);
                 breadCrumbs = [
                   {
                     name: v.key,
@@ -3496,7 +3523,8 @@ function generateGraph(data, root_key) {
                       })
                       .filter(function (o) {
                         return o !== "";
-                      });
+                      })
+                      .sort(d3.ascending);
                     breadCrumbs.push({
                       name: w.key,
                       type: "Audience",
@@ -3514,8 +3542,9 @@ function generateGraph(data, root_key) {
                           })
                           .filter(function (o) {
                             return o !== "";
-                          });
-                        console.log("items", items);
+                          })
+                          .sort(d3.ascending);
+
                         breadCrumbs.push({
                           name: u.key,
                           type: "Topics",
