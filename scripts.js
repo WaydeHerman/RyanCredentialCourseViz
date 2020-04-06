@@ -2775,7 +2775,7 @@ function generateGraph(data, root_key) {
             });
           });
 
-          var bitem2 = "<span>Topic: </span>";
+          var bitem2 = "<span>Audience: </span>";
           d3.select("#bitem-selector-2")
             .selectAll("option")
             .data(breadCrumbs[1].list)
@@ -2837,7 +2837,7 @@ function generateGraph(data, root_key) {
             });
           });
 
-          var bitem3 = "<span class='select'>Select Audience</span>";
+          var bitem3 = "<span class='select'>Select Topic</span>";
           d3.select("#bitem-selector-3")
             .selectAll("option")
             .data(currentList)
@@ -2973,7 +2973,7 @@ function generateGraph(data, root_key) {
             });
           });
 
-          var bitem2 = "<span>Topic: </span>";
+          var bitem2 = "<span>Audience: </span>";
           d3.select("#bitem-selector-2")
             .selectAll("option")
             .data(breadCrumbs[1].list)
@@ -3040,7 +3040,7 @@ function generateGraph(data, root_key) {
             });
           });
 
-          var bitem3 = "<span class='select'>Select Audience</span>";
+          var bitem3 = "<span class='select'>Select Topic</span>";
           d3.select("#bitem-selector-3")
             .selectAll("option")
             .data(currentList)
