@@ -1214,7 +1214,7 @@ function generateGraph(data, root_key) {
                 if (v.key === breadCrumbs[0].name) {
                   v.values.forEach(function (w) {
                     if (w) {
-                      if (w.key === breadCrumbs[1].name) {
+                      if (w.key === d.data.id) {
                         var data_copy = JSON.parse(JSON.stringify(w.values));
                         data_copy.push(w);
                         level += 1;
@@ -1253,7 +1253,7 @@ function generateGraph(data, root_key) {
                 if (v.key === breadCrumbs[0].name) {
                   v.values.forEach(function (w) {
                     if (w) {
-                      if (w.key === breadCrumbs[1].name) {
+                      if (w.key === d.data.id) {
                         var data_copy = JSON.parse(JSON.stringify(w.values));
                         data_copy.push(w);
                         level += 1;
@@ -1292,7 +1292,7 @@ function generateGraph(data, root_key) {
                 if (v.key === breadCrumbs[0].name && v.key === root_key) {
                   v.values.forEach(function (w) {
                     if (w) {
-                      if (w.key === breadCrumbs[1].name) {
+                      if (w.key === d.data.id) {
                         var data_copy = JSON.parse(JSON.stringify(w.values));
                         data_copy.push(w);
                         level += 1;
@@ -1365,7 +1365,7 @@ function generateGraph(data, root_key) {
                 if (v.key === breadCrumbs[0].name && v.key === root_key) {
                   v.values.forEach(function (w) {
                     if (w) {
-                      if (w.key === breadCrumbs[1].name) {
+                      if (w.key === d.data.id) {
                         var data_copy = JSON.parse(JSON.stringify(w.values));
                         data_copy.push(w);
                         level += 1;
