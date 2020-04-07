@@ -644,10 +644,10 @@ d3.select(".tooltip-close-btn").on("click", function () {
 d3.select(".copy-url-btn").on("click", function () {
   var queryStringCurrent = window.location;
   copyToClipboard(queryStringCurrent);
-    $('.copied-message').fadeIn();
-    setTimeout(function () {
-        $('.copied-message').fadeOut();
-    }, 3500);
+  $(".copied-message").fadeIn();
+  setTimeout(function () {
+    $(".copied-message").fadeOut();
+  }, 3500);
 });
 
 function setZoom(bmargin) {
