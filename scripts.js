@@ -27,7 +27,7 @@ $(".start-over-btn").click(function () {
 });
 
 // d3.csv("/wp-content/themes/digital-promise-new/js/micro-credentials/visualization.csv").then(function (data) {
-d3.csv("data.csv").then(function (data) {
+d3.csv("data (1).csv").then(function (data) {
   breadCrumbs = [];
 
   new_data = [];
@@ -100,7 +100,7 @@ d3.csv("data.csv").then(function (data) {
   stackNameData = d3
     .nest()
     .key(function (d) {
-      return d["Micro-credential Stack Name_alt"];
+      return d["Micro-credential Stack Name_alt"].replace(/&comma;/g, ",");
     })
     .sortKeys(d3.ascending)
     .key(function (d) {
@@ -492,8 +492,6 @@ d3.csv("data.csv").then(function (data) {
     d3.select(".start-screen").style("display", "block");
   }
 
-  
-
   audienceList.unshift("Select Audience");
   d3.select("#audience-selector")
     .selectAll("option")
@@ -501,14 +499,12 @@ d3.csv("data.csv").then(function (data) {
     .enter()
     .append("option")
     .html(function (d, index) {
-      if(index == 0) {
+      if (index == 0) {
         return "<option value=''>" + d + "</option>";
       } else {
         return "<option value='" + d + "'>" + d + "</option>";
       }
     });
-
-   
 
   d3.select("#audience-selector").on("change", function () {
     d = this.value;
@@ -543,7 +539,7 @@ d3.csv("data.csv").then(function (data) {
     .enter()
     .append("option")
     .html(function (d, index) {
-      if(index == 0) {
+      if (index == 0) {
         return "<option value=''>" + d + "</option>";
       } else {
         return "<option value='" + d + "'>" + d + "</option>";
@@ -583,7 +579,7 @@ d3.csv("data.csv").then(function (data) {
     .enter()
     .append("option")
     .html(function (d, index) {
-      if(index == 0) {
+      if (index == 0) {
         return "<option value=''>" + d + "</option>";
       } else {
         return "<option value='" + d + "'>" + d + "</option>";
@@ -595,6 +591,7 @@ d3.csv("data.csv").then(function (data) {
     if (d == "") return;
     stackNameData.forEach(function (v) {
       if (v.key === d) {
+        console.log("here");
         mode = "Stack Name";
         var data_copy = JSON.parse(JSON.stringify(v.values));
         data_copy.push(v);
@@ -625,7 +622,7 @@ d3.csv("data.csv").then(function (data) {
     .enter()
     .append("option")
     .html(function (d, index) {
-      if(index == 0) {
+      if (index == 0) {
         return "<option value=''>" + d + "</option>";
       } else {
         return "<option value='" + d + "'>" + d + "</option>";
