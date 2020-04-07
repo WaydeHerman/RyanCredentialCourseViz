@@ -1550,7 +1550,7 @@ function generateGraph(data, root_key) {
         }
       });
 
-    nodeEnter.append("circle").style("r", function (d) {
+    nodeEnter.append("circle").attr("r", function (d) {
       if (d.data.id === root_key) {
         return 14;
       } else {
