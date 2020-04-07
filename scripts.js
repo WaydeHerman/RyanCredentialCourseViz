@@ -492,14 +492,23 @@ d3.csv("data.csv").then(function (data) {
     d3.select(".start-screen").style("display", "block");
   }
 
+  
+
+  audienceList.unshift("Select Audience");
   d3.select("#audience-selector")
     .selectAll("option")
     .data(audienceList)
     .enter()
     .append("option")
-    .html(function (d) {
-      return "<option value='" + d + "'>" + d + "</option>";
+    .html(function (d, index) {
+      if(index == 0) {
+        return "<option value=''>" + d + "</option>";
+      } else {
+        return "<option value='" + d + "'>" + d + "</option>";
+      }
     });
+
+   
 
   d3.select("#audience-selector").on("change", function () {
     d = this.value;
@@ -527,13 +536,18 @@ d3.csv("data.csv").then(function (data) {
     });
   });
 
+  topicList.unshift("Select Topic");
   d3.select("#topic-selector")
     .selectAll("option")
     .data(topicList)
     .enter()
     .append("option")
-    .html(function (d) {
-      return "<option value='" + d + "'>" + d + "</option>";
+    .html(function (d, index) {
+      if(index == 0) {
+        return "<option value=''>" + d + "</option>";
+      } else {
+        return "<option value='" + d + "'>" + d + "</option>";
+      }
     });
 
   d3.select("#topic-selector").on("change", function () {
@@ -562,13 +576,18 @@ d3.csv("data.csv").then(function (data) {
     });
   });
 
+  stackNameList.unshift("Select Stack Name");
   d3.select("#stack-name-selector")
     .selectAll("option")
     .data(stackNameList)
     .enter()
     .append("option")
-    .html(function (d) {
-      return "<option value='" + d + "'>" + d + "</option>";
+    .html(function (d, index) {
+      if(index == 0) {
+        return "<option value=''>" + d + "</option>";
+      } else {
+        return "<option value='" + d + "'>" + d + "</option>";
+      }
     });
 
   d3.select("#stack-name-selector").on("change", function () {
@@ -599,13 +618,18 @@ d3.csv("data.csv").then(function (data) {
     });
   });
 
+  educationStandardList.unshift("Select Education Standard");
   d3.select("#education-standard-selector")
     .selectAll("option")
     .data(educationStandardList)
     .enter()
     .append("option")
-    .html(function (d) {
-      return "<option value='" + d + "'>" + d + "</option>";
+    .html(function (d, index) {
+      if(index == 0) {
+        return "<option value=''>" + d + "</option>";
+      } else {
+        return "<option value='" + d + "'>" + d + "</option>";
+      }
     });
 
   d3.select("#education-standard-selector").on("change", function () {
@@ -1982,10 +2006,13 @@ function generateGraph(data, root_key) {
     d3.select("#bitem-selector-4").html("");
     if (level === 0) {
       d3.select(".breadcrumbs-container").style("display", "none");
-      $("#audience-selector").val("");
-      $("#topic-selector").val("");
-      $("#stack-name-selector").val("");
-      $("#education-standard-selector").val("");
+      $("#audience-selector")[0].selectedIndex = 0;
+      $("#topic-selector")[0].selectedIndex = 0;
+      $("#stack-name-selector")[0].selectedIndex = 0;
+      $("#education-standard-selector")[0].selectedIndex = 0;
+      // $("#topic-selector").val("");
+      // $("#stack-name-selector").val("");
+      // $("#education-standard-selector").val("");
     } else {
       d3.select(".breadcrumbs-container").style("display", "block");
       if (mode === "Topics" || mode === "Audience") {
