@@ -2374,6 +2374,7 @@ function generateGraph(data, root_key) {
           d3.select("#bitem-selector-4").style("display", "none");
         }
         if (mode === "Topics") {
+          var bitem1 = "<span>Topic: </span>";
           d3.select("#bitem-selector-1")
             .selectAll("option")
             .data(breadCrumbs[0].list)
