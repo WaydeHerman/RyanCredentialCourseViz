@@ -30,6 +30,15 @@ $(".start-over-btn").click(function () {
 d3.csv("data.csv").then(function (data) {
   breadCrumbs = [];
 
+  console.log(
+    "data",
+    data.filter(function (d) {
+      return d["Topics"] === "Classroom Management";
+    })
+  );
+
+  console.log();
+
   new_data = [];
   data.forEach(function (v) {
     var audiences = v["Audience"].split(",");
@@ -97,6 +106,8 @@ d3.csv("data.csv").then(function (data) {
     })
     .entries(data);
 
+  console.log("topicData", topicData);
+
   stackNameData = d3
     .nest()
     .key(function (d) {
@@ -133,8 +144,8 @@ d3.csv("data.csv").then(function (data) {
     w.values.forEach(function (v) {
       var tmp_list = [];
       v.values.forEach(function (u, i) {
-        if (tmp_list.indexOf(u["MC ID #"]) < 0) {
-          tmp_list.push(u["MC ID #"]);
+        if (tmp_list.indexOf(u["Micro-credential Name"]) < 0) {
+          tmp_list.push(u["Micro-credential Name"]);
         } else {
           delete v.values[i];
         }
@@ -150,8 +161,8 @@ d3.csv("data.csv").then(function (data) {
     w.values.forEach(function (v) {
       var tmp_list = [];
       v.values.forEach(function (u, i) {
-        if (tmp_list.indexOf(u["MC ID #"]) < 0) {
-          tmp_list.push(u["MC ID #"]);
+        if (tmp_list.indexOf(u["Micro-credential Name"]) < 0) {
+          tmp_list.push(u["Micro-credential Name"]);
         } else {
           delete v.values[i];
         }
@@ -168,8 +179,8 @@ d3.csv("data.csv").then(function (data) {
       v.values.forEach(function (u) {
         var tmp_list = [];
         u.values.forEach(function (o, i) {
-          if (tmp_list.indexOf(o["MC ID #"]) < 0) {
-            tmp_list.push(o["MC ID #"]);
+          if (tmp_list.indexOf(o["Micro-credential Name"]) < 0) {
+            tmp_list.push(o["Micro-credential Name"]);
           } else {
             delete u.values[i];
           }
@@ -187,8 +198,8 @@ d3.csv("data.csv").then(function (data) {
       v.values.forEach(function (u) {
         var tmp_list = [];
         u.values.forEach(function (o, i) {
-          if (tmp_list.indexOf(o["MC ID #"]) < 0) {
-            tmp_list.push(o["MC ID #"]);
+          if (tmp_list.indexOf(o["Micro-credential Name"]) < 0) {
+            tmp_list.push(o["Micro-credential Name"]);
           } else {
             delete u.values[i];
           }
