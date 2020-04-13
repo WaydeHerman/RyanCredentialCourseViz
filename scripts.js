@@ -27,7 +27,7 @@ $(".start-over-btn").click(function () {
 });
 
 // d3.csv("/wp-content/themes/digital-promise-new/js/micro-credentials/visualization.csv").then(function (data) {
-d3.csv("data (1).csv").then(function (data) {
+d3.csv("data.csv").then(function (data) {
   breadCrumbs = [];
 
   new_data = [];
